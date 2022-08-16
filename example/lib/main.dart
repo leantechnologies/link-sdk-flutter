@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lean_example/widgets/link_sdk.dart';
+import 'package:link_sdk_flutter/lean_flutter_sdk.dart';
 
 void main() {
   runApp(const Demo());
