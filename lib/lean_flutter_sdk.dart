@@ -1,3 +1,5 @@
+library lean_flutter_sdk;
+
 import 'dart:async';
 import 'dart:io';
 
@@ -36,9 +38,7 @@ class LeanViewWidget extends StatefulWidget {
         permissions: permissions);
   }
 
-  void reconnect({
-    required String reconnectId,
-  }) {
+  void reconnect({required String reconnectId,}) {
     lvsc._reconnect(
       appToken: appToken,
       isSandbox: isSandbox,
@@ -51,8 +51,7 @@ class LeanViewWidget extends StatefulWidget {
 }
 
 class LeanViewStateController extends State<LeanViewWidget> {
-  final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
+  final Completer<WebViewController> _controller = Completer<WebViewController>();
 
   @override
   void initState() {
