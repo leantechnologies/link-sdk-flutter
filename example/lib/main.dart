@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:link_sdk_flutter/lean_sdk.dart';
+import 'package:lean_sdk_flutter/lean_sdk_flutter.dart';
 
 void main() {
   runApp(const Demo());
