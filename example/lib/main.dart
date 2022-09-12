@@ -1,5 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:link_sdk_flutter/lean_sdk.dart';
+import 'package:lean_sdk_flutter/lean_sdk_flutter.dart';
 
 void main() {
   runApp(const Demo());
@@ -39,13 +40,19 @@ class Home extends StatelessWidget {
           context: context,
           builder: (context) {
             return SizedBox(
-              height: MediaQuery.of(context).size.height * 0.8, // control the size of the Lean SDK view
+              height: MediaQuery.of(context).size.height * 0.8,
               child: Lean.connect(
                 appToken: appToken,
                 customerId: customerId,
                 permissions: permissions,
                 isSandbox: isSandbox,
-                callback: (resp) => print("Callback: $resp"),
+                callback: (resp) {
+                  if (kDebugMode) {
+                    print("Callback: $resp");
+                  }
+                  Navigator.pop(context);
+                },
+                actionCancelled: () => Navigator.pop(context),
               ),
             );
           });
@@ -62,7 +69,13 @@ class Home extends StatelessWidget {
                 appToken: appToken,
                 customerId: customerId,
                 isSandbox: isSandbox,
-                callback: (resp) => print("Callback: $resp"),
+                callback: (resp) {
+                  if (kDebugMode) {
+                    print("Callback: $resp");
+                  }
+                  Navigator.pop(context);
+                },
+                actionCancelled: () => Navigator.pop(context),
               ),
             ),
           ));
@@ -75,12 +88,40 @@ class Home extends StatelessWidget {
           appToken: appToken,
           reconnectId: reconnectId,
           isSandbox: isSandbox,
-          callback: (resp) => print("Callback: $resp"),
+          callback: (resp) {
+            if (kDebugMode) {
+              print("Callback: $resp");
+            }
+            Navigator.pop(context);
+          },
+          actionCancelled: () => Navigator.pop(context),
         ),),
       );
     }
 
-    _pay() { }
+    _pay() {
+      showModalBottomSheet(
+          isScrollControlled: true,
+          backgroundColor: Colors.red,
+          context: context,
+          builder: (context) {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height * 0.8,
+              child: Lean.pay(
+                appToken: appToken,
+                paymentIntentId: paymentIntentId,
+                isSandbox: isSandbox,
+                callback: (resp) {
+                  if (kDebugMode) {
+                    print("Callback: $resp");
+                  }
+                  Navigator.pop(context);
+                },
+                actionCancelled: () => Navigator.pop(context),
+              ),
+            );
+          });
+    }
 
     return SafeArea(
         child: Scaffold(

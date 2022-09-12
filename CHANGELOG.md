@@ -1,3 +1,8 @@
-## 0.0.1
+## 0.5.0
 
-* TODO: Describe initial release.
+includes features: 
+* connect bank account
+* create payment source
+* reconnect bank account
+* complete payment
+
