@@ -1,9 +1,25 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-typedef LeanCallback = void Function(String message);
+class LeanResponse {
+  final String status;
+  final String method;
+  final String? exitPoint;
+
+  LeanResponse(this.status, this.method, this.exitPoint);
+
+  LeanResponse.fromJson(Map<String, dynamic> json)
+      : status = json['status'],
+        method = json['method'],
+        exitPoint = json['exit_point'];
+}
+
+typedef LeanCallback = void Function(String response);
+typedef LeanActionError = void Function(String errorMessage);
+typedef LeanActionCancelled = void Function();
 
 enum Country { uae, ksa }
 
@@ -21,6 +37,7 @@ class Lean extends StatefulWidget {
   final bool isSandbox;
   final Country country;
   final LeanCallback? callback;
+  final LeanActionCancelled? actionCancelled;
   final LeanActionType _actionType;
 
   const Lean.connect(
@@ -31,7 +48,8 @@ class Lean extends StatefulWidget {
       this.version = 'latest',
       this.isSandbox = true,
       this.country = Country.uae,
-      this.callback})
+      this.callback,
+      this.actionCancelled})
       : _actionType = LeanActionType.connect,
         paymentIntentId = null,
         reconnectId = null;
@@ -43,7 +61,8 @@ class Lean extends StatefulWidget {
       this.version = 'latest',
       this.isSandbox = true,
       this.country = Country.uae,
-      this.callback})
+      this.callback,
+      this.actionCancelled})
       : _actionType = LeanActionType.createPaymentSource,
         reconnectId = null,
         paymentIntentId = null,
@@ -56,7 +75,8 @@ class Lean extends StatefulWidget {
       this.version = 'latest',
       this.isSandbox = true,
       this.country = Country.uae,
-      this.callback})
+      this.callback,
+      this.actionCancelled})
       : _actionType = LeanActionType.reconnect,
         customerId = null,
         paymentIntentId = null,
@@ -69,7 +89,8 @@ class Lean extends StatefulWidget {
       this.version = 'latest',
       this.isSandbox = true,
       this.country = Country.uae,
-      this.callback})
+      this.callback,
+      this.actionCancelled})
       : _actionType = LeanActionType.pay,
         customerId = null,
         reconnectId = null,
@@ -81,6 +102,7 @@ class Lean extends StatefulWidget {
 
 class _LeanState extends State<Lean> {
   late WebViewController _webViewController;
+  final Completer<WebViewController> _completer = Completer<WebViewController>();
 
   String get _html {
     return ('''
@@ -91,18 +113,11 @@ class _LeanState extends State<Lean> {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     </head>
     <body>
-
     <div id="lean-link"></div>
-
     <script src="https://cdn.leantech.me/${widget.country == Country.ksa ? "sa/" : ""}link/sdk/web/${widget.version}/Lean.min.js"></script>
     </body>
     </html>
     ''');
-  }
-
-  _loadHtml() async {
-    var uri = Uri.dataFromString(_html, mimeType: 'text/html', encoding: Encoding.getByName('utf-8'));
-    _webViewController.loadUrl(uri.toString());
   }
 
   String get _javaScript {
@@ -120,7 +135,6 @@ class _LeanState extends State<Lean> {
 
   String get _connectJsFunction {
     return ('''
-          LeanFlutter.postMessage("connect called")
           function postResponse(status) {
               status.method = "CONNECT"
               LeanFlutter.postMessage(JSON.stringify(status))
@@ -141,7 +155,6 @@ class _LeanState extends State<Lean> {
 
   String get _createPaymentSourceJsFunction {
     return ('''
-          LeanFlutter.postMessage("connect called")
           function postResponse(status) {
               status.method = "CREATE_PAYMENT_SOURCE"
               LeanFlutter.postMessage(JSON.stringify(status))
@@ -161,7 +174,6 @@ class _LeanState extends State<Lean> {
 
   String get _reconnectJsFunction {
     return ('''
-          LeanFlutter.postMessage("connect called")
           function postResponse(status) {
               status.method = "RECONNECT"
               LeanFlutter.postMessage(JSON.stringify(status))
@@ -181,7 +193,6 @@ class _LeanState extends State<Lean> {
 
   String get _payJsFunction {
     return ('''
-          LeanFlutter.postMessage("connect called")
           function postResponse(status) {
               status.method = "PAY"
               LeanFlutter.postMessage(JSON.stringify(status))
@@ -199,19 +210,18 @@ class _LeanState extends State<Lean> {
     ''');
   }
 
-  JavascriptChannel _leanJavascriptChannel(BuildContext context, LeanCallback? callback) {
+  JavascriptChannel _leanJavascriptChannel(BuildContext context) {
     return JavascriptChannel(
         name: 'LeanFlutter',
         onMessageReceived: (JavascriptMessage message) {
-          print("LeanFlutter Channel Response: ${message.message}");
-          if (callback != null) {
-            callback(message.message);
+
+          Map<String, dynamic> userMap = jsonDecode(message.message);
+          var resp = LeanResponse.fromJson(userMap);
+          if (widget.actionCancelled != null && "CANCELLED" == resp.status) {
+            widget.actionCancelled!();
+          } else if (widget.callback != null) {
+            widget.callback!(message.message);
           }
-          // handle success event
-
-          // handle cancelled event
-
-          // handle error event
         });
   }
 
@@ -223,19 +233,14 @@ class _LeanState extends State<Lean> {
       gestureNavigationEnabled: true,
       onWebViewCreated: (WebViewController webViewController) {
         _webViewController = webViewController;
-        _loadHtml();
+        _webViewController.loadHtmlString(_html);
       },
-      onProgress: (int progress) {
-        print("WebView is loading (progress : $progress%)");
-      },
-      onPageStarted: (String url) {
-        print('Page started loading: $url');
-      },
-      onPageFinished: (String url) {
+      onPageFinished: (_) async {
+        await Future.delayed(const Duration(milliseconds: 800));
         _webViewController.runJavascript(_javaScript);
       },
       javascriptChannels: <JavascriptChannel>{
-        _leanJavascriptChannel(context, widget.callback),
+        _leanJavascriptChannel(context),
       },
     );
   }
