@@ -3,7 +3,6 @@ The Flutter wrapper for LinkSDK allows you to connect your bank accounts and ini
 
 ## Features
 
----
 * connect bank account
 * create payment source
 * reconnect bank account
@@ -12,7 +11,6 @@ The Flutter wrapper for LinkSDK allows you to connect your bank accounts and ini
 
 ## Installation
 
----
 
 Run this command:
 ```shell
@@ -27,11 +25,9 @@ dependencies:
 
 ## Usage
 
----
 
 Please have a look on the sample application for more detailed usage of the `link_sdk_flutter`
 
 ## Contributions
 
----
 Contributions of any kind are very welcome! Feel free to improve the library by creating a pull request, or opening an issue.
