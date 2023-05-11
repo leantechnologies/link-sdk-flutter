@@ -29,7 +29,7 @@ enum Params {
   payment_destination_id,
 }
 
-enum Methods {
+enum LeanMethods {
   pay,
   link,
   connect,
@@ -39,7 +39,7 @@ enum Methods {
   updatePaymentSource,
 }
 
-enum UserPermissions {
+enum LeanPermissions {
   balance,
   identity,
   accounts,
@@ -54,7 +54,12 @@ enum UserPermissions {
   scheduled_payments,
 }
 
-enum Country {
+enum LeanCountry {
   sa,
   ae,
+}
+
+enum LeanLanguage {
+  en,
+  ar,
 }

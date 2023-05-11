@@ -1,45 +1,62 @@
+import 'dart:developer';
+
+import 'package:flutter/cupertino.dart';
+
 import 'enums.dart';
 
-class Lean {
-  late String env;
-  late bool showLogs;
-  late String baseUrl;
-  late String version;
-  late String country;
-  late bool isSandbox;
-  late String appToken;
-  late String language;
-  late Map<String, String> customization;
+class LeanSDK {
+  late String _env;
+  late bool _showLogs;
+  late String _baseUrl;
+  late String _version;
+  late String _country;
+  late bool _isSandbox;
+  late String _appToken;
+  late String _language;
+  Map<String, String> _customization = {};
 
-  Lean({required Map<String, dynamic> config}) {
-    env = config["env"];
-    version = config["version"];
-    country = config["country"];
-    appToken = config["appToken"];
-    language = config["language"];
-    showLogs = config["showLogs"];
-    isSandbox = config["isSandbox"];
-    customization = config["customization"];
-    baseUrl =
+  LeanSDK({
+    env,
+    version,
+    country,
+    appToken,
+    language,
+    showLogs,
+    isSandbox,
+    customization,
+  }) {
+    _env = env;
+    _version = version;
+    _country = country;
+    _appToken = appToken;
+    _language = language;
+    _showLogs = showLogs;
+    _isSandbox = isSandbox;
+
+    if (customization != null) {
+      _customization = customization;
+    }
+
+    _baseUrl =
         "https://cdn.leantech.me/link/loader/prod/$country/$version/lean-sdk.html";
   }
 
   //  ================    Members and helper methods    ================    //
 
-  String getBaseUrl() {
-    return "$baseUrl?${Config.implementation}=webview-hosted-html&${Config.app_token}=$appToken&${Config.sandbox}=$isSandbox&${Config.language}=$language&${Config.version}=$version&${Config.country}=$country&${Config.env}=$env";
+  String get _getBaseUrl {
+    return "$_baseUrl?${Config.implementation.name}=webview-hosted-html&${Config.app_token.name}=$_appToken&${Config.sandbox.name}=$_isSandbox&${Config.language.name}=$_language&${Config.version.name}=$_version&${Config.country.name}=$_country&${Config.env.name}=$_env";
   }
 
-  String convertPermissionsToURLString(List<UserPermissions> permissions) {
+  String convertPermissionsToURLString(List<LeanPermissions> permissions) {
     var permissionsParams = '';
 
     if (permissions.isEmpty) {
       return permissionsParams;
     }
 
-    for (UserPermissions permission in permissions) {
+    for (LeanPermissions permission in permissions) {
       permissionsParams =
-          "$permissionsParams&${Params.permissions}=$permission";
+          "$permissionsParams&${Params.permissions.name}=${permission.name}";
     }
 
     return permissionsParams;
@@ -48,13 +65,13 @@ class Lean {
   String convertCustomizationToURLString() {
     var customizationParams = '';
 
-    if (customization.isEmpty) {
+    if (_customization.isEmpty) {
       return customizationParams;
     }
 
-    for (String customizationOption in customization.keys) {
+    for (String customizationOption in _customization.keys) {
       customizationParams =
-          "$customizationParams&${Params.customization}=$customizationOption+${customization[customizationOption]}";
+          "$customizationParams&${Params.customization.name}=$customizationOption+${_customization[customizationOption]}";
     }
 
     return customizationParams;
@@ -64,7 +81,7 @@ class Lean {
 
   link({
     required String customerId,
-    required List<UserPermissions> permissions,
+    required List<LeanPermissions> permissions,
     String? bankIdentifier,
     String? failRedirectUrl,
     String? successRedirectUrl,
@@ -77,15 +94,15 @@ class Lean {
       throw const FormatException('Validation Error: permissions is required');
     }
 
-    if (permissions.contains(UserPermissions.payments)) {
+    if (permissions.contains(LeanPermissions.payments)) {
       throw const FormatException(
         "Validation Error: 'payments' permission is not supported for link",
       );
     }
 
-    if ((permissions.contains(UserPermissions.balance) ||
-            permissions.contains(UserPermissions.transactions)) &&
-        !permissions.contains(UserPermissions.accounts)) {
+    if ((permissions.contains(LeanPermissions.balance) ||
+            permissions.contains(LeanPermissions.transactions)) &&
+        !permissions.contains(LeanPermissions.accounts)) {
       throw const FormatException(
         "Validation Error: Must have 'accounts' permission if requesting 'balance' and/or 'transactions' permission",
       );
@@ -95,22 +112,22 @@ class Lean {
     String customizationParams = convertCustomizationToURLString();
 
     var initializationURL =
-        "$baseUrl&method=${Methods.link}&${Params.customer_id}=$customerId$permissionsParams$customizationParams";
+        "$_getBaseUrl&method=${LeanMethods.link.name}&${Params.customer_id.name}=$customerId$permissionsParams$customizationParams";
 
     // only include properties that are set
     if (bankIdentifier != null && bankIdentifier.isNotEmpty) {
       initializationURL =
-          "$initializationURL&${Params.bank_identifier}=$bankIdentifier";
+          "$initializationURL&${Params.bank_identifier.name}=$bankIdentifier";
     }
 
     if (failRedirectUrl != null && failRedirectUrl.isNotEmpty) {
       initializationURL =
-          "$initializationURL&${Params.fail_redirect_url}=$failRedirectUrl";
+          "$initializationURL&${Params.fail_redirect_url.name}=$failRedirectUrl";
     }
 
     if (successRedirectUrl != null && successRedirectUrl.isNotEmpty) {
       initializationURL =
-          "$initializationURL&${Params.success_redirect_url}=$successRedirectUrl";
+          "$initializationURL&${Params.success_redirect_url.name}=$successRedirectUrl";
     }
 
     return initializationURL;
@@ -118,7 +135,7 @@ class Lean {
 
   connect({
     required String customerId,
-    required List<UserPermissions> permissions,
+    required List<LeanPermissions> permissions,
     String? accessTo,
     String? accessFrom,
     String? bankIdentifier,
@@ -134,9 +151,9 @@ class Lean {
       throw const FormatException('Validation Error: permissions is required');
     }
 
-    if ((permissions.contains(UserPermissions.balance) ||
-            permissions.contains(UserPermissions.transactions)) &&
-        !permissions.contains(UserPermissions.accounts)) {
+    if ((permissions.contains(LeanPermissions.balance) ||
+            permissions.contains(LeanPermissions.transactions)) &&
+        !permissions.contains(LeanPermissions.accounts)) {
       throw const FormatException(
         "Validation Error: Must have 'accounts' permission if requesting 'balance' and/or 'transactions' permission",
       );
@@ -146,36 +163,37 @@ class Lean {
     String customizationParams = convertCustomizationToURLString();
 
     var initializationURL =
-        "$baseUrl&method=${Methods.connect}&${Params.customer_id}=$customerId$permissionsParams$customizationParams";
+        "$_getBaseUrl&method=${LeanMethods.connect.name}&${Params.customer_id.name}=$customerId$permissionsParams$customizationParams";
 
     // only include properties that are set
     if (bankIdentifier != null && bankIdentifier.isNotEmpty) {
       initializationURL =
-          "$initializationURL&${Params.bank_identifier}=$bankIdentifier";
+          "$initializationURL&${Params.bank_identifier.name}=$bankIdentifier";
     }
 
     if (paymentDestinationId != null && paymentDestinationId.isNotEmpty) {
       initializationURL =
-          "$initializationURL&${Params.payment_destination_id}=$paymentDestinationId";
+          "$initializationURL&${Params.payment_destination_id.name}=$paymentDestinationId";
     }
 
     if (accessTo != null && accessTo.isNotEmpty) {
-      initializationURL = "$initializationURL&${Params.access_to}=$accessTo";
+      initializationURL =
+          "$initializationURL&${Params.access_to.name}=$accessTo";
     }
 
     if (accessFrom != null && accessFrom.isNotEmpty) {
       initializationURL =
-          "$initializationURL&${Params.access_from}=$accessFrom";
+          "$initializationURL&${Params.access_from.name}=$accessFrom";
     }
 
     if (failRedirectUrl != null && failRedirectUrl.isNotEmpty) {
       initializationURL =
-          "$initializationURL&${Params.fail_redirect_url}=$failRedirectUrl";
+          "$initializationURL&${Params.fail_redirect_url.name}=$failRedirectUrl";
     }
 
     if (successRedirectUrl != null && successRedirectUrl.isNotEmpty) {
       initializationURL =
-          "$initializationURL&${Params.success_redirect_url}=$successRedirectUrl";
+          "$initializationURL&${Params.success_redirect_url.name}=$successRedirectUrl";
     }
 
     return initializationURL;
@@ -188,7 +206,7 @@ class Lean {
 
     String customizationParams = convertCustomizationToURLString();
 
-    return "$baseUrl&method=${Methods.reconnect}&${Params.reconnect_id}=$reconnectId$customizationParams";
+    return "$_getBaseUrl&method=${LeanMethods.reconnect}&${Params.reconnect_id.name}=$reconnectId$customizationParams";
   }
 
   createBeneficiary({
@@ -205,26 +223,26 @@ class Lean {
     String customizationParams = convertCustomizationToURLString();
 
     var initializationURL =
-        "$baseUrl&method=${Methods.createBeneficiary}&${Params.customer_id}=$customerId$customizationParams";
+        "$_getBaseUrl&method=${LeanMethods.createBeneficiary}&${Params.customer_id.name}=$customerId$customizationParams";
 
     if (paymentDestinationId != null && paymentDestinationId.isNotEmpty) {
       initializationURL =
-      "$initializationURL&${Params.payment_destination_id}=$paymentDestinationId";
+          "$initializationURL&${Params.payment_destination_id.name}=$paymentDestinationId";
     }
 
     if (paymentSourceId != null && paymentSourceId.isNotEmpty) {
       initializationURL =
-      "$initializationURL&${Params.payment_source_id}=$paymentSourceId";
+          "$initializationURL&${Params.payment_source_id.name}=$paymentSourceId";
     }
 
     if (failRedirectUrl != null && failRedirectUrl.isNotEmpty) {
       initializationURL =
-      "$initializationURL&${Params.fail_redirect_url}=$failRedirectUrl";
+          "$initializationURL&${Params.fail_redirect_url.name}=$failRedirectUrl";
     }
 
     if (successRedirectUrl != null && successRedirectUrl.isNotEmpty) {
       initializationURL =
-      "$initializationURL&${Params.success_redirect_url}=$successRedirectUrl";
+          "$initializationURL&${Params.success_redirect_url.name}=$successRedirectUrl";
     }
 
     return initializationURL;
@@ -244,26 +262,26 @@ class Lean {
     String customizationParams = convertCustomizationToURLString();
 
     var initializationURL =
-        "$baseUrl&method=${Methods.createBeneficiary}&${Params.customer_id}=$customerId$customizationParams";
+        "$_getBaseUrl&method=${LeanMethods.createBeneficiary}&${Params.customer_id.name}=$customerId$customizationParams";
 
     if (paymentDestinationId != null && paymentDestinationId.isNotEmpty) {
       initializationURL =
-      "$initializationURL&${Params.payment_destination_id}=$paymentDestinationId";
+          "$initializationURL&${Params.payment_destination_id.name}=$paymentDestinationId";
     }
 
     if (bankIdentifier != null && bankIdentifier.isNotEmpty) {
       initializationURL =
-      "$initializationURL&${Params.bank_identifier}=$bankIdentifier";
+          "$initializationURL&${Params.bank_identifier.name}=$bankIdentifier";
     }
 
     if (failRedirectUrl != null && failRedirectUrl.isNotEmpty) {
       initializationURL =
-      "$initializationURL&${Params.fail_redirect_url}=$failRedirectUrl";
+          "$initializationURL&${Params.fail_redirect_url.name}=$failRedirectUrl";
     }
 
     if (successRedirectUrl != null && successRedirectUrl.isNotEmpty) {
       initializationURL =
-      "$initializationURL&${Params.success_redirect_url}=$successRedirectUrl";
+          "$initializationURL&${Params.success_redirect_url.name}=$successRedirectUrl";
     }
 
     return initializationURL;
@@ -283,26 +301,26 @@ class Lean {
     String customizationParams = convertCustomizationToURLString();
 
     var initializationURL =
-        "$baseUrl&method=${Methods.createBeneficiary}&${Params.customer_id}=$customerId$customizationParams";
+        "$_getBaseUrl&method=${LeanMethods.createBeneficiary}&${Params.customer_id.name}=$customerId$customizationParams";
 
     if (paymentDestinationId != null && paymentDestinationId.isNotEmpty) {
       initializationURL =
-      "$initializationURL&${Params.payment_destination_id}=$paymentDestinationId";
+          "$initializationURL&${Params.payment_destination_id.name}=$paymentDestinationId";
     }
 
     if (paymentSourceId != null && paymentSourceId.isNotEmpty) {
       initializationURL =
-      "$initializationURL&${Params.payment_source_id}=$paymentSourceId";
+          "$initializationURL&${Params.payment_source_id.name}=$paymentSourceId";
     }
 
     if (failRedirectUrl != null && failRedirectUrl.isNotEmpty) {
       initializationURL =
-      "$initializationURL&${Params.fail_redirect_url}=$failRedirectUrl";
+          "$initializationURL&${Params.fail_redirect_url.name}=$failRedirectUrl";
     }
 
     if (successRedirectUrl != null && successRedirectUrl.isNotEmpty) {
       initializationURL =
-      "$initializationURL&${Params.success_redirect_url}=$successRedirectUrl";
+          "$initializationURL&${Params.success_redirect_url.name}=$successRedirectUrl";
     }
 
     return initializationURL;
@@ -316,32 +334,33 @@ class Lean {
     String? successRedirectUrl,
   }) {
     if (paymentIntentId.isEmpty) {
-      throw const FormatException('Validation Error: paymentIntentId is required');
+      throw const FormatException(
+          'Validation Error: paymentIntentId is required');
     }
 
     String customizationParams = convertCustomizationToURLString();
 
     var initializationURL =
-        "$baseUrl&method=${Methods.createBeneficiary}&${Params.payment_intent_id}=$paymentIntentId$customizationParams";
+        "$_getBaseUrl&method=${LeanMethods.createBeneficiary}&${Params.payment_intent_id.name}=$paymentIntentId$customizationParams";
 
     if (accountId != null && accountId.isNotEmpty) {
       initializationURL =
-      "$initializationURL&${Params.account_id}=$accountId";
+          "$initializationURL&${Params.account_id.name}=$accountId";
     }
 
     if (showBalances != null && showBalances == true) {
       initializationURL =
-      "$initializationURL&${Params.show_balances}=$showBalances";
+          "$initializationURL&${Params.show_balances.name}=$showBalances";
     }
 
     if (failRedirectUrl != null && failRedirectUrl.isNotEmpty) {
       initializationURL =
-      "$initializationURL&${Params.fail_redirect_url}=$failRedirectUrl";
+          "$initializationURL&${Params.fail_redirect_url.name}=$failRedirectUrl";
     }
 
     if (successRedirectUrl != null && successRedirectUrl.isNotEmpty) {
       initializationURL =
-      "$initializationURL&${Params.success_redirect_url}=$successRedirectUrl";
+          "$initializationURL&${Params.success_redirect_url.name}=$successRedirectUrl";
     }
 
     return initializationURL;

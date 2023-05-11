@@ -26,114 +26,115 @@ class Home extends StatelessWidget {
     var paymentDestinationId = "";
     var paymentIntentId = "";
     var permissions = [
-      Permission.identity,
-      Permission.transactions,
-      Permission.balance,
-      Permission.accounts
+      LeanPermissions.identity,
+      LeanPermissions.transactions,
+      LeanPermissions.balance,
+      LeanPermissions.accounts
     ];
     var isSandbox = true;
+
+    var lean = Lean(appToken: appToken);
+    // lean.connect(customerId: customerId, permissions: permissions)
 
     _connect() {
       showModalBottomSheet(
           isScrollControlled: true,
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.transparent,
           context: context,
           builder: (context) {
             return Padding(
                 padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).viewInsets.bottom),
                 child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.8,
-                    child: Lean.connect(
-                      appToken: appToken,
+                    height: MediaQuery.of(context).size.height,
+                    child: lean.connect(
                       customerId: customerId,
                       permissions: permissions,
-                      isSandbox: isSandbox,
                       callback: (resp) {
                         if (kDebugMode) {
                           print("Callback: $resp");
                         }
                         Navigator.pop(context);
                       },
-                      actionCancelled: () => Navigator.pop(context),
+                      // actionCancelled: () => Navigator.pop(context),
                     )));
           });
     }
 
-    _createPaymentSource() {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) => Center(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.8,
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: Lean.createPaymentSource(
-                      appToken: appToken,
-                      customerId: customerId,
-                      isSandbox: isSandbox,
-                      callback: (resp) {
-                        if (kDebugMode) {
-                          print("Callback: $resp");
-                        }
-                        Navigator.pop(context);
-                      },
-                      actionCancelled: () => Navigator.pop(context),
-                    ),
-                  ),
-                ),
-              ));
-    }
-
-    _reconnect() {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Lean.reconnect(
-            appToken: appToken,
-            reconnectId: reconnectId,
-            isSandbox: isSandbox,
-            callback: (resp) {
-              if (kDebugMode) {
-                print("Callback: $resp");
-              }
-              Navigator.pop(context);
-            },
-            actionCancelled: () => Navigator.pop(context),
-          ),
-        ),
-      );
-    }
-
-    _pay() {
-      showModalBottomSheet(
-          isScrollControlled: true,
-          backgroundColor: Colors.red,
-          context: context,
-          builder: (context) {
-            return Padding(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.8,
-                child: Lean.pay(
-                  appToken: appToken,
-                  paymentIntentId: paymentIntentId,
-                  isSandbox: isSandbox,
-                  callback: (resp) {
-                    if (kDebugMode) {
-                      print("Callback: $resp");
-                    }
-                    Navigator.pop(context);
-                  },
-                  actionCancelled: () => Navigator.pop(context),
-                ),
-              ),
-            );
-          });
-    }
+    // _createPaymentSource() {
+    //   showDialog(
+    //       context: context,
+    //       builder: (BuildContext context) => Center(
+    //             child: Padding(
+    //               padding: EdgeInsets.only(
+    //                   bottom: MediaQuery.of(context).viewInsets.bottom),
+    //               child: SizedBox(
+    //                 height: MediaQuery.of(context).size.height * 0.8,
+    //                 width: MediaQuery.of(context).size.width * 0.8,
+    //                 child: Lean.createPaymentSource(
+    //                   appToken: appToken,
+    //                   customerId: customerId,
+    //                   isSandbox: isSandbox,
+    //                   callback: (resp) {
+    //                     if (kDebugMode) {
+    //                       print("Callback: $resp");
+    //                     }
+    //                     Navigator.pop(context);
+    //                   },
+    //                   actionCancelled: () => Navigator.pop(context),
+    //                 ),
+    //               ),
+    //             ),
+    //           ));
+    // }
+    //
+    // _reconnect() {
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) => Lean.reconnect(
+    //         appToken: appToken,
+    //         reconnectId: reconnectId,
+    //         isSandbox: isSandbox,
+    //         callback: (resp) {
+    //           if (kDebugMode) {
+    //             print("Callback: $resp");
+    //           }
+    //           Navigator.pop(context);
+    //         },
+    //         actionCancelled: () => Navigator.pop(context),
+    //       ),
+    //     ),
+    //   );
+    // }
+    //
+    // _pay() {
+    //   showModalBottomSheet(
+    //       isScrollControlled: true,
+    //       backgroundColor: Colors.red,
+    //       context: context,
+    //       builder: (context) {
+    //         return Padding(
+    //           padding: EdgeInsets.only(
+    //               bottom: MediaQuery.of(context).viewInsets.bottom),
+    //           child: SizedBox(
+    //             height: MediaQuery.of(context).size.height * 0.8,
+    //             child: Lean.pay(
+    //               appToken: appToken,
+    //               paymentIntentId: paymentIntentId,
+    //               isSandbox: isSandbox,
+    //               callback: (resp) {
+    //                 if (kDebugMode) {
+    //                   print("Callback: $resp");
+    //                 }
+    //                 Navigator.pop(context);
+    //               },
+    //               actionCancelled: () => Navigator.pop(context),
+    //             ),
+    //           ),
+    //         );
+    //       });
+    // }
 
     return SafeArea(
         child: Scaffold(
@@ -162,7 +163,8 @@ class Home extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: () => _createPaymentSource(),
+                      onPressed: null,
+                      // onPressed: () => _createPaymentSource(),
                       style: _buttonStyle(),
                       child: const Text('Create payment source'),
                     ),
@@ -172,7 +174,8 @@ class Home extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: () => _reconnect(),
+                      onPressed: null,
+                      // onPressed: () => _reconnect(),
                       style: _buttonStyle(),
                       child: const Text('Reconnect'),
                     ),
@@ -182,7 +185,8 @@ class Home extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: () => _pay(),
+                      onPressed: null,
+                      // onPressed: () => _pay(),
                       style: _buttonStyle(),
                       child: const Text('Pay'),
                     ),
