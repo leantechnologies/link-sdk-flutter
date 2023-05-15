@@ -33,9 +33,6 @@ class Home extends StatelessWidget {
     ];
     var isSandbox = true;
 
-    var lean = Lean(appToken: appToken);
-    // lean.connect(customerId: customerId, permissions: permissions)
-
     _connect() {
       showModalBottomSheet(
           isScrollControlled: true,
@@ -47,94 +44,99 @@ class Home extends StatelessWidget {
                     bottom: MediaQuery.of(context).viewInsets.bottom),
                 child: SizedBox(
                     height: MediaQuery.of(context).size.height,
-                    child: lean.connect(
+                    child: Lean.connect(
+                      appToken: appToken,
                       customerId: customerId,
                       permissions: permissions,
+                      callback: (resp) {
+                        print("height: ${MediaQuery.of(context).size.height}");
+                        print("width: ${MediaQuery.of(context).size.width}");
+
+                        if (kDebugMode) {
+                          print("Callback: $resp");
+                        }
+                        Navigator.pop(context);
+                      },
+                      actionCancelled: () => Navigator.pop(context),
+                    )));
+          });
+    }
+
+    _createPaymentSource() {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) => Center(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: Lean.createPaymentSource(
+                      appToken: appToken,
+                      customerId: customerId,
+                      isSandbox: isSandbox,
                       callback: (resp) {
                         if (kDebugMode) {
                           print("Callback: $resp");
                         }
                         Navigator.pop(context);
                       },
-                      // actionCancelled: () => Navigator.pop(context),
-                    )));
-          });
+                      actionCancelled: () => Navigator.pop(context),
+                    ),
+                  ),
+                ),
+              ));
     }
 
-    // _createPaymentSource() {
-    //   showDialog(
-    //       context: context,
-    //       builder: (BuildContext context) => Center(
-    //             child: Padding(
-    //               padding: EdgeInsets.only(
-    //                   bottom: MediaQuery.of(context).viewInsets.bottom),
-    //               child: SizedBox(
-    //                 height: MediaQuery.of(context).size.height * 0.8,
-    //                 width: MediaQuery.of(context).size.width * 0.8,
-    //                 child: Lean.createPaymentSource(
-    //                   appToken: appToken,
-    //                   customerId: customerId,
-    //                   isSandbox: isSandbox,
-    //                   callback: (resp) {
-    //                     if (kDebugMode) {
-    //                       print("Callback: $resp");
-    //                     }
-    //                     Navigator.pop(context);
-    //                   },
-    //                   actionCancelled: () => Navigator.pop(context),
-    //                 ),
-    //               ),
-    //             ),
-    //           ));
-    // }
-    //
-    // _reconnect() {
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //       builder: (context) => Lean.reconnect(
-    //         appToken: appToken,
-    //         reconnectId: reconnectId,
-    //         isSandbox: isSandbox,
-    //         callback: (resp) {
-    //           if (kDebugMode) {
-    //             print("Callback: $resp");
-    //           }
-    //           Navigator.pop(context);
-    //         },
-    //         actionCancelled: () => Navigator.pop(context),
-    //       ),
-    //     ),
-    //   );
-    // }
-    //
-    // _pay() {
-    //   showModalBottomSheet(
-    //       isScrollControlled: true,
-    //       backgroundColor: Colors.red,
-    //       context: context,
-    //       builder: (context) {
-    //         return Padding(
-    //           padding: EdgeInsets.only(
-    //               bottom: MediaQuery.of(context).viewInsets.bottom),
-    //           child: SizedBox(
-    //             height: MediaQuery.of(context).size.height * 0.8,
-    //             child: Lean.pay(
-    //               appToken: appToken,
-    //               paymentIntentId: paymentIntentId,
-    //               isSandbox: isSandbox,
-    //               callback: (resp) {
-    //                 if (kDebugMode) {
-    //                   print("Callback: $resp");
-    //                 }
-    //                 Navigator.pop(context);
-    //               },
-    //               actionCancelled: () => Navigator.pop(context),
-    //             ),
-    //           ),
-    //         );
-    //       });
-    // }
+    _reconnect() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Lean.reconnect(
+            appToken: appToken,
+            reconnectId: reconnectId,
+            isSandbox: isSandbox,
+            env: 'development',
+            callback: (resp) {
+              if (kDebugMode) {
+                print("Callback: $resp");
+              }
+              Navigator.pop(context);
+            },
+            actionCancelled: () => Navigator.pop(context),
+          ),
+        ),
+      );
+    }
+
+    _pay() {
+      showModalBottomSheet(
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          context: context,
+          builder: (context) {
+            return Padding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.8,
+                child: Lean.pay(
+                  appToken: appToken,
+                  paymentIntentId: paymentIntentId,
+                  isSandbox: isSandbox,
+                  callback: (resp) {
+                    if (kDebugMode) {
+                      print("Callback: $resp");
+                    }
+                    Navigator.pop(context);
+                  },
+                  actionCancelled: () => Navigator.pop(context),
+                ),
+              ),
+            );
+          });
+    }
 
     return SafeArea(
         child: Scaffold(
@@ -163,8 +165,7 @@ class Home extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: null,
-                      // onPressed: () => _createPaymentSource(),
+                      onPressed: () => _createPaymentSource(),
                       style: _buttonStyle(),
                       child: const Text('Create payment source'),
                     ),
@@ -174,8 +175,7 @@ class Home extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: null,
-                      // onPressed: () => _reconnect(),
+                      onPressed: () => _reconnect(),
                       style: _buttonStyle(),
                       child: const Text('Reconnect'),
                     ),
@@ -185,8 +185,7 @@ class Home extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: null,
-                      // onPressed: () => _pay(),
+                      onPressed: () => _pay(),
                       style: _buttonStyle(),
                       child: const Text('Pay'),
                     ),
