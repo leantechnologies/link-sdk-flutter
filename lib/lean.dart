@@ -1,4 +1,4 @@
-import 'enums.dart';
+import 'lean_types.dart';
 
 class LeanSDK {
   late String _env;

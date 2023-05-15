@@ -5,8 +5,8 @@ import 'package:lean_sdk_flutter/lean.dart';
 import 'package:lean_sdk_flutter/lean_web_client.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import 'enums.dart';
-export 'enums.dart';
+import 'lean_types.dart';
+export 'lean_types.dart';
 
 class Lean extends StatefulWidget {
   //  ================    Initialization params    =============    //
