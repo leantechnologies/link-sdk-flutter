@@ -1,7 +1,3 @@
-import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
-
 import 'enums.dart';
 
 class LeanSDK {
@@ -47,7 +43,7 @@ class LeanSDK {
     return "$_baseUrl?${Config.implementation.name}=webview-hosted-html&${Config.app_token.name}=$_appToken&${Config.sandbox.name}=$_isSandbox&${Config.language.name}=$_language&${Config.version.name}=$_version&${Config.country.name}=$_country&${Config.env.name}=$_env";
   }
 
-  String convertPermissionsToURLString(List<LeanPermissions> permissions) {
+  String _convertPermissionsToURLString(List<LeanPermissions> permissions) {
     var permissionsParams = '';
 
     if (permissions.isEmpty) {
@@ -62,7 +58,7 @@ class LeanSDK {
     return permissionsParams;
   }
 
-  String convertCustomizationToURLString() {
+  String _convertCustomizationToURLString() {
     var customizationParams = '';
 
     if (_customization.isEmpty) {
@@ -78,60 +74,6 @@ class LeanSDK {
   }
 
   //  ================    Link methods    ================    //
-
-  link({
-    required String customerId,
-    required List<LeanPermissions> permissions,
-    String? bankIdentifier,
-    String? failRedirectUrl,
-    String? successRedirectUrl,
-  }) {
-    if (customerId.isEmpty) {
-      throw const FormatException('Validation Error: customerId is required');
-    }
-
-    if (permissions.isEmpty) {
-      throw const FormatException('Validation Error: permissions is required');
-    }
-
-    if (permissions.contains(LeanPermissions.payments)) {
-      throw const FormatException(
-        "Validation Error: 'payments' permission is not supported for link",
-      );
-    }
-
-    if ((permissions.contains(LeanPermissions.balance) ||
-            permissions.contains(LeanPermissions.transactions)) &&
-        !permissions.contains(LeanPermissions.accounts)) {
-      throw const FormatException(
-        "Validation Error: Must have 'accounts' permission if requesting 'balance' and/or 'transactions' permission",
-      );
-    }
-
-    String permissionsParams = convertPermissionsToURLString(permissions);
-    String customizationParams = convertCustomizationToURLString();
-
-    var initializationURL =
-        "$_getBaseUrl&method=${LeanMethods.link.name}&${Params.customer_id.name}=$customerId$permissionsParams$customizationParams";
-
-    // only include properties that are set
-    if (bankIdentifier != null && bankIdentifier.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.bank_identifier.name}=$bankIdentifier";
-    }
-
-    if (failRedirectUrl != null && failRedirectUrl.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.fail_redirect_url.name}=$failRedirectUrl";
-    }
-
-    if (successRedirectUrl != null && successRedirectUrl.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.success_redirect_url.name}=$successRedirectUrl";
-    }
-
-    return initializationURL;
-  }
 
   connect({
     required String customerId,
@@ -159,8 +101,8 @@ class LeanSDK {
       );
     }
 
-    String permissionsParams = convertPermissionsToURLString(permissions);
-    String customizationParams = convertCustomizationToURLString();
+    String permissionsParams = _convertPermissionsToURLString(permissions);
+    String customizationParams = _convertCustomizationToURLString();
 
     var initializationURL =
         "$_getBaseUrl&method=${LeanMethods.connect.name}&${Params.customer_id.name}=$customerId$permissionsParams$customizationParams";
@@ -204,9 +146,9 @@ class LeanSDK {
       throw const FormatException('Validation Error: reconnectId is required');
     }
 
-    String customizationParams = convertCustomizationToURLString();
+    String customizationParams = _convertCustomizationToURLString();
 
-    return "$_getBaseUrl&method=${LeanMethods.reconnect}&${Params.reconnect_id.name}=$reconnectId$customizationParams";
+    return "$_getBaseUrl&method=${LeanMethods.reconnect.name}&${Params.reconnect_id.name}=$reconnectId$customizationParams";
   }
 
   createBeneficiary({
@@ -220,10 +162,10 @@ class LeanSDK {
       throw const FormatException('Validation Error: customerId is required');
     }
 
-    String customizationParams = convertCustomizationToURLString();
+    String customizationParams = _convertCustomizationToURLString();
 
     var initializationURL =
-        "$_getBaseUrl&method=${LeanMethods.createBeneficiary}&${Params.customer_id.name}=$customerId$customizationParams";
+        "$_getBaseUrl&method=${LeanMethods.createBeneficiary.name}&${Params.customer_id.name}=$customerId$customizationParams";
 
     if (paymentDestinationId != null && paymentDestinationId.isNotEmpty) {
       initializationURL =
@@ -259,10 +201,10 @@ class LeanSDK {
       throw const FormatException('Validation Error: customerId is required');
     }
 
-    String customizationParams = convertCustomizationToURLString();
+    String customizationParams = _convertCustomizationToURLString();
 
     var initializationURL =
-        "$_getBaseUrl&method=${LeanMethods.createBeneficiary}&${Params.customer_id.name}=$customerId$customizationParams";
+        "$_getBaseUrl&method=${LeanMethods.createBeneficiary.name}&${Params.customer_id.name}=$customerId$customizationParams";
 
     if (paymentDestinationId != null && paymentDestinationId.isNotEmpty) {
       initializationURL =
@@ -298,10 +240,10 @@ class LeanSDK {
       throw const FormatException('Validation Error: customerId is required');
     }
 
-    String customizationParams = convertCustomizationToURLString();
+    String customizationParams = _convertCustomizationToURLString();
 
     var initializationURL =
-        "$_getBaseUrl&method=${LeanMethods.createBeneficiary}&${Params.customer_id.name}=$customerId$customizationParams";
+        "$_getBaseUrl&method=${LeanMethods.createBeneficiary.name}&${Params.customer_id.name}=$customerId$customizationParams";
 
     if (paymentDestinationId != null && paymentDestinationId.isNotEmpty) {
       initializationURL =
@@ -338,10 +280,10 @@ class LeanSDK {
           'Validation Error: paymentIntentId is required');
     }
 
-    String customizationParams = convertCustomizationToURLString();
+    String customizationParams = _convertCustomizationToURLString();
 
     var initializationURL =
-        "$_getBaseUrl&method=${LeanMethods.createBeneficiary}&${Params.payment_intent_id.name}=$paymentIntentId$customizationParams";
+        "$_getBaseUrl&method=${LeanMethods.createBeneficiary.name}&${Params.payment_intent_id.name}=$paymentIntentId$customizationParams";
 
     if (accountId != null && accountId.isNotEmpty) {
       initializationURL =
