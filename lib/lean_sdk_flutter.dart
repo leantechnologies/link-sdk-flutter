@@ -2,30 +2,15 @@ import 'dart:developer';
 
 import 'package:flutter/widgets.dart';
 import 'package:lean_sdk_flutter/lean.dart';
+import 'package:lean_sdk_flutter/lean_web_client.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'enums.dart';
 export 'enums.dart';
 
-class LeanResponse {
-  final String status;
-  final String method;
-  final String? exitPoint;
-
-  LeanResponse(this.status, this.method, this.exitPoint);
-
-  LeanResponse.fromJson(Map<String, dynamic> json)
-      : status = json['status'],
-        method = json['method'],
-        exitPoint = json['exit_point'];
-}
-
-typedef LeanCallback = void Function(String response);
-typedef LeanActionError = void Function(String errorMessage);
-typedef LeanActionCancelled = void Function();
-
 class Lean extends StatefulWidget {
   //  ================    Initialization params    =============    //
+
   final String env; // Internal
   final String version;
   final bool showLogs;
@@ -34,6 +19,7 @@ class Lean extends StatefulWidget {
   final LeanLanguage language;
 
   //  ================    Link method params    ================    //
+
   final String appToken;
   final String? accessTo;
   final String? accountId;
@@ -53,6 +39,7 @@ class Lean extends StatefulWidget {
   final LeanActionCancelled? actionCancelled;
 
   //  ================    Extra params    =====================    //
+
   final LeanMethods _method;
   final String initializationUrl;
 
@@ -335,6 +322,9 @@ class _LeanState extends State<Lean> {
       },
       onPageFinished: (_) async {
         log('Lean SDK initialization completed.');
+      },
+      navigationDelegate: (request) {
+        return LeanWebClient.handleUrlOverride(request, widget.callback);
       },
     );
   }

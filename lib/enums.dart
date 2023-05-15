@@ -63,3 +63,36 @@ enum LeanLanguage {
   en,
   ar,
 }
+
+typedef LeanCallback = void Function(LeanResponse response);
+
+typedef LeanActionError = void Function(String errorMessage);
+
+typedef LeanActionCancelled = void Function();
+
+class LeanBankResponse {
+  final String? bankId;
+  final bool? isSupported;
+
+  LeanBankResponse(this.bankId, this.isSupported);
+}
+
+class LeanResponse {
+  final String status;
+  final String? message;
+  final String? lastApiResponse;
+  final String? exitPoint;
+  final String? secondaryStatus;
+  final String? bankId;
+  final bool? bankIsSupported;
+
+  LeanResponse({
+    required this.status,
+    this.bankId,
+    this.message,
+    this.exitPoint,
+    this.bankIsSupported,
+    this.lastApiResponse,
+    this.secondaryStatus,
+  });
+}
