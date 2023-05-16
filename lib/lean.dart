@@ -1,8 +1,9 @@
+import 'package:lean_sdk_flutter/lean_logger.dart';
+
 import 'lean_types.dart';
 
 class LeanSDK {
   late String _env;
-  late bool _showLogs;
   late String _baseUrl;
   late String _version;
   late String _country;
@@ -26,8 +27,9 @@ class LeanSDK {
     _country = country;
     _appToken = appToken;
     _language = language;
-    _showLogs = showLogs;
     _isSandbox = isSandbox;
+
+    LeanLogger.showLogs = showLogs;
 
     if (customization != null) {
       _customization = customization;

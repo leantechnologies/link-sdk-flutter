@@ -1,10 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/widgets.dart';
 import 'package:lean_sdk_flutter/lean.dart';
 import 'package:lean_sdk_flutter/lean_web_client.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import 'lean_logger.dart';
 import 'lean_types.dart';
 export 'lean_types.dart';
 
@@ -318,10 +317,10 @@ class _LeanState extends State<Lean> {
       javascriptMode: JavascriptMode.unrestricted,
       gestureNavigationEnabled: true,
       onPageStarted: (_) async {
-        log('Lean SDK initialization started.');
+        LeanLogger.info(msg: 'Lean SDK initialization started.');
       },
       onPageFinished: (_) async {
-        log('Lean SDK initialization completed.');
+        LeanLogger.info(msg: 'Lean SDK initialization completed.');
       },
       navigationDelegate: (request) {
         return LeanWebClient.handleUrlOverride(request, widget.callback);

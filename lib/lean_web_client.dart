@@ -1,8 +1,7 @@
-import 'dart:developer';
-
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import 'lean_logger.dart';
 import 'lean_types.dart';
 
 class LeanWebClient {
@@ -27,7 +26,7 @@ class LeanWebClient {
     if (uri.scheme == 'leanlink') {
       // Close SDK if it's an internal OpenBanking redirect
       if (uri.host == 'redirect') {
-        log('Redirect received: ${request.url}');
+        LeanLogger.info(msg: 'Redirect received: ${request.url}');
 
         callback?.call(LeanResponse(
           status: 'SUCCESS',
@@ -43,7 +42,7 @@ class LeanWebClient {
         return NavigationDecision.prevent;
       }
 
-      log('Response received: ${request.url}');
+      LeanLogger.info(msg: 'Response received: ${request.url}');
 
       // Send response back caller for proper handling
       callback?.call(_getResponseFromParams(uri));
@@ -54,10 +53,10 @@ class LeanWebClient {
 
     // Open all URLs in default web browser
     if (await canLaunchUrl(uri)) {
-      log('Opening URL in browser: ${request.url}');
+      LeanLogger.info(msg: 'Opening URL in browser: ${request.url}');
       await launchUrl(uri);
     } else {
-      log('Could not launch ${request.url}');
+      LeanLogger.info(msg: 'Could not launch ${request.url}');
     }
 
     // Do not override URL loading

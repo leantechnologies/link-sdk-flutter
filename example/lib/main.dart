@@ -45,13 +45,11 @@ class Home extends StatelessWidget {
                 child: SizedBox(
                     height: MediaQuery.of(context).size.height,
                     child: Lean.connect(
+                      showLogs: true,
                       appToken: appToken,
                       customerId: customerId,
                       permissions: permissions,
                       callback: (resp) {
-                        print("height: ${MediaQuery.of(context).size.height}");
-                        print("width: ${MediaQuery.of(context).size.width}");
-
                         if (kDebugMode) {
                           print("Callback: $resp");
                         }
