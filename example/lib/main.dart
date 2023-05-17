@@ -43,20 +43,19 @@ class Home extends StatelessWidget {
                 padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).viewInsets.bottom),
                 child: SizedBox(
-                    height: MediaQuery.of(context).size.height,
                     child: Lean.connect(
-                      showLogs: true,
-                      appToken: appToken,
-                      customerId: customerId,
-                      permissions: permissions,
-                      callback: (resp) {
-                        if (kDebugMode) {
-                          print("Callback: $resp");
-                        }
-                        Navigator.pop(context);
-                      },
-                      actionCancelled: () => Navigator.pop(context),
-                    )));
+                  showLogs: true,
+                  appToken: appToken,
+                  customerId: customerId,
+                  permissions: permissions,
+                  callback: (resp) {
+                    if (kDebugMode) {
+                      print("Callback: $resp");
+                    }
+                    Navigator.pop(context);
+                  },
+                  actionCancelled: () => Navigator.pop(context),
+                )));
           });
     }
 
@@ -68,8 +67,6 @@ class Home extends StatelessWidget {
                   padding: EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewInsets.bottom),
                   child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.8,
-                    width: MediaQuery.of(context).size.width * 0.8,
                     child: Lean.createPaymentSource(
                       appToken: appToken,
                       customerId: customerId,
@@ -88,24 +85,29 @@ class Home extends StatelessWidget {
     }
 
     _reconnect() {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Lean.reconnect(
-            appToken: appToken,
-            reconnectId: reconnectId,
-            isSandbox: isSandbox,
-            env: 'development',
-            callback: (resp) {
-              if (kDebugMode) {
-                print("Callback: $resp");
-              }
-              Navigator.pop(context);
-            },
-            actionCancelled: () => Navigator.pop(context),
-          ),
-        ),
-      );
+      showModalBottomSheet(
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          context: context,
+          builder: (context) {
+            return Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: SizedBox(
+                    child: Lean.reconnect(
+                  appToken: appToken,
+                  reconnectId: reconnectId,
+                  isSandbox: isSandbox,
+                  env: 'development',
+                  callback: (resp) {
+                    if (kDebugMode) {
+                      print("Callback: $resp");
+                    }
+                    Navigator.pop(context);
+                  },
+                  actionCancelled: () => Navigator.pop(context),
+                )));
+          });
     }
 
     _pay() {
@@ -118,7 +120,6 @@ class Home extends StatelessWidget {
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
               child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.8,
                 child: Lean.pay(
                   appToken: appToken,
                   paymentIntentId: paymentIntentId,
