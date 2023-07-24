@@ -48,6 +48,12 @@ class Home extends StatelessWidget {
                   appToken: appToken,
                   customerId: customerId,
                   permissions: permissions,
+                  customization: const {
+                    "button_text_color": "white",
+                    "theme_color": "red",
+                    "button_border_radius": "10",
+                    "overlay_color": "pink",
+                  },
                   callback: (resp) {
                     if (kDebugMode) {
                       print("Callback: $resp");
