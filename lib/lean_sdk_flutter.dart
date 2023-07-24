@@ -276,10 +276,10 @@ class _LeanState extends State<Lean> {
   String get _updatePaymentSource {
     return _leanSdk.updatePaymentSource(
         customerId: widget.customerId!,
-        paymentSourceId: widget.paymentSourceId,
+        paymentSourceId: widget.paymentSourceId!,
+        paymentDestinationId: widget.paymentDestinationId!,
         failRedirectUrl: widget.failRedirectUrl,
-        successRedirectUrl: widget.successRedirectUrl,
-        paymentDestinationId: widget.paymentDestinationId);
+        successRedirectUrl: widget.successRedirectUrl);
   }
 
   String get _pay {

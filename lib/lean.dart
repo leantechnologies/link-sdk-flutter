@@ -206,7 +206,7 @@ class LeanSDK {
     String customizationParams = _convertCustomizationToURLString();
 
     var initializationURL =
-        "$_getBaseUrl&method=${LeanMethods.createBeneficiary.name}&${Params.customer_id.name}=$customerId$customizationParams";
+        "$_getBaseUrl&method=${LeanMethods.createPaymentSource.name}&${Params.customer_id.name}=$customerId$customizationParams";
 
     if (paymentDestinationId != null && paymentDestinationId.isNotEmpty) {
       initializationURL =
@@ -233,29 +233,27 @@ class LeanSDK {
 
   updatePaymentSource({
     required String customerId,
-    String? paymentSourceId,
+    required String paymentSourceId,
+    required String paymentDestinationId,
     String? failRedirectUrl,
     String? successRedirectUrl,
-    String? paymentDestinationId,
   }) {
     if (customerId.isEmpty) {
       throw const FormatException('Validation Error: customerId is required');
     }
 
+    if (paymentSourceId.isEmpty) {
+      throw const FormatException('Validation Error: paymentSourceId is required');
+    }
+
+    if (paymentDestinationId.isEmpty) {
+      throw const FormatException('Validation Error: paymentDestinationId is required');
+    }
+
     String customizationParams = _convertCustomizationToURLString();
 
     var initializationURL =
-        "$_getBaseUrl&method=${LeanMethods.createBeneficiary.name}&${Params.customer_id.name}=$customerId$customizationParams";
-
-    if (paymentDestinationId != null && paymentDestinationId.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.payment_destination_id.name}=$paymentDestinationId";
-    }
-
-    if (paymentSourceId != null && paymentSourceId.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.payment_source_id.name}=$paymentSourceId";
-    }
+        "$_getBaseUrl&method=${LeanMethods.updatePaymentSource.name}&${Params.customer_id.name}=$customerId&${Params.payment_source_id.name}=$paymentSourceId&${Params.payment_destination_id.name}=$paymentDestinationId$customizationParams";
 
     if (failRedirectUrl != null && failRedirectUrl.isNotEmpty) {
       initializationURL =
@@ -285,7 +283,7 @@ class LeanSDK {
     String customizationParams = _convertCustomizationToURLString();
 
     var initializationURL =
-        "$_getBaseUrl&method=${LeanMethods.createBeneficiary.name}&${Params.payment_intent_id.name}=$paymentIntentId$customizationParams";
+        "$_getBaseUrl&method=${LeanMethods.pay.name}&${Params.payment_intent_id.name}=$paymentIntentId$customizationParams";
 
     if (accountId != null && accountId.isNotEmpty) {
       initializationURL =
