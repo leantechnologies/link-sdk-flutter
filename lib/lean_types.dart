@@ -20,12 +20,14 @@ enum Params {
   reconnect_id,
   show_balances,
   customization,
+  implementation,
   bank_identifier,
   fail_redirect_url,
   payment_intent_id,
   payment_source_id,
   initialization_url,
   success_redirect_url,
+  implementation_config,
   payment_destination_id,
 }
 

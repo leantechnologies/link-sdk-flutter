@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:lean_sdk_flutter/lean_logger.dart';
 
 import 'lean_types.dart';
@@ -20,6 +22,7 @@ class LeanSDK {
     language,
     showLogs,
     isSandbox,
+    packageInfo,
     customization,
   }) {
     _env = env;
@@ -42,7 +45,25 @@ class LeanSDK {
   //  ================    Members and helper methods    ================    //
 
   String get _getBaseUrl {
-    return "$_baseUrl?${Config.implementation.name}=webview-hosted-html&${Config.app_token.name}=$_appToken&${Config.sandbox.name}=$_isSandbox&${Config.language.name}=$_language&${Config.version.name}=$_version&${Config.country.name}=$_country&${Config.env.name}=$_env";
+    return "$_baseUrl?${Config.implementation.name}=webview-hosted-html$_getImplementationConfig&${Config.app_token.name}=$_appToken&${Config.sandbox.name}=$_isSandbox&${Config.language.name}=$_language&${Config.version.name}=$_version&${Config.country.name}=$_country&${Config.env.name}=$_env";
+  }
+
+  String get _getImplementationConfig {
+    final Map<String, String> implementation = {
+      "platform": "mobile",
+      "sdk": "flutter",
+      "os": Platform.operatingSystem.toString(),
+      "sdk_version": '3.0.0', // @todo: get this dynamically from pubspec.yaml
+    };
+
+    var implementationParams = '';
+
+    implementation.forEach((key, value) => {
+          implementationParams =
+              "$implementationParams&${Params.implementation_config.name}=$key+$value"
+        });
+
+    return implementationParams;
   }
 
   String _convertPermissionsToURLString(List<LeanPermissions> permissions) {
@@ -243,11 +264,13 @@ class LeanSDK {
     }
 
     if (paymentSourceId.isEmpty) {
-      throw const FormatException('Validation Error: paymentSourceId is required');
+      throw const FormatException(
+          'Validation Error: paymentSourceId is required');
     }
 
     if (paymentDestinationId.isEmpty) {
-      throw const FormatException('Validation Error: paymentDestinationId is required');
+      throw const FormatException(
+          'Validation Error: paymentDestinationId is required');
     }
 
     String customizationParams = _convertCustomizationToURLString();
