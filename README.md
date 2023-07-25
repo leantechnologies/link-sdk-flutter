@@ -20,7 +20,7 @@ Or, simply add the dependency to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  link_sdk_flutter: ^0.5.0
+  link_sdk_flutter: ^3.0.0
 ```
 
 ## Usage

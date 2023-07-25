@@ -5,6 +5,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import 'lean_logger.dart';
 import 'lean_types.dart';
+
 export 'lean_types.dart';
 
 class Lean extends StatefulWidget {
@@ -215,8 +216,6 @@ class Lean extends StatefulWidget {
         initializationUrl = '',
         paymentDestinationId = null;
 
-  // @TODO: call action cancelled after receiving a callback
-
   @override
   State<Lean> createState() => _LeanState();
 }
@@ -312,6 +311,7 @@ class _LeanState extends State<Lean> {
 
   @override
   Widget build(BuildContext context) {
+    LeanLogger.info(msg: "_initializationUrl $_initializationUrl");
     return WebView(
       initialUrl: _initializationUrl,
       javascriptMode: JavascriptMode.unrestricted,
