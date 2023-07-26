@@ -45,10 +45,10 @@ class LeanSDK {
   //  ================    Members and helper methods    ================    //
 
   String get _getBaseUrl {
-    return "$_baseUrl?${Config.implementation.name}=webview-hosted-html$_getImplementationConfig&${Config.app_token.name}=$_appToken&${Config.sandbox.name}=$_isSandbox&${Config.language.name}=$_language&${Config.version.name}=$_version&${Config.country.name}=$_country&${Config.env.name}=$_env";
+    return "$_baseUrl?${Config.implementation.name}=webview-hosted-html$_getImplementationAnalyticsParams&${Config.app_token.name}=$_appToken&${Config.sandbox.name}=$_isSandbox&${Config.language.name}=$_language&${Config.version.name}=$_version&${Config.country.name}=$_country&${Config.env.name}=$_env";
   }
 
-  String get _getImplementationConfig {
+  String get _getImplementationAnalyticsParams {
     final Map<String, String> implementation = {
       "platform": "mobile",
       "sdk": "flutter",
