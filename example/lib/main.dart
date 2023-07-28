@@ -20,8 +20,8 @@ class Demo extends StatelessWidget {
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var appToken = "3405cab6-5e6c-4925-a14a-b3ba8914d315";
-    var customerId = "3bb14718-2cab-423a-a133-0d94cb2a721f";
+    var appToken = "";
+    var customerId = "";
     var reconnectId = "";
     var paymentDestinationId = "";
     var paymentIntentId = "";
