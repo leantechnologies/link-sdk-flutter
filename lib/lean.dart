@@ -49,11 +49,12 @@ class LeanSDK {
   }
 
   String get _getImplementationAnalyticsParams {
-    final Map<String, String> implementation = {
+    final Map<String, dynamic> implementation = {
       "platform": "mobile",
       "sdk": "flutter",
       "os": Platform.operatingSystem.toString(),
       "sdk_version": '3.0.0', // @todo: get this dynamically from pubspec.yaml
+      "is_version_pinned": _version != "latest"
     };
 
     var implementationParams = '';
