@@ -20,7 +20,7 @@ Or, simply add the dependency to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  lean_sdk_flutter: ^3.0.0-alpha.2
+  lean_sdk_flutter: ^3.0.0-alpha.4
 ```
 
 ## Usage
