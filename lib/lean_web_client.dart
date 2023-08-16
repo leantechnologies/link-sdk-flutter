@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'dart:async';
 
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -20,7 +20,7 @@ class LeanWebClient {
     );
   }
 
-  static handleUrlOverride(
+  static FutureOr<NavigationDecision> handleUrlOverride(
     NavigationRequest request,
     LeanCallback? callback,
   ) async {
