@@ -1,4 +1,4 @@
-## 3.0.0-alpha.4
+## 3.0.0-alpha.5
 
 Major version bump for new SDK architecture
 

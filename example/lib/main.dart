@@ -29,7 +29,8 @@ class Home extends StatelessWidget {
       LeanPermissions.identity,
       LeanPermissions.transactions,
       LeanPermissions.balance,
-      LeanPermissions.accounts
+      LeanPermissions.accounts,
+      LeanPermissions.payments
     ];
     var isSandbox = true;
 
@@ -43,6 +44,7 @@ class Home extends StatelessWidget {
                 padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).viewInsets.bottom),
                 child: SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.8,
                     child: Lean.connect(
                   showLogs: true,
                   appToken: appToken,
