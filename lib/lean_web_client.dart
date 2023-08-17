@@ -20,14 +20,14 @@ class LeanWebClient {
     );
   }
 
-  static FutureOr<NavigationDecision> handleUrlOverride(
+  static Future<NavigationDecision> handleUrlOverride(
     NavigationRequest request,
     LeanCallback? callback,
   ) async {
     var uri = Uri.parse(request.url);
 
     if (request.url.contains('https://cdn.leantech.me/link/loader')) {
-      return NavigationDecision.prevent;
+      return NavigationDecision.navigate; // iOS initial load
     }
 
     if (uri.scheme == 'leanlink') {
