@@ -1,0 +1,84 @@
+name: build-apps
+on:
+  push:
+    branches:
+      - 'v2' # @TODO: change branch to master after release of v2
+jobs:
+  android_build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'liberica'
+          java-version: '17'
+      - run: fastlane android build_android
+
+      # Upload the APK to the build number folder
+      - uses: hkusu/s3-upload-action@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'eu-west-2'
+          aws-bucket: ${{ secrets.AWS_BUCKET }}
+          file-path: 'example/build/app/outputs/flutter-apk/app-debug.apk'
+          destination-dir: '/'
+          bucket-root: ${{ format('/link/webview/flutter/android/build.{0}', github.run_number) }}
+
+      # Upload the APK to latest folder overriding the previous APK
+      - uses: hkusu/s3-upload-action@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'eu-west-2'
+          aws-bucket: ${{ secrets.AWS_BUCKET }}
+          file-path: 'example/build/app/outputs/flutter-apk/app-debug.apk'
+          destination-dir: '/'
+          bucket-root: '/link/webview/flutter/android/latest'
+
+      - name: Invalidate CloudFront
+        uses: chetan/invalidate-cloudfront-action@v2
+        env:
+          DISTRIBUTION: ${{ secrets.DISTRIBUTION_ID }}
+          PATHS: "/link/webview/flutter/android/*"
+          AWS_REGION: "eu-west-2"
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  ios_build:
+    if: false # disable iOS builds until we have a valid Apple Developer account
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: fastlane ios build_ios
+
+      # Upload the IPA to the build number folder
+      - uses: hkusu/s3-upload-action@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'eu-west-2'
+          aws-bucket: ${{ secrets.AWS_BUCKET }}
+          file-path: '' # @TODO: get the IPA file path
+          destination-dir: '/'
+          bucket-root: ${{ format('/link/webview/flutter/ios/build.{0}', github.run_number) }}
+
+      # Upload the IPA to latest folder overriding the previous IPA
+      - uses: hkusu/s3-upload-action@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'eu-west-2'
+          aws-bucket: ${{ secrets.AWS_BUCKET }}
+          file-path: '' # @TODO: get the IPA file path
+          destination-dir: '/'
+          bucket-root: '/link/webview/flutter/ios/latest'
+
+      - name: Invalidate CloudFront
+        uses: chetan/invalidate-cloudfront-action@v2
+        env:
+          DISTRIBUTION: ${{ secrets.DISTRIBUTION_ID }}
+          PATHS: "/link/webview/flutter/ios/*"
+          AWS_REGION: "eu-west-2"
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
