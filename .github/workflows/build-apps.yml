@@ -22,7 +22,7 @@ jobs:
         uses: flutter-actions/setup-flutter@v2
         with:
           channel: stable
-          version: 3.0.2
+          version: 3.10.6
 
       - name: Install dependencies
         run: flutter pub get
@@ -33,8 +33,8 @@ jobs:
       - name: Build APK
         run: bundle exec fastlane android build_android
 
-      # Upload the APK to the build number folder
-      - uses: hkusu/s3-upload-action@v2
+      - name: ${{ format('Upload APK to /build.{0} directory', github.run_number) }}
+        uses: hkusu/s3-upload-action@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -44,8 +44,8 @@ jobs:
           destination-dir: '/'
           bucket-root: ${{ format('/link/webview/flutter/android/build.{0}', github.run_number) }}
 
-      # Upload the APK to latest folder overriding the previous APK
-      - uses: hkusu/s3-upload-action@v2
+      - name: Upload APK to /latest folder overriding previous APK
+        uses: hkusu/s3-upload-action@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -55,7 +55,7 @@ jobs:
           destination-dir: '/'
           bucket-root: '/link/webview/flutter/android/latest'
 
-      - name: Invalidate CloudFront
+      - name: Invalidate CloudFront cache
         uses: chetan/invalidate-cloudfront-action@v2
         env:
           DISTRIBUTION: ${{ secrets.DISTRIBUTION_ID }}
@@ -74,7 +74,7 @@ jobs:
         uses: flutter-actions/setup-flutter@v2
         with:
           channel: stable
-          version: 3.0.2
+          version: 3.10.6
 
       - name: Install dependencies
         run: flutter pub get
@@ -85,8 +85,8 @@ jobs:
       - name: Build IPA
         run: bundle exec fastlane ios build_ios
 
-      # Upload the IPA to the build number folder
-      - uses: hkusu/s3-upload-action@v2
+      - name: ${{ format('Upload IPA to /build.{0} directory', github.run_number) }}
+        uses: hkusu/s3-upload-action@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -96,8 +96,8 @@ jobs:
           destination-dir: '/'
           bucket-root: ${{ format('/link/webview/flutter/ios/build.{0}', github.run_number) }}
 
-      # Upload the IPA to latest folder overriding the previous IPA
-      - uses: hkusu/s3-upload-action@v2
+      - name: Upload IPA to /latest folder overriding previous IPA
+        uses: hkusu/s3-upload-action@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -107,7 +107,7 @@ jobs:
           destination-dir: '/'
           bucket-root: '/link/webview/flutter/ios/latest'
 
-      - name: Invalidate CloudFront
+      - name: Invalidate CloudFront cache
         uses: chetan/invalidate-cloudfront-action@v2
         env:
           DISTRIBUTION: ${{ secrets.DISTRIBUTION_ID }}
