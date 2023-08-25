@@ -28,10 +28,10 @@ jobs:
         run: flutter pub get
 
       - name: Setup Fastlane
-      - run: bundle install
+        run: bundle install
 
       - name: Build APK
-      - run: bundle exec fastlane android build_android
+        run: bundle exec fastlane android build_android
 
       # Upload the APK to the build number folder
       - uses: hkusu/s3-upload-action@v2
@@ -80,10 +80,10 @@ jobs:
         run: flutter pub get
 
       - name: Setup Fastlane
-      - run: bundle install
+        run: bundle install
 
       - name: Build IPA
-      - run: bundle exec fastlane ios build_ios
+        run: bundle exec fastlane ios build_ios
 
       # Upload the IPA to the build number folder
       - uses: hkusu/s3-upload-action@v2
