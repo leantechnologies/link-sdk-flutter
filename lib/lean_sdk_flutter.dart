@@ -311,9 +311,12 @@ class _LeanState extends State<Lean> {
 
   @override
   Widget build(BuildContext context) {
-    LeanLogger.info(msg: "_initializationUrl $_initializationUrl");
+    var initialUrl = Uri.parse(_initializationUrl).toString();
+
+    LeanLogger.info(msg: "_initializationUrl $initialUrl");
+
     return WebView(
-      initialUrl: _initializationUrl,
+      initialUrl: initialUrl,
       javascriptMode: JavascriptMode.unrestricted,
       gestureNavigationEnabled: true,
       onPageStarted: (_) async {
