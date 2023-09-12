@@ -1,0 +1,31 @@
+fastlane_version '2.53.1'
+
+# before_all do
+#     ensure_git_branch
+#     ensure_git_status_clean
+#     git_pull
+# end
+
+platform :ios do
+    desc "Build iOS .ipa"
+
+    lane :build_ios do
+        setup_ci if ENV['CI']
+        gym(scheme: 'Runner', workspace: './example/ios/Runner.xcworkspace')
+
+        # sync_code_signing
+        # disable_automatic_code_signing(path: "./example/ios/Runner.xcodeproj")
+        # build_app(scheme: "Runner", export_method: "ad-hoc", workspace: './example/ios/Runner.xcworkspace')
+        # enable_automatic_code_signing(path: "./example/ios/Runner.xcodeproj")
+    end
+end
+
+platform :android do
+    desc "Build Android .apk"
+
+    lane :build_android do
+        setup_ci if ENV['CI']
+        gradle(task: 'clean', project_dir: 'example/android/')
+        gradle(task: 'assemble', build_type: 'Release', project_dir: 'example/android/')
+    end
+end

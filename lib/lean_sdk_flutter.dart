@@ -1,246 +1,332 @@
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:flutter/widgets.dart';
+import 'package:lean_sdk_flutter/lean.dart';
+import 'package:lean_sdk_flutter/lean_web_client.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class LeanResponse {
-  final String status;
-  final String method;
-  final String? exitPoint;
+import 'lean_logger.dart';
+import 'lean_types.dart';
 
-  LeanResponse(this.status, this.method, this.exitPoint);
-
-  LeanResponse.fromJson(Map<String, dynamic> json)
-      : status = json['status'],
-        method = json['method'],
-        exitPoint = json['exit_point'];
-}
-
-typedef LeanCallback = void Function(String response);
-typedef LeanActionError = void Function(String errorMessage);
-typedef LeanActionCancelled = void Function();
-
-enum Country { uae, ksa }
-
-enum Permission { identity, transactions, balance, accounts }
-
-enum LeanActionType { connect, createPaymentSource, reconnect, pay }
+export 'lean_types.dart';
 
 class Lean extends StatefulWidget {
+  //  ================    Initialization params    =============    //
+
+  final String env; // Internal
+  final String version;
+  final bool showLogs;
+  final bool isSandbox;
+  final LeanCountry country;
+  final LeanLanguage language;
+
+  //  ================    Link method params    ================    //
+
   final String appToken;
+  final String? accessTo;
+  final String? accountId;
+  final String? accessFrom;
   final String? customerId;
   final String? reconnectId;
-  final String? paymentIntentId;
-  final List<Permission>? permissions;
-  final String version;
-  final bool isSandbox;
-  final Country country;
+  final bool? showBalances;
   final LeanCallback? callback;
+  final String? bankIdentifier;
+  final String? paymentIntentId;
+  final String? failRedirectUrl;
+  final String? paymentSourceId;
+  final String? successRedirectUrl;
+  final String? paymentDestinationId;
+  final Map<String, String>? customization;
+  final List<LeanPermissions>? permissions;
   final LeanActionCancelled? actionCancelled;
-  final LeanActionType _actionType;
 
-  const Lean.connect(
-      {super.key,
-      required this.appToken,
-      required this.customerId,
-      required this.permissions,
-      this.version = 'latest',
-      this.isSandbox = true,
-      this.country = Country.uae,
-      this.callback,
-      this.actionCancelled})
-      : _actionType = LeanActionType.connect,
-        paymentIntentId = null,
-        reconnectId = null;
+  //  ================    Extra params    =====================    //
 
-  const Lean.createPaymentSource(
-      {super.key,
-      required this.appToken,
-      required this.customerId,
-      this.version = 'latest',
-      this.isSandbox = true,
-      this.country = Country.uae,
-      this.callback,
-      this.actionCancelled})
-      : _actionType = LeanActionType.createPaymentSource,
+  final LeanMethods _method;
+  final String initializationUrl;
+
+  const Lean.connect({
+    super.key,
+    required this.appToken,
+    required this.customerId,
+    required this.permissions,
+    this.callback,
+    this.customization,
+    this.actionCancelled,
+    this.isSandbox = true,
+    this.showLogs = false,
+    this.version = 'latest',
+    this.env = 'production',
+    this.country = LeanCountry.ae,
+    this.language = LeanLanguage.en,
+    // method-specific properties
+    this.accessTo,
+    this.accessFrom,
+    this.bankIdentifier,
+    this.failRedirectUrl,
+    this.successRedirectUrl,
+    this.paymentDestinationId,
+  })  : _method = LeanMethods.connect,
+        accountId = null,
         reconnectId = null,
+        showBalances = null,
+        paymentSourceId = null,
         paymentIntentId = null,
-        permissions = null;
+        initializationUrl = '';
 
-  const Lean.reconnect(
-      {super.key,
-      required this.appToken,
-      required this.reconnectId,
-      this.version = 'latest',
-      this.isSandbox = true,
-      this.country = Country.uae,
-      this.callback,
-      this.actionCancelled})
-      : _actionType = LeanActionType.reconnect,
+  const Lean.reconnect({
+    super.key,
+    required this.appToken,
+    required this.reconnectId,
+    this.callback,
+    this.customization,
+    this.actionCancelled,
+    this.isSandbox = true,
+    this.showLogs = false,
+    this.version = 'latest',
+    this.env = 'production',
+    this.country = LeanCountry.ae,
+    this.language = LeanLanguage.en,
+  })  : _method = LeanMethods.reconnect,
+        accessTo = null,
+        accountId = null,
         customerId = null,
+        accessFrom = null,
+        permissions = null,
+        showBalances = null,
+        bankIdentifier = null,
+        paymentSourceId = null,
         paymentIntentId = null,
-        permissions = null;
+        initializationUrl = '',
+        failRedirectUrl = null,
+        successRedirectUrl = null,
+        paymentDestinationId = null;
 
-  const Lean.pay(
-      {super.key,
-      required this.appToken,
-      required this.paymentIntentId,
-      this.version = 'latest',
-      this.isSandbox = true,
-      this.country = Country.uae,
-      this.callback,
-      this.actionCancelled})
-      : _actionType = LeanActionType.pay,
-        customerId = null,
+  const Lean.createBeneficiary({
+    super.key,
+    required this.appToken,
+    required this.customerId,
+    this.callback,
+    this.customization,
+    this.actionCancelled,
+    this.isSandbox = true,
+    this.showLogs = false,
+    this.version = 'latest',
+    this.env = 'production',
+    this.country = LeanCountry.ae,
+    this.language = LeanLanguage.en,
+    // method-specific properties
+    this.paymentSourceId,
+    this.failRedirectUrl,
+    this.successRedirectUrl,
+    this.paymentDestinationId,
+  })  : _method = LeanMethods.createBeneficiary,
+        accessTo = null,
+        accountId = null,
+        accessFrom = null,
+        permissions = null,
         reconnectId = null,
-        permissions = null;
+        showBalances = null,
+        bankIdentifier = null,
+        paymentIntentId = null,
+        initializationUrl = '';
+
+  const Lean.createPaymentSource({
+    super.key,
+    required this.appToken,
+    required this.customerId,
+    this.callback,
+    this.customization,
+    this.actionCancelled,
+    this.isSandbox = true,
+    this.showLogs = false,
+    this.version = 'latest',
+    this.env = 'production',
+    this.country = LeanCountry.ae,
+    this.language = LeanLanguage.en,
+    // method-specific properties
+    this.bankIdentifier,
+    this.failRedirectUrl,
+    this.successRedirectUrl,
+    this.paymentDestinationId,
+  })  : _method = LeanMethods.createPaymentSource,
+        accessTo = null,
+        accountId = null,
+        accessFrom = null,
+        permissions = null,
+        reconnectId = null,
+        showBalances = null,
+        paymentIntentId = null,
+        paymentSourceId = null,
+        initializationUrl = '';
+
+  const Lean.updatePaymentSource({
+    super.key,
+    required this.appToken,
+    required this.customerId,
+    this.callback,
+    this.customization,
+    this.actionCancelled,
+    this.isSandbox = true,
+    this.showLogs = false,
+    this.version = 'latest',
+    this.env = 'production',
+    this.country = LeanCountry.ae,
+    this.language = LeanLanguage.en,
+    // method-specific properties
+    this.paymentSourceId,
+    this.failRedirectUrl,
+    this.successRedirectUrl,
+    this.paymentDestinationId,
+  })  : _method = LeanMethods.updatePaymentSource,
+        accessTo = null,
+        accountId = null,
+        accessFrom = null,
+        permissions = null,
+        reconnectId = null,
+        showBalances = null,
+        bankIdentifier = null,
+        paymentIntentId = null,
+        initializationUrl = '';
+
+  const Lean.pay({
+    super.key,
+    required this.appToken,
+    required this.paymentIntentId,
+    this.callback,
+    this.customization,
+    this.actionCancelled,
+    this.isSandbox = true,
+    this.showLogs = false,
+    this.version = 'latest',
+    this.env = 'production',
+    this.country = LeanCountry.ae,
+    this.language = LeanLanguage.en,
+    // method-specific properties
+    this.accountId,
+    this.showBalances,
+    this.failRedirectUrl,
+    this.successRedirectUrl,
+  })  : _method = LeanMethods.pay,
+        accessTo = null,
+        customerId = null,
+        accessFrom = null,
+        reconnectId = null,
+        permissions = null,
+        bankIdentifier = null,
+        paymentSourceId = null,
+        initializationUrl = '',
+        paymentDestinationId = null;
 
   @override
-  _LeanState createState() => _LeanState();
+  State<Lean> createState() => _LeanState();
 }
 
 class _LeanState extends State<Lean> {
-  late WebViewController _webViewController;
-  final Completer<WebViewController> _completer = Completer<WebViewController>();
+  LeanSDK get _leanSdk {
+    var leanSdk = LeanSDK(
+      env: widget.env,
+      version: widget.version,
+      appToken: widget.appToken,
+      showLogs: widget.showLogs,
+      isSandbox: widget.isSandbox,
+      country: widget.country.name,
+      language: widget.language.name,
+      customization: widget.customization,
+    );
 
-  String get _html {
-    return ('''
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    </head>
-    <body>
-    <div id="lean-link"></div>
-    <script src="https://cdn.leantech.me/${widget.country == Country.ksa ? "sa/" : ""}link/sdk/web/${widget.version}/Lean.min.js"></script>
-    </body>
-    </html>
-    ''');
+    return leanSdk;
   }
 
-  String get _javaScript {
-    switch (widget._actionType) {
-      case LeanActionType.connect:
-        return _connectJsFunction;
-      case LeanActionType.reconnect:
-        return _reconnectJsFunction;
-      case LeanActionType.createPaymentSource:
-        return _createPaymentSourceJsFunction;
-      case LeanActionType.pay:
-        return _payJsFunction;
+  String get _connect {
+    return _leanSdk.connect(
+        customerId: widget.customerId!,
+        permissions: widget.permissions!,
+        accessTo: widget.accessTo,
+        accessFrom: widget.accessFrom,
+        bankIdentifier: widget.bankIdentifier,
+        failRedirectUrl: widget.failRedirectUrl,
+        successRedirectUrl: widget.successRedirectUrl,
+        paymentDestinationId: widget.paymentDestinationId);
+  }
+
+  String get _reconnect {
+    return _leanSdk.reconnect(
+      reconnectId: widget.reconnectId!,
+    );
+  }
+
+  String get _createBeneficiary {
+    return _leanSdk.createBeneficiary(
+        customerId: widget.customerId!,
+        paymentSourceId: widget.paymentSourceId,
+        failRedirectUrl: widget.failRedirectUrl,
+        successRedirectUrl: widget.successRedirectUrl,
+        paymentDestinationId: widget.paymentDestinationId);
+  }
+
+  String get _createPaymentSource {
+    return _leanSdk.createPaymentSource(
+        customerId: widget.customerId!,
+        bankIdentifier: widget.bankIdentifier,
+        failRedirectUrl: widget.failRedirectUrl,
+        successRedirectUrl: widget.successRedirectUrl,
+        paymentDestinationId: widget.paymentDestinationId);
+  }
+
+  String get _updatePaymentSource {
+    return _leanSdk.updatePaymentSource(
+        customerId: widget.customerId!,
+        paymentSourceId: widget.paymentSourceId!,
+        paymentDestinationId: widget.paymentDestinationId!,
+        failRedirectUrl: widget.failRedirectUrl,
+        successRedirectUrl: widget.successRedirectUrl);
+  }
+
+  String get _pay {
+    return _leanSdk.pay(
+        paymentIntentId: widget.paymentIntentId!,
+        accountId: widget.accountId,
+        showBalances: widget.showBalances,
+        failRedirectUrl: widget.failRedirectUrl,
+        successRedirectUrl: widget.successRedirectUrl);
+  }
+
+  String get _initializationUrl {
+    switch (widget._method) {
+      case LeanMethods.connect:
+        return _connect;
+      case LeanMethods.reconnect:
+        return _reconnect;
+      case LeanMethods.createBeneficiary:
+        return _createBeneficiary;
+      case LeanMethods.createPaymentSource:
+        return _createPaymentSource;
+      case LeanMethods.updatePaymentSource:
+        return _updatePaymentSource;
+      case LeanMethods.pay:
+        return _pay;
+      default:
+        return '';
     }
-  }
-
-  String get _connectJsFunction {
-    return ('''
-          function postResponse(status) {
-              status.method = "CONNECT"
-              LeanFlutter.postMessage(JSON.stringify(status))
-          }
-          try {
-            Lean.connect({
-              app_token: "${widget.appToken}",
-              customer_id: "${widget.customerId}",
-              permissions: ["${widget.permissions?.map((p) => p.name).join("\",\"")}"],
-              sandbox: ${widget.isSandbox},
-              callback: postResponse
-            });
-          } catch (e) {
-            postResponse({ method: "CONNECT", status: "ERROR", message: "Lean not initialized" })
-          }
-    ''');
-  }
-
-  String get _createPaymentSourceJsFunction {
-    return ('''
-          function postResponse(status) {
-              status.method = "CREATE_PAYMENT_SOURCE"
-              LeanFlutter.postMessage(JSON.stringify(status))
-          }
-          try {
-            Lean.createPaymentSource({
-              app_token: "${widget.appToken}",
-              customer_id: "${widget.customerId}",
-              sandbox: ${widget.isSandbox},
-              callback: postResponse
-            });
-          } catch (e) {
-            postResponse({ method: "CREATE_PAYMENT_SOURCE", status: "ERROR", message: "Lean not initialized" })
-          }
-    ''');
-  }
-
-  String get _reconnectJsFunction {
-    return ('''
-          function postResponse(status) {
-              status.method = "RECONNECT"
-              LeanFlutter.postMessage(JSON.stringify(status))
-          }
-          try {
-            Lean.reconnect({
-              app_token: "${widget.appToken}",
-              reconnect_id: "${widget.reconnectId}",
-              sandbox: ${widget.isSandbox},
-              callback: postResponse
-            });
-          } catch (e) {
-            postResponse({ method: "RECONNECT", status: "ERROR", message: "Lean not initialized" })
-          }
-    ''');
-  }
-
-  String get _payJsFunction {
-    return ('''
-          function postResponse(status) {
-              status.method = "PAY"
-              LeanFlutter.postMessage(JSON.stringify(status))
-          }
-          try {
-            Lean.pay({
-              app_token: "${widget.appToken}",
-              customer_id: "${widget.customerId}",
-              sandbox: ${widget.isSandbox},
-              callback: postResponse
-            });
-          } catch (e) {
-            postResponse({ method: "PAY", status: "ERROR", message: "Lean not initialized" })
-          }
-    ''');
-  }
-
-  JavascriptChannel _leanJavascriptChannel(BuildContext context) {
-    return JavascriptChannel(
-        name: 'LeanFlutter',
-        onMessageReceived: (JavascriptMessage message) {
-
-          Map<String, dynamic> userMap = jsonDecode(message.message);
-          var resp = LeanResponse.fromJson(userMap);
-          if (widget.actionCancelled != null && "CANCELLED" == resp.status) {
-            widget.actionCancelled!();
-          } else if (widget.callback != null) {
-            widget.callback!(message.message);
-          }
-        });
   }
 
   @override
   Widget build(BuildContext context) {
+    var initialUrl = Uri.parse(_initializationUrl).toString();
+
+    LeanLogger.info(msg: "_initializationUrl $initialUrl");
+
     return WebView(
-      initialUrl: '',
+      initialUrl: initialUrl,
       javascriptMode: JavascriptMode.unrestricted,
       gestureNavigationEnabled: true,
-      onWebViewCreated: (WebViewController webViewController) {
-        _webViewController = webViewController;
-        _webViewController.loadHtmlString(_html);
+      onPageStarted: (_) async {
+        LeanLogger.info(msg: 'Lean SDK initialization started.');
       },
       onPageFinished: (_) async {
-        await Future.delayed(const Duration(milliseconds: 800));
-        _webViewController.runJavascript(_javaScript);
+        LeanLogger.info(msg: 'Lean SDK initialization completed.');
       },
-      javascriptChannels: <JavascriptChannel>{
-        _leanJavascriptChannel(context),
+      navigationDelegate: (request) {
+        return LeanWebClient.handleUrlOverride(request, widget.callback);
       },
     );
   }

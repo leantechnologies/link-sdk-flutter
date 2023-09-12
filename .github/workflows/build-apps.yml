@@ -1,0 +1,117 @@
+name: build-apps
+on:
+  push:
+    branches:
+      - v2 # @TODO: change branch to master after release of v2
+jobs:
+  android_build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: liberica
+          java-version: 17
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+
+      - name: Setup Flutter SDK
+        uses: flutter-actions/setup-flutter@v2
+        with:
+          channel: stable
+          version: 3.10.6
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Setup Fastlane
+        run: bundle install
+
+      - name: Build APK
+        run: bundle exec fastlane android build_android
+
+      - name: ${{ format('Upload APK to /build.{0} directory', github.run_number) }}
+        uses: hkusu/s3-upload-action@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'eu-west-2'
+          aws-bucket: ${{ secrets.AWS_BUCKET }}
+          file-path: 'example/build/app/outputs/flutter-apk/app-release.apk'
+          destination-dir: '/'
+          bucket-root: ${{ format('/link/webview/flutter/android/build.{0}', github.run_number) }}
+
+      - name: Upload APK to /latest folder overriding previous APK
+        uses: hkusu/s3-upload-action@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'eu-west-2'
+          aws-bucket: ${{ secrets.AWS_BUCKET }}
+          file-path: 'example/build/app/outputs/flutter-apk/app-release.apk'
+          destination-dir: '/'
+          bucket-root: '/link/webview/flutter/android/latest'
+
+      - name: Invalidate CloudFront cache
+        uses: chetan/invalidate-cloudfront-action@v2
+        env:
+          DISTRIBUTION: ${{ secrets.DISTRIBUTION_ID }}
+          PATHS: '/link/webview/flutter/android/*'
+          AWS_REGION: 'eu-west-2'
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  ios_build:
+    if: false # disable iOS builds until we have a valid Apple Developer account
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Flutter SDK
+        uses: flutter-actions/setup-flutter@v2
+        with:
+          channel: stable
+          version: 3.10.6
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Setup Fastlane
+        run: bundle install
+
+      - name: Build IPA
+        run: bundle exec fastlane ios build_ios
+
+      - name: ${{ format('Upload IPA to /build.{0} directory', github.run_number) }}
+        uses: hkusu/s3-upload-action@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'eu-west-2'
+          aws-bucket: ${{ secrets.AWS_BUCKET }}
+          file-path: '' # @TODO: get the IPA file path
+          destination-dir: '/'
+          bucket-root: ${{ format('/link/webview/flutter/ios/build.{0}', github.run_number) }}
+
+      - name: Upload IPA to /latest folder overriding previous IPA
+        uses: hkusu/s3-upload-action@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'eu-west-2'
+          aws-bucket: ${{ secrets.AWS_BUCKET }}
+          file-path: '' # @TODO: get the IPA file path
+          destination-dir: '/'
+          bucket-root: '/link/webview/flutter/ios/latest'
+
+      - name: Invalidate CloudFront cache
+        uses: chetan/invalidate-cloudfront-action@v2
+        env:
+          DISTRIBUTION: ${{ secrets.DISTRIBUTION_ID }}
+          PATHS: '/link/webview/flutter/ios/*'
+          AWS_REGION: 'eu-west-2'
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

@@ -20,43 +20,50 @@ class Demo extends StatelessWidget {
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var appToken = "3405cab6-5e6c-4925-a14a-b3ba8914d315";
-    var customerId = "3bb14718-2cab-423a-a133-0d94cb2a721f";
+    var appToken = "";
+    var customerId = "";
     var reconnectId = "";
     var paymentDestinationId = "";
     var paymentIntentId = "";
     var permissions = [
-      Permission.identity,
-      Permission.transactions,
-      Permission.balance,
-      Permission.accounts
+      LeanPermissions.identity,
+      LeanPermissions.transactions,
+      LeanPermissions.balance,
+      LeanPermissions.accounts,
+      LeanPermissions.payments
     ];
     var isSandbox = true;
 
     _connect() {
       showModalBottomSheet(
           isScrollControlled: true,
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.transparent,
           context: context,
           builder: (context) {
             return Padding(
                 padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).viewInsets.bottom),
                 child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.8,
+                  height: MediaQuery.of(context).size.height * 0.8,
                     child: Lean.connect(
-                      appToken: appToken,
-                      customerId: customerId,
-                      permissions: permissions,
-                      isSandbox: isSandbox,
-                      callback: (resp) {
-                        if (kDebugMode) {
-                          print("Callback: $resp");
-                        }
-                        Navigator.pop(context);
-                      },
-                      actionCancelled: () => Navigator.pop(context),
-                    )));
+                  showLogs: true,
+                  appToken: appToken,
+                  customerId: customerId,
+                  permissions: permissions,
+                  customization: const {
+                    "button_text_color": "white",
+                    "theme_color": "red",
+                    "button_border_radius": "10",
+                    "overlay_color": "pink",
+                  },
+                  callback: (resp) {
+                    if (kDebugMode) {
+                      print("Callback: $resp");
+                    }
+                    Navigator.pop(context);
+                  },
+                  actionCancelled: () => Navigator.pop(context),
+                )));
           });
     }
 
@@ -68,8 +75,6 @@ class Home extends StatelessWidget {
                   padding: EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewInsets.bottom),
                   child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.8,
-                    width: MediaQuery.of(context).size.width * 0.8,
                     child: Lean.createPaymentSource(
                       appToken: appToken,
                       customerId: customerId,
@@ -88,36 +93,41 @@ class Home extends StatelessWidget {
     }
 
     _reconnect() {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Lean.reconnect(
-            appToken: appToken,
-            reconnectId: reconnectId,
-            isSandbox: isSandbox,
-            callback: (resp) {
-              if (kDebugMode) {
-                print("Callback: $resp");
-              }
-              Navigator.pop(context);
-            },
-            actionCancelled: () => Navigator.pop(context),
-          ),
-        ),
-      );
+      showModalBottomSheet(
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          context: context,
+          builder: (context) {
+            return Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: SizedBox(
+                    child: Lean.reconnect(
+                  appToken: appToken,
+                  reconnectId: reconnectId,
+                  isSandbox: isSandbox,
+                  env: 'development',
+                  callback: (resp) {
+                    if (kDebugMode) {
+                      print("Callback: $resp");
+                    }
+                    Navigator.pop(context);
+                  },
+                  actionCancelled: () => Navigator.pop(context),
+                )));
+          });
     }
 
     _pay() {
       showModalBottomSheet(
           isScrollControlled: true,
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.transparent,
           context: context,
           builder: (context) {
             return Padding(
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
               child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.8,
                 child: Lean.pay(
                   appToken: appToken,
                   paymentIntentId: paymentIntentId,

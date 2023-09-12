@@ -14,13 +14,13 @@ The Flutter wrapper for LinkSDK allows you to connect your bank accounts and ini
 
 Run this command:
 ```shell
-flutter pub add link_sdk_flutter
+flutter pub add lean_sdk_flutter
 ```
 Or, simply add the dependency to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  link_sdk_flutter: ^0.5.0
+  lean_sdk_flutter: ^3.0.0-alpha.6
 ```
 
 ## Usage
