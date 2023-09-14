@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:lean_sdk_flutter/lean.dart';
 import 'package:lean_sdk_flutter/lean_web_client.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
 import 'lean_logger.dart';
 import 'lean_types.dart';
@@ -311,23 +312,43 @@ class _LeanState extends State<Lean> {
 
   @override
   Widget build(BuildContext context) {
-    var initialUrl = Uri.parse(_initializationUrl).toString();
+    var initialUrl = Uri.parse(_initializationUrl);
 
     LeanLogger.info(msg: "_initializationUrl $initialUrl");
 
-    return WebView(
-      initialUrl: initialUrl,
-      javascriptMode: JavascriptMode.unrestricted,
-      gestureNavigationEnabled: true,
-      onPageStarted: (_) async {
-        LeanLogger.info(msg: 'Lean SDK initialization started.');
-      },
-      onPageFinished: (_) async {
-        LeanLogger.info(msg: 'Lean SDK initialization completed.');
-      },
-      navigationDelegate: (request) {
-        return LeanWebClient.handleUrlOverride(request, widget.callback);
-      },
-    );
+    late final PlatformWebViewControllerCreationParams params;
+
+    if (WebViewPlatform.instance is WebKitWebViewPlatform) {
+      params = WebKitWebViewControllerCreationParams(
+        allowsInlineMediaPlayback: true,
+        mediaTypesRequiringUserAction: const { PlaybackMediaTypes.video }
+      );
+    } else {
+      params = const PlatformWebViewControllerCreationParams();
+    }
+
+    final WebViewController controller = WebViewController.fromPlatformCreationParams(params)
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageStarted: (String url) {
+            LeanLogger.info(msg: 'Lean SDK initialization started.');
+          },
+          onPageFinished: (String url) {
+            LeanLogger.info(msg: 'Lean SDK initialization completed.');
+          },
+          onNavigationRequest: (NavigationRequest request) {
+            return LeanWebClient.handleUrlOverride(request, widget.callback);
+          },
+        ),
+      )
+      ..loadRequest(initialUrl);
+
+    if (controller.platform is WebKitWebViewController) {
+      (controller.platform as WebKitWebViewController)
+          .setInspectable(true);
+    }
+
+    return WebViewWidget(controller: controller);
   }
 }
