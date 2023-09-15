@@ -3,6 +3,8 @@ import 'package:lean_sdk_flutter/lean.dart';
 import 'package:lean_sdk_flutter/lean_web_client.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
+import 'package:webview_flutter_android/webview_flutter_android.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'lean_logger.dart';
 import 'lean_types.dart';
@@ -310,8 +312,23 @@ class _LeanState extends State<Lean> {
     }
   }
 
+  Future<void> requestCameraPermission(PlatformWebViewPermissionRequest request) async {
+    final status = await Permission.camera.request();
+    if (status == PermissionStatus.granted) {
+      request.grant();
+    } else if (status == PermissionStatus.denied) {
+      // Permission denied.
+    } else if (status == PermissionStatus.permanentlyDenied) {
+      // Permission permanently denied.
+    }
+  }
+
+  late final WebViewController _controller;
+
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+
     var initialUrl = Uri.parse(_initializationUrl);
 
     LeanLogger.info(msg: "_initializationUrl $initialUrl");
@@ -321,7 +338,7 @@ class _LeanState extends State<Lean> {
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
       params = WebKitWebViewControllerCreationParams(
         allowsInlineMediaPlayback: true,
-        mediaTypesRequiringUserAction: const { PlaybackMediaTypes.video }
+        mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{}
       );
     } else {
       params = const PlatformWebViewControllerCreationParams();
@@ -349,6 +366,21 @@ class _LeanState extends State<Lean> {
           .setInspectable(true);
     }
 
-    return WebViewWidget(controller: controller);
+    if (controller.platform is AndroidWebViewController) {
+      AndroidWebViewController.enableDebugging(true);
+      (controller.platform as AndroidWebViewController)
+          .setMediaPlaybackRequiresUserGesture(false);
+      (controller.platform as AndroidWebViewController)
+          .setOnPlatformPermissionRequest((PlatformWebViewPermissionRequest request) {
+            requestCameraPermission(request);
+          });
+    }
+
+    _controller = controller;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WebViewWidget(controller: _controller);
   }
 }
