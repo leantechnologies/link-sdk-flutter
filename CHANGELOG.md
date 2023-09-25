@@ -1,3 +1,7 @@
+## 3.0.1
+
+ADCB Facepass support
+
 ## 3.0.0-alpha.6
 
 Major version bump for new SDK architecture
