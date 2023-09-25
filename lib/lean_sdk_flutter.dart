@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lean_sdk_flutter/lean.dart';
 import 'package:lean_sdk_flutter/lean_web_client.dart';
@@ -362,12 +363,17 @@ class _LeanState extends State<Lean> {
       ..loadRequest(initialUrl);
 
     if (controller.platform is WebKitWebViewController) {
-      (controller.platform as WebKitWebViewController)
-          .setInspectable(true);
+      if (kDebugMode) {
+        (controller.platform as WebKitWebViewController)
+            .setInspectable(true);
+      }
     }
 
     if (controller.platform is AndroidWebViewController) {
-      AndroidWebViewController.enableDebugging(true);
+      if (kDebugMode) {
+        AndroidWebViewController.enableDebugging(true);
+      }
+
       (controller.platform as AndroidWebViewController)
           .setMediaPlaybackRequiresUserGesture(false);
       (controller.platform as AndroidWebViewController)
