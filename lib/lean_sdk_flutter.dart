@@ -1,7 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lean_sdk_flutter/lean.dart';
 import 'package:lean_sdk_flutter/lean_web_client.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
+import 'package:webview_flutter_android/webview_flutter_android.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'lean_logger.dart';
 import 'lean_types.dart';
@@ -309,25 +313,80 @@ class _LeanState extends State<Lean> {
     }
   }
 
+  Future<void> requestCameraPermission(PlatformWebViewPermissionRequest request) async {
+    final status = await Permission.camera.request();
+    if (status == PermissionStatus.granted) {
+      request.grant();
+    } else if (status == PermissionStatus.denied) {
+      // Permission denied.
+    } else if (status == PermissionStatus.permanentlyDenied) {
+      // Permission permanently denied.
+    }
+  }
+
+  late final WebViewController _controller;
+
   @override
-  Widget build(BuildContext context) {
-    var initialUrl = Uri.parse(_initializationUrl).toString();
+  void initState() {
+    super.initState();
+
+    var initialUrl = Uri.parse(_initializationUrl);
 
     LeanLogger.info(msg: "_initializationUrl $initialUrl");
 
-    return WebView(
-      initialUrl: initialUrl,
-      javascriptMode: JavascriptMode.unrestricted,
-      gestureNavigationEnabled: true,
-      onPageStarted: (_) async {
-        LeanLogger.info(msg: 'Lean SDK initialization started.');
-      },
-      onPageFinished: (_) async {
-        LeanLogger.info(msg: 'Lean SDK initialization completed.');
-      },
-      navigationDelegate: (request) {
-        return LeanWebClient.handleUrlOverride(request, widget.callback);
-      },
-    );
+    late final PlatformWebViewControllerCreationParams params;
+
+    if (WebViewPlatform.instance is WebKitWebViewPlatform) {
+      params = WebKitWebViewControllerCreationParams(
+        allowsInlineMediaPlayback: true,
+        mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{}
+      );
+    } else {
+      params = const PlatformWebViewControllerCreationParams();
+    }
+
+    final WebViewController controller = WebViewController.fromPlatformCreationParams(params)
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageStarted: (String url) {
+            LeanLogger.info(msg: 'Lean SDK initialization started.');
+          },
+          onPageFinished: (String url) {
+            LeanLogger.info(msg: 'Lean SDK initialization completed.');
+          },
+          onNavigationRequest: (NavigationRequest request) {
+            return LeanWebClient.handleUrlOverride(request, widget.callback);
+          },
+        ),
+      )
+      ..loadRequest(initialUrl);
+
+    if (controller.platform is WebKitWebViewController) {
+      if (kDebugMode) {
+        (controller.platform as WebKitWebViewController)
+            .setInspectable(true);
+      }
+    }
+
+    if (controller.platform is AndroidWebViewController) {
+      if (kDebugMode) {
+        AndroidWebViewController.enableDebugging(true);
+      }
+
+      (controller.platform as AndroidWebViewController)
+          .setMediaPlaybackRequiresUserGesture(false);
+      (controller.platform as AndroidWebViewController)
+          .setOnPlatformPermissionRequest((PlatformWebViewPermissionRequest request) {
+            requestCameraPermission(request);
+          });
+    }
+
+    _controller = controller;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WebViewWidget(controller: _controller);
   }
 }
