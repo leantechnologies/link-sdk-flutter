@@ -1,6 +1,6 @@
 name: lean_sdk_flutter
 description: Lean SDK Flutter.
-version: 3.0.0-alpha.6
+version: 3.0.1
 homepage: https://github.com/leantechnologies/link-sdk-flutter
 
 environment:
@@ -14,6 +14,8 @@ dependencies:
   webview_flutter: ^4.2.4
   url_launcher: ^6.0.9
   permission_handler: ^11.0.0
+  webview_flutter_wkwebview: ^3.8.0
+  webview_flutter_android: ^3.10.1
 
 dev_dependencies:
   flutter_test:
