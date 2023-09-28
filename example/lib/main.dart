@@ -1,23 +1,56 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lean_sdk_flutter/lean_sdk_flutter.dart';
 
 void main() {
-  runApp(const Demo());
+  runApp(const MyApp());
 }
 
-class Demo extends StatelessWidget {
-  const Demo({Key? key}) : super(key: key);
+/// Route configuration.
+final GoRouter _router = GoRouter(
+  routes: <RouteBase>[
+    GoRoute(
+      path: '/',
+      builder: (BuildContext context, GoRouterState state) {
+        return const HomeScreen();
+      },
+      routes: <RouteBase>[
+        GoRoute(
+          path: '/app/flutter/connect/success',
+          builder: (BuildContext context, GoRouterState state) {
+            return const SuccessScreen();
+          },
+        ),
+        GoRoute(
+          path: '/app/flutter/connect/fail',
+          builder: (BuildContext context, GoRouterState state) {
+            return const FailScreen();
+          },
+        ),
+      ],
+    ),
+  ],
+);
+
+/// Main app.
+class MyApp extends StatelessWidget {
+  /// Constructs a [MyApp]
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Home(),
+    return MaterialApp.router(
+      routerConfig: _router,
     );
   }
 }
 
-class Home extends StatelessWidget {
+/// Home screen
+class HomeScreen extends StatelessWidget {
+  /// Constructs a [HomeScreen]
+  const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     var appToken = "";
@@ -50,6 +83,8 @@ class Home extends StatelessWidget {
                   appToken: appToken,
                   customerId: customerId,
                   permissions: permissions,
+                  failRedirectUrl: "https://leantech.me/app/flutter/connect/success",
+                  successRedirectUrl: "https://leantech.me/app/flutter/connect/fail",
                   customization: const {
                     "button_text_color": "white",
                     "theme_color": "red",
@@ -204,8 +239,46 @@ class Home extends StatelessWidget {
 
   _buttonStyle() => ElevatedButton.styleFrom(
         shape: const StadiumBorder(),
-        primary: Colors.black,
+        backgroundColor: Colors.black,
         minimumSize: const Size(200, 40),
         maximumSize: const Size(200, 40),
       );
+}
+
+/// Success screen
+class SuccessScreen extends StatelessWidget {
+  /// Constructs a [SuccessScreen]
+  const SuccessScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Success')),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () => context.go('/'),
+          child: const Text('Account connected. Go back to the Home screen'),
+        ),
+      ),
+    );
+  }
+}
+
+/// Fail screen
+class FailScreen extends StatelessWidget {
+  /// Constructs a [FailScreen]
+  const FailScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Fail')),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () => context.go('/'),
+          child: const Text('Failed to connect account. Go back to the Home screen'),
+        ),
+      ),
+    );
+  }
 }
