@@ -17,13 +17,13 @@ final GoRouter _router = GoRouter(
       },
       routes: <RouteBase>[
         GoRoute(
-          path: '/app/flutter/connect/success',
+          path: 'app/flutter/connect/success',
           builder: (BuildContext context, GoRouterState state) {
             return const SuccessScreen();
           },
         ),
         GoRoute(
-          path: '/app/flutter/connect/fail',
+          path: 'app/flutter/connect/fail',
           builder: (BuildContext context, GoRouterState state) {
             return const FailScreen();
           },
@@ -255,10 +255,16 @@ class SuccessScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Success')),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () => context.go('/'),
-          child: const Text('Account connected. Go back to the Home screen'),
-        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text("Account connected."),
+            ElevatedButton(
+              onPressed: () => context.go('/'),
+              child: const Text('Go back to the Home screen'),
+            ),
+          ],
+        )
       ),
     );
   }
@@ -272,12 +278,18 @@ class FailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Fail')),
+      appBar: AppBar(title: const Text('Failed')),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () => context.go('/'),
-          child: const Text('Failed to connect account. Go back to the Home screen'),
-        ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("Failed to connect account."),
+              ElevatedButton(
+                onPressed: () => context.go('/'),
+                child: const Text('Go back to the Home screen'),
+              ),
+            ],
+          )
       ),
     );
   }
