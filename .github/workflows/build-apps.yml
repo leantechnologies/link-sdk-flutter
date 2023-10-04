@@ -2,7 +2,7 @@ name: build-apps
 on:
   push:
     branches:
-      - FEN-98-build-ios # @TODO: change branch to master
+      - master
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
