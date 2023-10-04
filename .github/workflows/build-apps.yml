@@ -3,6 +3,11 @@ on:
   push:
     branches:
       - FEN-98-build-ios # @TODO: change branch to master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   android_build:
     runs-on: macos-latest
@@ -84,6 +89,19 @@ jobs:
 
       - name: Setup Fastlane
         run: bundle install
+
+      - name: Cache cocoapods
+        uses: actions/cache@v3
+        with:
+          path: /example/ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      - name: Install pod dependencies
+        run: |
+          cd example/ios
+          pod install
 
       - name: Build IPA
         run: bundle exec fastlane ios build_ios
