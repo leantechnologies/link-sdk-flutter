@@ -1,22 +1,27 @@
 fastlane_version '2.53.1'
 
-# before_all do
-#     ensure_git_branch
-#     ensure_git_status_clean
-#     git_pull
-# end
+before_all do
+    ENV["FASTLANE_DONT_STORE_PASSWORD"] = "1"
+end
 
 platform :ios do
     desc "Build iOS .ipa"
 
     lane :build_ios do
         setup_ci if ENV['CI']
-        gym(scheme: 'Runner', workspace: './example/ios/Runner.xcworkspace')
+        match(type: "development")
 
-        # sync_code_signing
-        # disable_automatic_code_signing(path: "./example/ios/Runner.xcodeproj")
-        # build_app(scheme: "Runner", export_method: "ad-hoc", workspace: './example/ios/Runner.xcworkspace')
-        # enable_automatic_code_signing(path: "./example/ios/Runner.xcodeproj")
+        build_app(
+          clean: true,
+          silent: true,
+          skip_package_pkg: true,
+          configuration: "Release",
+          scheme: "Runner",
+          output_name: "app-release.ipa",
+          export_method: "development",
+          output_directory: "./example/build/ios",
+          workspace: "./example/ios/Runner.xcworkspace",
+        )
     end
 end
 

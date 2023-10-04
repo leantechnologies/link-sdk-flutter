@@ -2,7 +2,7 @@ name: build-apps
 on:
   push:
     branches:
-      - v2 # @TODO: change branch to master after release of v2
+      - FEN-98-build-ios # @TODO: change branch to master
 jobs:
   android_build:
     runs-on: macos-latest
@@ -65,10 +65,13 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
   ios_build:
-    if: false # disable iOS builds until we have a valid Apple Developer account
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: MrSquaare/ssh-setup-action@v3
+        with:
+          host: github.com
+          private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Setup Flutter SDK
         uses: flutter-actions/setup-flutter@v2
@@ -84,6 +87,8 @@ jobs:
 
       - name: Build IPA
         run: bundle exec fastlane ios build_ios
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
 
       - name: ${{ format('Upload IPA to /build.{0} directory', github.run_number) }}
         uses: hkusu/s3-upload-action@v2
@@ -92,7 +97,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: 'eu-west-2'
           aws-bucket: ${{ secrets.AWS_BUCKET }}
-          file-path: '' # @TODO: get the IPA file path
+          file-path: 'example/build/ios/app-release.ipa'
           destination-dir: '/'
           bucket-root: ${{ format('/link/webview/flutter/ios/build.{0}', github.run_number) }}
 
@@ -103,7 +108,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: 'eu-west-2'
           aws-bucket: ${{ secrets.AWS_BUCKET }}
-          file-path: '' # @TODO: get the IPA file path
+          file-path: 'example/build/ios/app-release.ipa'
           destination-dir: '/'
           bucket-root: '/link/webview/flutter/ios/latest'
 
