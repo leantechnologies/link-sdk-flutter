@@ -83,8 +83,8 @@ class HomeScreen extends StatelessWidget {
                   appToken: appToken,
                   customerId: customerId,
                   permissions: permissions,
-                  failRedirectUrl: "https://leantech.me/app/flutter/connect/success",
-                  successRedirectUrl: "https://leantech.me/app/flutter/connect/fail",
+                  failRedirectUrl: "https://cdn.leantech.me/app/flutter/connect/success",
+                  successRedirectUrl: "https://cdn.leantech.me/app/flutter/connect/fail",
                   customization: const {
                     "button_text_color": "white",
                     "theme_color": "red",
