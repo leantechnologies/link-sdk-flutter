@@ -1,3 +1,7 @@
+## 3.0.2
+
+Internal fix for a bug in pinned sdk versions
+
 ## 3.0.1
 
 ADCB Facepass support
