@@ -15,6 +15,7 @@ enum Params {
   access_to,
   account_id,
   customer_id,
+  end_user_id,
   permissions,
   access_from,
   reconnect_id,
@@ -30,6 +31,7 @@ enum Params {
   implementation_config,
   payment_destination_id,
   account_type,
+  bulk_payment_intent_id,
 }
 
 enum LeanMethods {

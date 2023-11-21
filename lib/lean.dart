@@ -60,8 +60,7 @@ class LeanSDK {
     var implementationParams = '';
 
     implementation.forEach((key, value) => implementationParams =
-              "$implementationParams&${Params.implementation_config.name}=$key+$value"
-        );
+        "$implementationParams&${Params.implementation_config.name}=$key+$value");
 
     return implementationParams;
   }
@@ -101,6 +100,7 @@ class LeanSDK {
   connect({
     required String customerId,
     required List<LeanPermissions> permissions,
+    String? endUserId,
     String? accessTo,
     String? accessFrom,
     String? bankIdentifier,
@@ -140,6 +140,11 @@ class LeanSDK {
     if (paymentDestinationId != null && paymentDestinationId.isNotEmpty) {
       initializationURL =
           "$initializationURL&${Params.payment_destination_id.name}=$paymentDestinationId";
+    }
+
+    if (endUserId != null && endUserId.isNotEmpty) {
+      initializationURL =
+          "$initializationURL&${Params.end_user_id.name}=$endUserId";
     }
 
     if (accessTo != null && accessTo.isNotEmpty) {
@@ -262,6 +267,7 @@ class LeanSDK {
     required String customerId,
     required String paymentSourceId,
     required String paymentDestinationId,
+    String? endUserId,
     String? failRedirectUrl,
     String? successRedirectUrl,
   }) {
@@ -284,6 +290,11 @@ class LeanSDK {
     var initializationURL =
         "$_getBaseUrl&method=${LeanMethods.updatePaymentSource.name}&${Params.customer_id.name}=$customerId&${Params.payment_source_id.name}=$paymentSourceId&${Params.payment_destination_id.name}=$paymentDestinationId$customizationParams";
 
+    if (endUserId != null && endUserId.isNotEmpty) {
+      initializationURL =
+          "$initializationURL&${Params.end_user_id.name}=$endUserId";
+    }
+
     if (failRedirectUrl != null && failRedirectUrl.isNotEmpty) {
       initializationURL =
           "$initializationURL&${Params.fail_redirect_url.name}=$failRedirectUrl";
@@ -298,21 +309,39 @@ class LeanSDK {
   }
 
   pay({
-    required String paymentIntentId,
+    String? paymentIntentId,
+    String? bulkPaymentIntentId,
+    String? endUserId,
     String? accountId,
     bool? showBalances,
     String? failRedirectUrl,
     String? successRedirectUrl,
   }) {
-    if (paymentIntentId.isEmpty) {
+    if ((paymentIntentId == null || paymentIntentId.isEmpty) &&
+        (bulkPaymentIntentId == null || bulkPaymentIntentId.isEmpty)) {
       throw const FormatException(
-          'Validation Error: paymentIntentId is required');
+          'Validation Error: paymentIntentId or bulkPaymentIntentId is required');
     }
 
     String customizationParams = _convertCustomizationToURLString();
 
     var initializationURL =
         "$_getBaseUrl&method=${LeanMethods.pay.name}&${Params.payment_intent_id.name}=$paymentIntentId$customizationParams";
+
+    if (paymentIntentId != null && paymentIntentId.isNotEmpty) {
+      initializationURL =
+          "$initializationURL&${Params.payment_intent_id.name}=$paymentIntentId";
+    }
+
+    if (bulkPaymentIntentId != null && bulkPaymentIntentId.isNotEmpty) {
+      initializationURL =
+          "$initializationURL&${Params.bulk_payment_intent_id.name}=$bulkPaymentIntentId";
+    }
+
+    if (endUserId != null && endUserId.isNotEmpty) {
+      initializationURL =
+          "$initializationURL&${Params.end_user_id.name}=$endUserId";
+    }
 
     if (accountId != null && accountId.isNotEmpty) {
       initializationURL =
