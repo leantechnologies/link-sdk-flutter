@@ -107,6 +107,7 @@ class LeanSDK {
     String? failRedirectUrl,
     String? successRedirectUrl,
     String? paymentDestinationId,
+    String? accountType,
   }) {
     if (customerId.isEmpty) {
       throw const FormatException('Validation Error: customerId is required');
@@ -164,6 +165,11 @@ class LeanSDK {
     if (successRedirectUrl != null && successRedirectUrl.isNotEmpty) {
       initializationURL =
           "$initializationURL&${Params.success_redirect_url.name}=$successRedirectUrl";
+    }
+
+    if (accountType != null && accountType.isNotEmpty) {
+      initializationURL =
+      "$initializationURL&${Params.account_type.name}=$accountType";
     }
 
     return initializationURL;

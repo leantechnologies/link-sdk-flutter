@@ -30,6 +30,7 @@ enum Params {
   success_redirect_url,
   implementation_config,
   payment_destination_id,
+  account_type,
   bulk_payment_intent_id,
 }
 
