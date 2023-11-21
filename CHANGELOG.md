@@ -1,3 +1,7 @@
+## 3.0.3
+
+Supported bulk payments and account type params
+
 ## 3.0.2
 
 Internal fix for a bug in pinned sdk versions
