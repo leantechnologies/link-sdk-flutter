@@ -66,6 +66,7 @@ class HomeScreen extends StatelessWidget {
       LeanPermissions.payments
     ];
     var isSandbox = true;
+    var environment = 'staging';
 
     _connect() {
       showModalBottomSheet(
@@ -77,28 +78,32 @@ class HomeScreen extends StatelessWidget {
                 padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).viewInsets.bottom),
                 child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.8,
+                    height: MediaQuery.of(context).size.height * 0.8,
                     child: Lean.connect(
-                  showLogs: true,
-                  appToken: appToken,
-                  customerId: customerId,
-                  permissions: permissions,
-                  failRedirectUrl: "https://cdn.leantech.me/app/flutter/connect/success",
-                  successRedirectUrl: "https://cdn.leantech.me/app/flutter/connect/fail",
-                  customization: const {
-                    "button_text_color": "white",
-                    "theme_color": "red",
-                    "button_border_radius": "10",
-                    "overlay_color": "pink",
-                  },
-                  callback: (resp) {
-                    if (kDebugMode) {
-                      print("Callback: $resp");
-                    }
-                    Navigator.pop(context);
-                  },
-                  actionCancelled: () => Navigator.pop(context),
-                )));
+                      showLogs: true,
+                      env: environment,
+                      appToken: appToken,
+                      isSandbox: isSandbox,
+                      customerId: customerId,
+                      permissions: permissions,
+                      failRedirectUrl:
+                          "https://cdn.leantech.me/app/flutter/connect/success",
+                      successRedirectUrl:
+                          "https://cdn.leantech.me/app/flutter/connect/fail",
+                      customization: const {
+                        "button_text_color": "white",
+                        "theme_color": "red",
+                        "button_border_radius": "10",
+                        "overlay_color": "pink",
+                      },
+                      callback: (resp) {
+                        if (kDebugMode) {
+                          print("Callback: $resp");
+                        }
+                        Navigator.pop(context);
+                      },
+                      actionCancelled: () => Navigator.pop(context),
+                    )));
           });
     }
 
@@ -111,6 +116,7 @@ class HomeScreen extends StatelessWidget {
                       bottom: MediaQuery.of(context).viewInsets.bottom),
                   child: SizedBox(
                     child: Lean.createPaymentSource(
+                      env: environment,
                       appToken: appToken,
                       customerId: customerId,
                       isSandbox: isSandbox,
@@ -138,10 +144,10 @@ class HomeScreen extends StatelessWidget {
                     bottom: MediaQuery.of(context).viewInsets.bottom),
                 child: SizedBox(
                     child: Lean.reconnect(
+                  env: environment,
                   appToken: appToken,
                   reconnectId: reconnectId,
                   isSandbox: isSandbox,
-                  env: 'development',
                   callback: (resp) {
                     if (kDebugMode) {
                       print("Callback: $resp");
@@ -164,6 +170,7 @@ class HomeScreen extends StatelessWidget {
                   bottom: MediaQuery.of(context).viewInsets.bottom),
               child: SizedBox(
                 child: Lean.pay(
+                  env: environment,
                   appToken: appToken,
                   paymentIntentId: paymentIntentId,
                   isSandbox: isSandbox,
@@ -255,17 +262,16 @@ class SuccessScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Success')),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text("Account connected."),
-            ElevatedButton(
-              onPressed: () => context.go('/'),
-              child: const Text('Go back to the Home screen'),
-            ),
-          ],
-        )
-      ),
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text("Account connected."),
+          ElevatedButton(
+            onPressed: () => context.go('/'),
+            child: const Text('Go back to the Home screen'),
+          ),
+        ],
+      )),
     );
   }
 }
@@ -281,16 +287,15 @@ class FailScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Failed')),
       body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text("Failed to connect account."),
-              ElevatedButton(
-                onPressed: () => context.go('/'),
-                child: const Text('Go back to the Home screen'),
-              ),
-            ],
-          )
-      ),
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text("Failed to connect account."),
+          ElevatedButton(
+            onPressed: () => context.go('/'),
+            child: const Text('Go back to the Home screen'),
+          ),
+        ],
+      )),
     );
   }
 }
