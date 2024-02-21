@@ -149,6 +149,7 @@ class Lean extends StatefulWidget {
     // method-specific properties
     this.bankIdentifier,
     this.failRedirectUrl,
+    this.paymentSourceId,
     this.successRedirectUrl,
     this.paymentDestinationId,
   })  : _method = LeanMethods.createPaymentSource,
@@ -159,7 +160,6 @@ class Lean extends StatefulWidget {
         reconnectId = null,
         showBalances = null,
         paymentIntentId = null,
-        paymentSourceId = null,
         initializationUrl = '';
 
   const Lean.updatePaymentSource({

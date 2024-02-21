@@ -228,6 +228,7 @@ class LeanSDK {
     required String customerId,
     String? bankIdentifier,
     String? failRedirectUrl,
+    String? paymentSourceId,
     String? successRedirectUrl,
     String? paymentDestinationId,
   }) {
