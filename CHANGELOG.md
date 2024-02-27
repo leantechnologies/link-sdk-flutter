@@ -1,3 +1,7 @@
+## 3.0.4
+
+New UI for example app
+
 ## 3.0.3
 
 Supported bulk payments and account type params
