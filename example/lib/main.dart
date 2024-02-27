@@ -47,17 +47,53 @@ class MyApp extends StatelessWidget {
 }
 
 /// Home screen
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   /// Constructs a [HomeScreen]
   const HomeScreen({super.key});
 
   @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController _appTokenController = TextEditingController();
+  String appToken = "";
+
+  // Connect
+  final TextEditingController _connectCustomerIDController =
+      TextEditingController();
+  String connectCustomerID = "";
+  final TextEditingController _connectBankIdentifierController =
+      TextEditingController();
+  String connectBankIdentifier = "";
+  final TextEditingController _connectPaymentDestinationIDController =
+      TextEditingController();
+  String connectPaymentDestinationID = "";
+
+  // Reconnect
+  final TextEditingController _reconnectIDController = TextEditingController();
+  String reconnectID = "";
+
+  // Create Beneficiary
+  final TextEditingController _customerIDController = TextEditingController();
+  String customerID = "";
+  final TextEditingController _paymentSourceIDController =
+      TextEditingController();
+  String paymentSourceID = "";
+  final TextEditingController _paymentDestinationIDController =
+      TextEditingController();
+  String paymentDestinationID = "";
+
+  // Pay
+  bool isShowBalances = false;
+  final TextEditingController _accountIdController = TextEditingController();
+  String accountId = "";
+  final TextEditingController _paymentIntentIDController =
+      TextEditingController();
+  String paymentIntentID = "";
+
+  @override
   Widget build(BuildContext context) {
-    var appToken = "";
-    var customerId = "";
-    var reconnectId = "";
-    var paymentDestinationId = "";
-    var paymentIntentId = "";
     var permissions = [
       LeanPermissions.identity,
       LeanPermissions.transactions,
@@ -84,7 +120,9 @@ class HomeScreen extends StatelessWidget {
                       env: environment,
                       appToken: appToken,
                       isSandbox: isSandbox,
-                      customerId: customerId,
+                      customerId: connectCustomerID,
+                      bankIdentifier: connectBankIdentifier,
+                      paymentDestinationId: connectPaymentDestinationID,
                       permissions: permissions,
                       failRedirectUrl:
                           "https://cdn.leantech.me/app/flutter/connect/success",
@@ -96,9 +134,41 @@ class HomeScreen extends StatelessWidget {
                         "button_border_radius": "10",
                         "overlay_color": "pink",
                       },
-                      callback: (resp) {
+                      callback: (LeanResponse resp) {
                         if (kDebugMode) {
-                          print("Callback: $resp");
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text("Callback: ${resp.message}"),
+                          ));
+                        }
+                        Navigator.pop(context);
+                      },
+                      actionCancelled: () => Navigator.pop(context),
+                    )));
+          });
+    }
+
+    _reconnect() {
+      showModalBottomSheet(
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          context: context,
+          builder: (context) {
+            return Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.8,
+                    child: Lean.reconnect(
+                      env: environment,
+                      appToken: appToken,
+                      reconnectId: reconnectID,
+                      isSandbox: isSandbox,
+                      showLogs: true,
+                      callback: (LeanResponse resp) {
+                        if (kDebugMode) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text("Callback: ${resp.message}"),
+                          ));
                         }
                         Navigator.pop(context);
                       },
@@ -115,14 +185,20 @@ class HomeScreen extends StatelessWidget {
                   padding: EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewInsets.bottom),
                   child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.8,
                     child: Lean.createPaymentSource(
                       env: environment,
                       appToken: appToken,
-                      customerId: customerId,
+                      customerId: customerID,
+                      paymentSourceId: paymentSourceID,
+                      paymentDestinationId: paymentDestinationID,
                       isSandbox: isSandbox,
-                      callback: (resp) {
+                      showLogs: true,
+                      callback: (LeanResponse resp) {
                         if (kDebugMode) {
-                          print("Callback: $resp");
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text("Callback: ${resp.message}"),
+                          ));
                         }
                         Navigator.pop(context);
                       },
@@ -131,32 +207,6 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
               ));
-    }
-
-    _reconnect() {
-      showModalBottomSheet(
-          isScrollControlled: true,
-          backgroundColor: Colors.transparent,
-          context: context,
-          builder: (context) {
-            return Padding(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: SizedBox(
-                    child: Lean.reconnect(
-                  env: environment,
-                  appToken: appToken,
-                  reconnectId: reconnectId,
-                  isSandbox: isSandbox,
-                  callback: (resp) {
-                    if (kDebugMode) {
-                      print("Callback: $resp");
-                    }
-                    Navigator.pop(context);
-                  },
-                  actionCancelled: () => Navigator.pop(context),
-                )));
-          });
     }
 
     _pay() {
@@ -169,14 +219,20 @@ class HomeScreen extends StatelessWidget {
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
               child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.8,
                 child: Lean.pay(
                   env: environment,
                   appToken: appToken,
-                  paymentIntentId: paymentIntentId,
+                  accountId: accountId,
+                  paymentIntentId: paymentIntentID,
+                  showBalances: isShowBalances,
                   isSandbox: isSandbox,
-                  callback: (resp) {
+                  showLogs: true,
+                  callback: (LeanResponse resp) {
                     if (kDebugMode) {
-                      print("Callback: $resp");
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("Callback: ${resp.message}"),
+                      ));
                     }
                     Navigator.pop(context);
                   },
@@ -190,59 +246,312 @@ class HomeScreen extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
             backgroundColor: Colors.white,
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/images/lean.png',
-                        width: 100, height: 100),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () => _connect(),
-                      style: _buttonStyle(),
-                      child: const Text('Connect'),
+            body: SingleChildScrollView(
+              child: Column(
+                // mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset('assets/images/lean.png',
+                          width: 100, height: 100),
+                    ],
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.only(bottom: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          spreadRadius: 2,
+                          blurRadius: 2,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () => _createPaymentSource(),
-                      style: _buttonStyle(),
-                      child: const Text('Create payment source'),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 0),
+                            child: TextFormField(
+                              decoration: const InputDecoration(
+                                border: UnderlineInputBorder(),
+                                labelText: 'Application token',
+                              ),
+                              controller: _appTokenController,
+                              onChanged: (value) {
+                                setState(() {
+                                  appToken = value;
+                                });
+                              },
+                            ),
+                          ),
+                        ]),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.only(bottom: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          spreadRadius: 2,
+                          blurRadius: 2,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () => _reconnect(),
-                      style: _buttonStyle(),
-                      child: const Text('Reconnect'),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 0),
+                            child: TextFormField(
+                              decoration: const InputDecoration(
+                                border: UnderlineInputBorder(),
+                                labelText: 'Customer ID',
+                              ),
+                              controller: _connectCustomerIDController,
+                              onChanged: (value) {
+                                setState(() {
+                                  connectCustomerID = value;
+                                });
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 0),
+                            child: TextFormField(
+                              decoration: const InputDecoration(
+                                border: UnderlineInputBorder(),
+                                labelText: 'Bank Identifier',
+                              ),
+                              controller: _connectBankIdentifierController,
+                              onChanged: (value) {
+                                setState(() {
+                                  connectBankIdentifier = value;
+                                });
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: 14, left: 8, right: 8),
+                            child: TextFormField(
+                              decoration: const InputDecoration(
+                                border: UnderlineInputBorder(),
+                                labelText: 'Payment Destination ID',
+                              ),
+                              controller:
+                                  _connectPaymentDestinationIDController,
+                              onChanged: (value) {
+                                setState(() {
+                                  connectPaymentDestinationID = value;
+                                });
+                              },
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () => _connect(),
+                            style: _buttonStyle(),
+                            child: const Text('Connect'),
+                          ),
+                        ]),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.only(bottom: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          spreadRadius: 2,
+                          blurRadius: 2,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () => _pay(),
-                      style: _buttonStyle(),
-                      child: const Text('Pay'),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: 14, left: 8, right: 8),
+                            child: TextFormField(
+                              decoration: const InputDecoration(
+                                border: UnderlineInputBorder(),
+                                labelText: 'Reconnect ID',
+                              ),
+                              controller: _reconnectIDController,
+                              onChanged: (value) {
+                                setState(() {
+                                  reconnectID = value;
+                                });
+                              },
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () => _reconnect(),
+                            style: _buttonStyle(),
+                            child: const Text('Reconnect'),
+                          ),
+                        ]),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.only(bottom: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          spreadRadius: 2,
+                          blurRadius: 2,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ],
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 0),
+                            child: TextFormField(
+                              decoration: const InputDecoration(
+                                border: UnderlineInputBorder(),
+                                labelText: 'Customer ID',
+                              ),
+                              controller: _customerIDController,
+                              onChanged: (value) {
+                                setState(() {
+                                  customerID = value;
+                                });
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 0),
+                            child: TextFormField(
+                              decoration: const InputDecoration(
+                                border: UnderlineInputBorder(),
+                                labelText: 'Payment Source ID',
+                              ),
+                              controller: _paymentSourceIDController,
+                              onChanged: (value) {
+                                setState(() {
+                                  paymentSourceID = value;
+                                });
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: 14, left: 8, right: 8),
+                            child: TextFormField(
+                              decoration: const InputDecoration(
+                                border: UnderlineInputBorder(),
+                                labelText: 'Payment Destination ID',
+                              ),
+                              controller: _paymentDestinationIDController,
+                              onChanged: (value) {
+                                setState(() {
+                                  paymentDestinationID = value;
+                                });
+                              },
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () => _createPaymentSource(),
+                            style: _buttonStyle(),
+                            child: const Text('Create payment source'),
+                          ),
+                        ]),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.only(bottom: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          spreadRadius: 2,
+                          blurRadius: 2,
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text("Show Balances"),
+                                  Switch(
+                                    value: isShowBalances,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        isShowBalances = value;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 0),
+                            child: TextFormField(
+                              decoration: const InputDecoration(
+                                border: UnderlineInputBorder(),
+                                labelText: 'Account ID',
+                              ),
+                              controller: _accountIdController,
+                              onChanged: (value) {
+                                setState(() {
+                                  accountId = value;
+                                });
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: 14, left: 8, right: 8),
+                            child: TextFormField(
+                              decoration: const InputDecoration(
+                                border: UnderlineInputBorder(),
+                                labelText: 'Payment Intent ID',
+                              ),
+                              controller: _paymentIntentIDController,
+                              onChanged: (value) {
+                                setState(() {
+                                  paymentIntentID = value;
+                                });
+                              },
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () => _pay(),
+                            style: _buttonStyle(),
+                            child: const Text('Pay'),
+                          ),
+                        ]),
+                  ),
+                ],
+              ),
             )));
   }
+
+  // _cardStyle() =>
 
   _buttonStyle() => ElevatedButton.styleFrom(
         shape: const StadiumBorder(),

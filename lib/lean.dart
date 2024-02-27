@@ -53,7 +53,7 @@ class LeanSDK {
       "platform": "mobile",
       "sdk": "flutter",
       "os": Platform.operatingSystem.toString(),
-      "sdk_version": '3.0.3', // @todo: get this dynamically from pubspec.yaml
+      "sdk_version": '3.0.4', // @todo: get this dynamically from pubspec.yaml
       "is_version_pinned": _version != "latest"
     };
 
@@ -109,22 +109,6 @@ class LeanSDK {
     String? paymentDestinationId,
     String? accountType,
   }) {
-    if (customerId.isEmpty) {
-      throw const FormatException('Validation Error: customerId is required');
-    }
-
-    if (permissions.isEmpty) {
-      throw const FormatException('Validation Error: permissions is required');
-    }
-
-    if ((permissions.contains(LeanPermissions.balance) ||
-            permissions.contains(LeanPermissions.transactions)) &&
-        !permissions.contains(LeanPermissions.accounts)) {
-      throw const FormatException(
-        "Validation Error: Must have 'accounts' permission if requesting 'balance' and/or 'transactions' permission",
-      );
-    }
-
     String permissionsParams = _convertPermissionsToURLString(permissions);
     String customizationParams = _convertCustomizationToURLString();
 
@@ -176,10 +160,6 @@ class LeanSDK {
   }
 
   reconnect({required String reconnectId}) {
-    if (reconnectId.isEmpty) {
-      throw const FormatException('Validation Error: reconnectId is required');
-    }
-
     String customizationParams = _convertCustomizationToURLString();
 
     return "$_getBaseUrl&method=${LeanMethods.reconnect.name}&${Params.reconnect_id.name}=$reconnectId$customizationParams";
@@ -192,10 +172,6 @@ class LeanSDK {
     String? successRedirectUrl,
     String? paymentDestinationId,
   }) {
-    if (customerId.isEmpty) {
-      throw const FormatException('Validation Error: customerId is required');
-    }
-
     String customizationParams = _convertCustomizationToURLString();
 
     var initializationURL =
@@ -228,13 +204,10 @@ class LeanSDK {
     required String customerId,
     String? bankIdentifier,
     String? failRedirectUrl,
+    String? paymentSourceId,
     String? successRedirectUrl,
     String? paymentDestinationId,
   }) {
-    if (customerId.isEmpty) {
-      throw const FormatException('Validation Error: customerId is required');
-    }
-
     String customizationParams = _convertCustomizationToURLString();
 
     var initializationURL =
@@ -271,20 +244,6 @@ class LeanSDK {
     String? failRedirectUrl,
     String? successRedirectUrl,
   }) {
-    if (customerId.isEmpty) {
-      throw const FormatException('Validation Error: customerId is required');
-    }
-
-    if (paymentSourceId.isEmpty) {
-      throw const FormatException(
-          'Validation Error: paymentSourceId is required');
-    }
-
-    if (paymentDestinationId.isEmpty) {
-      throw const FormatException(
-          'Validation Error: paymentDestinationId is required');
-    }
-
     String customizationParams = _convertCustomizationToURLString();
 
     var initializationURL =
@@ -317,21 +276,10 @@ class LeanSDK {
     String? failRedirectUrl,
     String? successRedirectUrl,
   }) {
-    if ((paymentIntentId == null || paymentIntentId.isEmpty) &&
-        (bulkPaymentIntentId == null || bulkPaymentIntentId.isEmpty)) {
-      throw const FormatException(
-          'Validation Error: paymentIntentId or bulkPaymentIntentId is required');
-    }
-
     String customizationParams = _convertCustomizationToURLString();
 
     var initializationURL =
         "$_getBaseUrl&method=${LeanMethods.pay.name}&${Params.payment_intent_id.name}=$paymentIntentId$customizationParams";
-
-    if (paymentIntentId != null && paymentIntentId.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.payment_intent_id.name}=$paymentIntentId";
-    }
 
     if (bulkPaymentIntentId != null && bulkPaymentIntentId.isNotEmpty) {
       initializationURL =
