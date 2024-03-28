@@ -277,6 +277,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 0),
                             child: TextFormField(
+                              key: Key('appToken'),
                               decoration: const InputDecoration(
                                 border: UnderlineInputBorder(),
                                 labelText: 'Application token',
@@ -311,6 +312,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 0),
                             child: TextFormField(
+                              key: Key('connectCustomerId'),
                               decoration: const InputDecoration(
                                 border: UnderlineInputBorder(),
                                 labelText: 'Customer ID',
@@ -327,6 +329,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 0),
                             child: TextFormField(
+                              key: Key('connectBankIdentifier'),
                               decoration: const InputDecoration(
                                 border: UnderlineInputBorder(),
                                 labelText: 'Bank Identifier',
@@ -343,6 +346,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: const EdgeInsets.only(
                                 bottom: 14, left: 8, right: 8),
                             child: TextFormField(
+                              key: Key('connectPaymentDestinationId'),
                               decoration: const InputDecoration(
                                 border: UnderlineInputBorder(),
                                 labelText: 'Payment Destination ID',
@@ -383,6 +387,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: const EdgeInsets.only(
                                 bottom: 14, left: 8, right: 8),
                             child: TextFormField(
+                              key: Key('reconnectId'),
                               decoration: const InputDecoration(
                                 border: UnderlineInputBorder(),
                                 labelText: 'Reconnect ID',
@@ -422,6 +427,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 0),
                             child: TextFormField(
+                              key: Key('createBeneficiaryCustomerId'),
                               decoration: const InputDecoration(
                                 border: UnderlineInputBorder(),
                                 labelText: 'Customer ID',
@@ -438,6 +444,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 0),
                             child: TextFormField(
+                              key: Key('createBeneficiaryPaymentSourceId'),
                               decoration: const InputDecoration(
                                 border: UnderlineInputBorder(),
                                 labelText: 'Payment Source ID',
@@ -454,6 +461,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: const EdgeInsets.only(
                                 bottom: 14, left: 8, right: 8),
                             child: TextFormField(
+                              key: Key('createBeneficiaryPaymentDestinationId'),
                               decoration: const InputDecoration(
                                 border: UnderlineInputBorder(),
                                 labelText: 'Payment Destination ID',
@@ -511,6 +519,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 0),
                             child: TextFormField(
+                              key: Key('payAccountId'),
                               decoration: const InputDecoration(
                                 border: UnderlineInputBorder(),
                                 labelText: 'Account ID',
@@ -527,6 +536,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: const EdgeInsets.only(
                                 bottom: 14, left: 8, right: 8),
                             child: TextFormField(
+                              key: Key('paymentIntentId'),
                               decoration: const InputDecoration(
                                 border: UnderlineInputBorder(),
                                 labelText: 'Payment Intent ID',
