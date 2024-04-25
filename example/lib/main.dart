@@ -102,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
       LeanPermissions.payments
     ];
     var isSandbox = true;
-    var environment = 'development';
+    var environment = 'staging';
 
     _connect() {
       showDialog(
