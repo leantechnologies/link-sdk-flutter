@@ -105,142 +105,135 @@ class _HomeScreenState extends State<HomeScreen> {
     var environment = 'staging';
 
     _connect() {
-      showModalBottomSheet(
-          isScrollControlled: true,
-          backgroundColor: Colors.transparent,
-          context: context,
-          builder: (context) {
-            return Padding(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.8,
-                    child: Lean.connect(
-                      showLogs: true,
-                      env: environment,
-                      appToken: appToken,
-                      isSandbox: isSandbox,
-                      customerId: connectCustomerID,
-                      bankIdentifier: connectBankIdentifier,
-                      paymentDestinationId: connectPaymentDestinationID,
-                      permissions: permissions,
-                      failRedirectUrl:
-                          "https://cdn.leantech.me/app/flutter/connect/success",
-                      successRedirectUrl:
-                          "https://cdn.leantech.me/app/flutter/connect/fail",
-                      customization: const {
-                        "button_text_color": "white",
-                        "theme_color": "red",
-                        "button_border_radius": "10",
-                        "overlay_color": "pink",
-                      },
-                      callback: (LeanResponse resp) {
-                        if (kDebugMode) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text("Callback: ${resp.message}"),
-                          ));
-                        }
-                        Navigator.pop(context);
-                      },
-                      actionCancelled: () => Navigator.pop(context),
-                    )));
-          });
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => Center(
+          child: Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Lean.connect(
+              showLogs: true,
+              env: environment,
+              appToken: appToken,
+              isSandbox: isSandbox,
+              customerId: connectCustomerID,
+              bankIdentifier: connectBankIdentifier,
+              paymentDestinationId: connectPaymentDestinationID,
+              permissions: permissions,
+              failRedirectUrl:
+                  "https://cdn.leantech.me/app/flutter/connect/success",
+              successRedirectUrl:
+                  "https://cdn.leantech.me/app/flutter/connect/fail",
+              customization: const {
+                "button_text_color": "white",
+                "theme_color": "red",
+                "button_border_radius": "10",
+                "overlay_color": "pink",
+              },
+              callback: (LeanResponse resp) {
+                if (kDebugMode) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("Callback: ${resp.message}"),
+                  ));
+                }
+                Navigator.pop(context);
+              },
+              actionCancelled: () => Navigator.pop(context),
+            ),
+          ),
+        ),
+      );
     }
 
     _reconnect() {
-      showModalBottomSheet(
-          isScrollControlled: true,
-          backgroundColor: Colors.transparent,
-          context: context,
-          builder: (context) {
-            return Padding(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.8,
-                    child: Lean.reconnect(
-                      env: environment,
-                      appToken: appToken,
-                      reconnectId: reconnectID,
-                      isSandbox: isSandbox,
-                      showLogs: true,
-                      callback: (LeanResponse resp) {
-                        if (kDebugMode) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text("Callback: ${resp.message}"),
-                          ));
-                        }
-                        Navigator.pop(context);
-                      },
-                      actionCancelled: () => Navigator.pop(context),
-                    )));
-          });
+      showDialog(
+        context: context,
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Lean.reconnect(
+              env: environment,
+              appToken: appToken,
+              reconnectId: reconnectID,
+              isSandbox: isSandbox,
+              showLogs: true,
+              callback: (LeanResponse resp) {
+                if (kDebugMode) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("Callback: ${resp.message}"),
+                  ));
+                }
+                Navigator.pop(context);
+              },
+              actionCancelled: () => Navigator.pop(context),
+            ),
+          );
+        },
+      );
     }
 
     _createPaymentSource() {
       showDialog(
-          context: context,
-          builder: (BuildContext context) => Center(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.8,
-                    child: Lean.createPaymentSource(
-                      env: environment,
-                      appToken: appToken,
-                      customerId: customerID,
-                      paymentSourceId: paymentSourceID,
-                      paymentDestinationId: paymentDestinationID,
-                      isSandbox: isSandbox,
-                      showLogs: true,
-                      callback: (LeanResponse resp) {
-                        if (kDebugMode) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text("Callback: ${resp.message}"),
-                          ));
-                        }
-                        Navigator.pop(context);
-                      },
-                      actionCancelled: () => Navigator.pop(context),
-                    ),
-                  ),
-                ),
-              ));
+        context: context,
+        builder: (BuildContext context) => Center(
+          child: Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * 0.8,
+              child: Lean.createPaymentSource(
+                env: environment,
+                appToken: appToken,
+                customerId: customerID,
+                paymentSourceId: paymentSourceID,
+                paymentDestinationId: paymentDestinationID,
+                isSandbox: isSandbox,
+                showLogs: true,
+                callback: (LeanResponse resp) {
+                  if (kDebugMode) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Callback: ${resp.message}"),
+                    ));
+                  }
+                  Navigator.pop(context);
+                },
+                actionCancelled: () => Navigator.pop(context),
+              ),
+            ),
+          ),
+        ),
+      );
     }
 
     _pay() {
-      showModalBottomSheet(
-          isScrollControlled: true,
-          backgroundColor: Colors.transparent,
-          context: context,
-          builder: (context) {
-            return Padding(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.8,
-                child: Lean.pay(
-                  env: environment,
-                  appToken: appToken,
-                  accountId: accountId,
-                  paymentIntentId: paymentIntentID,
-                  showBalances: isShowBalances,
-                  isSandbox: isSandbox,
-                  showLogs: true,
-                  callback: (LeanResponse resp) {
-                    if (kDebugMode) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text("Callback: ${resp.message}"),
-                      ));
-                    }
-                    Navigator.pop(context);
-                  },
-                  actionCancelled: () => Navigator.pop(context),
-                ),
-              ),
-            );
-          });
+      showDialog(
+        context: context,
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Lean.pay(
+              env: environment,
+              appToken: appToken,
+              accountId: accountId,
+              paymentIntentId: paymentIntentID,
+              showBalances: isShowBalances,
+              isSandbox: isSandbox,
+              showLogs: true,
+              callback: (LeanResponse resp) {
+                if (kDebugMode) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("Callback: ${resp.message}"),
+                  ));
+                }
+                Navigator.pop(context);
+              },
+              actionCancelled: () => Navigator.pop(context),
+            ),
+          );
+        },
+      );
     }
 
     return SafeArea(
