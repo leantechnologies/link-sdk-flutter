@@ -26,6 +26,7 @@ class Lean extends StatefulWidget {
 
   final String appToken;
   final String? accessTo;
+  final String? accessToken;
   final String? accountId;
   final String? accessFrom;
   final String? customerId;
@@ -64,6 +65,7 @@ class Lean extends StatefulWidget {
     // method-specific properties
     this.accessTo,
     this.accessFrom,
+    this.accessToken,
     this.bankIdentifier,
     this.failRedirectUrl,
     this.successRedirectUrl,
@@ -81,6 +83,7 @@ class Lean extends StatefulWidget {
     required this.appToken,
     required this.reconnectId,
     this.callback,
+    this.accessToken,
     this.customization,
     this.actionCancelled,
     this.isSandbox = true,
@@ -109,6 +112,7 @@ class Lean extends StatefulWidget {
     required this.appToken,
     required this.customerId,
     this.callback,
+    this.accessToken,
     this.customization,
     this.actionCancelled,
     this.isSandbox = true,
@@ -138,6 +142,7 @@ class Lean extends StatefulWidget {
     required this.appToken,
     required this.customerId,
     this.callback,
+    this.accessToken,
     this.customization,
     this.actionCancelled,
     this.isSandbox = true,
@@ -167,6 +172,7 @@ class Lean extends StatefulWidget {
     required this.appToken,
     required this.customerId,
     this.callback,
+    this.accessToken,
     this.customization,
     this.actionCancelled,
     this.isSandbox = true,
@@ -196,6 +202,7 @@ class Lean extends StatefulWidget {
     required this.appToken,
     required this.paymentIntentId,
     this.callback,
+    this.accessToken,
     this.customization,
     this.actionCancelled,
     this.isSandbox = true,
@@ -249,13 +256,13 @@ class _LeanState extends State<Lean> {
         bankIdentifier: widget.bankIdentifier,
         failRedirectUrl: widget.failRedirectUrl,
         successRedirectUrl: widget.successRedirectUrl,
-        paymentDestinationId: widget.paymentDestinationId);
+        paymentDestinationId: widget.paymentDestinationId,
+        accessToken: widget.accessToken);
   }
 
   String get _reconnect {
     return _leanSdk.reconnect(
-      reconnectId: widget.reconnectId!,
-    );
+        reconnectId: widget.reconnectId!, accessToken: widget.accessToken);
   }
 
   String get _createBeneficiary {
@@ -264,7 +271,8 @@ class _LeanState extends State<Lean> {
         paymentSourceId: widget.paymentSourceId,
         failRedirectUrl: widget.failRedirectUrl,
         successRedirectUrl: widget.successRedirectUrl,
-        paymentDestinationId: widget.paymentDestinationId);
+        paymentDestinationId: widget.paymentDestinationId,
+        accessToken: widget.accessToken);
   }
 
   String get _createPaymentSource {
@@ -273,7 +281,8 @@ class _LeanState extends State<Lean> {
         bankIdentifier: widget.bankIdentifier,
         failRedirectUrl: widget.failRedirectUrl,
         successRedirectUrl: widget.successRedirectUrl,
-        paymentDestinationId: widget.paymentDestinationId);
+        paymentDestinationId: widget.paymentDestinationId,
+        accessToken: widget.accessToken);
   }
 
   String get _updatePaymentSource {
@@ -282,7 +291,8 @@ class _LeanState extends State<Lean> {
         paymentSourceId: widget.paymentSourceId!,
         paymentDestinationId: widget.paymentDestinationId!,
         failRedirectUrl: widget.failRedirectUrl,
-        successRedirectUrl: widget.successRedirectUrl);
+        successRedirectUrl: widget.successRedirectUrl,
+        accessToken: widget.accessToken);
   }
 
   String get _pay {
@@ -291,7 +301,8 @@ class _LeanState extends State<Lean> {
         accountId: widget.accountId,
         showBalances: widget.showBalances,
         failRedirectUrl: widget.failRedirectUrl,
-        successRedirectUrl: widget.successRedirectUrl);
+        successRedirectUrl: widget.successRedirectUrl,
+        accessToken: widget.accessToken);
   }
 
   String get _initializationUrl {
@@ -313,7 +324,8 @@ class _LeanState extends State<Lean> {
     }
   }
 
-  Future<void> requestCameraPermission(PlatformWebViewPermissionRequest request) async {
+  Future<void> requestCameraPermission(
+      PlatformWebViewPermissionRequest request) async {
     final status = await Permission.camera.request();
     if (status == PermissionStatus.granted) {
       request.grant();
@@ -338,34 +350,34 @@ class _LeanState extends State<Lean> {
 
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
       params = WebKitWebViewControllerCreationParams(
-        allowsInlineMediaPlayback: true,
-        mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{}
-      );
+          allowsInlineMediaPlayback: true,
+          mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{});
     } else {
       params = const PlatformWebViewControllerCreationParams();
     }
 
-    final WebViewController controller = WebViewController.fromPlatformCreationParams(params)
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onPageStarted: (String url) {
-            LeanLogger.info(msg: 'Lean SDK initialization started.');
-          },
-          onPageFinished: (String url) {
-            LeanLogger.info(msg: 'Lean SDK initialization completed.');
-          },
-          onNavigationRequest: (NavigationRequest request) {
-            return LeanWebClient.handleUrlOverride(request, widget.callback);
-          },
-        ),
-      )
-      ..loadRequest(initialUrl);
+    final WebViewController controller =
+        WebViewController.fromPlatformCreationParams(params)
+          ..setJavaScriptMode(JavaScriptMode.unrestricted)
+          ..setNavigationDelegate(
+            NavigationDelegate(
+              onPageStarted: (String url) {
+                LeanLogger.info(msg: 'Lean SDK initialization started.');
+              },
+              onPageFinished: (String url) {
+                LeanLogger.info(msg: 'Lean SDK initialization completed.');
+              },
+              onNavigationRequest: (NavigationRequest request) {
+                return LeanWebClient.handleUrlOverride(
+                    request, widget.callback);
+              },
+            ),
+          )
+          ..loadRequest(initialUrl);
 
     if (controller.platform is WebKitWebViewController) {
       if (kDebugMode) {
-        (controller.platform as WebKitWebViewController)
-            .setInspectable(true);
+        (controller.platform as WebKitWebViewController).setInspectable(true);
       }
     }
 
@@ -377,9 +389,10 @@ class _LeanState extends State<Lean> {
       (controller.platform as AndroidWebViewController)
           .setMediaPlaybackRequiresUserGesture(false);
       (controller.platform as AndroidWebViewController)
-          .setOnPlatformPermissionRequest((PlatformWebViewPermissionRequest request) {
-            requestCameraPermission(request);
-          });
+          .setOnPlatformPermissionRequest(
+              (PlatformWebViewPermissionRequest request) {
+        requestCameraPermission(request);
+      });
     }
 
     _controller = controller;

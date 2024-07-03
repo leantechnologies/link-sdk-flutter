@@ -114,6 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Lean.connect(
               showLogs: true,
               env: environment,
+              accessToken: "",
               appToken: appToken,
               isSandbox: isSandbox,
               customerId: connectCustomerID,
@@ -158,6 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
               reconnectId: reconnectID,
               isSandbox: isSandbox,
               showLogs: true,
+              accessToken: "",
               callback: (LeanResponse resp) {
                 if (kDebugMode) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -190,6 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 paymentDestinationId: paymentDestinationID,
                 isSandbox: isSandbox,
                 showLogs: true,
+                accessToken: "",
                 callback: (LeanResponse resp) {
                   if (kDebugMode) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -221,6 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
               showBalances: isShowBalances,
               isSandbox: isSandbox,
               showLogs: true,
+              accessToken: "",
               callback: (LeanResponse resp) {
                 if (kDebugMode) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(

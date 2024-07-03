@@ -31,6 +31,7 @@ enum Params {
   implementation_config,
   payment_destination_id,
   account_type,
+  access_token,
   bulk_payment_intent_id,
 }
 
