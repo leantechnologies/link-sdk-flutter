@@ -1,3 +1,7 @@
+## 3.0.5
+
+Added support OAuth via `accessToken` param for Lean methods
+
 ## 3.0.4
 
 New UI for example app

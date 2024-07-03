@@ -53,7 +53,7 @@ class LeanSDK {
       "platform": "mobile",
       "sdk": "flutter",
       "os": Platform.operatingSystem.toString(),
-      "sdk_version": '3.0.4', // @todo: get this dynamically from pubspec.yaml
+      "sdk_version": '3.0.5', // @todo: get this dynamically from pubspec.yaml
       "is_version_pinned": _version != "latest"
     };
 
