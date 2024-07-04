@@ -53,7 +53,7 @@ class LeanSDK {
       "platform": "mobile",
       "sdk": "flutter",
       "os": Platform.operatingSystem.toString(),
-      "sdk_version": '3.0.4', // @todo: get this dynamically from pubspec.yaml
+      "sdk_version": '3.0.5', // @todo: get this dynamically from pubspec.yaml
       "is_version_pinned": _version != "latest"
     };
 
@@ -108,6 +108,7 @@ class LeanSDK {
     String? successRedirectUrl,
     String? paymentDestinationId,
     String? accountType,
+    String? accessToken,
   }) {
     String permissionsParams = _convertPermissionsToURLString(permissions);
     String customizationParams = _convertCustomizationToURLString();
@@ -141,6 +142,11 @@ class LeanSDK {
           "$initializationURL&${Params.access_from.name}=$accessFrom";
     }
 
+    if (accessToken != null && accessToken.isNotEmpty) {
+      initializationURL =
+          "$initializationURL&${Params.access_token.name}=$accessToken";
+    }
+
     if (failRedirectUrl != null && failRedirectUrl.isNotEmpty) {
       initializationURL =
           "$initializationURL&${Params.fail_redirect_url.name}=$failRedirectUrl";
@@ -153,21 +159,33 @@ class LeanSDK {
 
     if (accountType != null && accountType.isNotEmpty) {
       initializationURL =
-      "$initializationURL&${Params.account_type.name}=$accountType";
+          "$initializationURL&${Params.account_type.name}=$accountType";
     }
 
     return initializationURL;
   }
 
-  reconnect({required String reconnectId}) {
+  reconnect({
+    required String reconnectId,
+    String? accessToken,
+  }) {
     String customizationParams = _convertCustomizationToURLString();
 
-    return "$_getBaseUrl&method=${LeanMethods.reconnect.name}&${Params.reconnect_id.name}=$reconnectId$customizationParams";
+    var initializationURL =
+        "$_getBaseUrl&method=${LeanMethods.reconnect.name}&${Params.reconnect_id.name}=$reconnectId$customizationParams";
+
+    if (accessToken != null && accessToken.isNotEmpty) {
+      initializationURL =
+          "$initializationURL&${Params.access_token.name}=$accessToken";
+    }
+
+    return initializationURL;
   }
 
   createBeneficiary({
     required String customerId,
     String? paymentSourceId,
+    String? accessToken,
     String? failRedirectUrl,
     String? successRedirectUrl,
     String? paymentDestinationId,
@@ -187,6 +205,11 @@ class LeanSDK {
           "$initializationURL&${Params.payment_source_id.name}=$paymentSourceId";
     }
 
+    if (accessToken != null && accessToken.isNotEmpty) {
+      initializationURL =
+          "$initializationURL&${Params.access_token.name}=$accessToken";
+    }
+
     if (failRedirectUrl != null && failRedirectUrl.isNotEmpty) {
       initializationURL =
           "$initializationURL&${Params.fail_redirect_url.name}=$failRedirectUrl";
@@ -203,6 +226,7 @@ class LeanSDK {
   createPaymentSource({
     required String customerId,
     String? bankIdentifier,
+    String? accessToken,
     String? failRedirectUrl,
     String? paymentSourceId,
     String? successRedirectUrl,
@@ -223,6 +247,11 @@ class LeanSDK {
           "$initializationURL&${Params.bank_identifier.name}=$bankIdentifier";
     }
 
+    if (accessToken != null && accessToken.isNotEmpty) {
+      initializationURL =
+          "$initializationURL&${Params.access_token.name}=$accessToken";
+    }
+
     if (failRedirectUrl != null && failRedirectUrl.isNotEmpty) {
       initializationURL =
           "$initializationURL&${Params.fail_redirect_url.name}=$failRedirectUrl";
@@ -240,6 +269,7 @@ class LeanSDK {
     required String customerId,
     required String paymentSourceId,
     required String paymentDestinationId,
+    String? accessToken,
     String? endUserId,
     String? failRedirectUrl,
     String? successRedirectUrl,
@@ -252,6 +282,11 @@ class LeanSDK {
     if (endUserId != null && endUserId.isNotEmpty) {
       initializationURL =
           "$initializationURL&${Params.end_user_id.name}=$endUserId";
+    }
+
+    if (accessToken != null && accessToken.isNotEmpty) {
+      initializationURL =
+          "$initializationURL&${Params.access_token.name}=$accessToken";
     }
 
     if (failRedirectUrl != null && failRedirectUrl.isNotEmpty) {
@@ -271,6 +306,7 @@ class LeanSDK {
     String? paymentIntentId,
     String? bulkPaymentIntentId,
     String? endUserId,
+    String? accessToken,
     String? accountId,
     bool? showBalances,
     String? failRedirectUrl,
@@ -299,6 +335,11 @@ class LeanSDK {
     if (showBalances != null && showBalances == true) {
       initializationURL =
           "$initializationURL&${Params.show_balances.name}=$showBalances";
+    }
+
+    if (accessToken != null && accessToken.isNotEmpty) {
+      initializationURL =
+          "$initializationURL&${Params.access_token.name}=$accessToken";
     }
 
     if (failRedirectUrl != null && failRedirectUrl.isNotEmpty) {
