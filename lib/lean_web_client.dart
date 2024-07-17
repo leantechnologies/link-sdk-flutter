@@ -17,6 +17,9 @@ class LeanWebClient {
       secondaryStatus: uri.queryParameters["secondary_status"],
       bankIsSupported:
           uri.queryParameters["is_supported"]?.toLowerCase() == 'true',
+      exitIntentPoint: uri.queryParameters["exit_intent_point"],
+      exitSurveyReason: uri.queryParameters["exit_survey_reason"],
+      leanCorrelationId: uri.queryParameters["lean_correlation_id"],
     );
   }
 
@@ -43,6 +46,9 @@ class LeanWebClient {
           lastApiResponse: null,
           secondaryStatus: null,
           bankIsSupported: null,
+          exitIntentPoint: null,
+          exitSurveyReason: null,
+          leanCorrelationId: null,
         ));
 
         // Do not override URL loading
