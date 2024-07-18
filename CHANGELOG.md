@@ -1,3 +1,7 @@
+## 3.0.6
+
+Added support for exit_intent_point, exit_survey_reason, lean_correlation_id to callback
+
 ## 3.0.5
 
 Added support for OAuth via `accessToken` param for Lean methods
