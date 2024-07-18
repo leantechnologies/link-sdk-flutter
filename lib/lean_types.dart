@@ -91,6 +91,9 @@ class LeanResponse {
   final String? secondaryStatus;
   final String? bankId;
   final bool? bankIsSupported;
+  final String? exitIntentPoint;
+  final String? exitSurveyReason;
+  final String? leanCorrelationId;
 
   LeanResponse({
     required this.status,
@@ -100,5 +103,8 @@ class LeanResponse {
     this.bankIsSupported,
     this.lastApiResponse,
     this.secondaryStatus,
+    this.exitIntentPoint,
+    this.exitSurveyReason,
+    this.leanCorrelationId,
   });
 }
