@@ -338,13 +338,14 @@ class _LeanState extends State<Lean> {
 
   late final WebViewController _controller;
 
+  Uri? get _initialUri => Uri.tryParse(_initializationUrl);
+
+  bool get _isValidUri =>
+      _initialUri != null && _initialUri!.isAbsolute && _initialUri!.path.isNotEmpty;
+
   @override
   void initState() {
     super.initState();
-
-    var initialUrl = Uri.parse(_initializationUrl);
-
-    LeanLogger.info(msg: "_initializationUrl $initialUrl");
 
     late final PlatformWebViewControllerCreationParams params;
 
@@ -368,31 +369,31 @@ class _LeanState extends State<Lean> {
                 LeanLogger.info(msg: 'Lean SDK initialization completed.');
               },
               onNavigationRequest: (NavigationRequest request) {
-                return LeanWebClient.handleUrlOverride(
-                    request, widget.callback);
-              },
+            return LeanWebClient.handleUrlOverride(request, widget.callback);
+          },
             ),
-          )
-          ..loadRequest(initialUrl);
+      );
 
-    if (controller.platform is WebKitWebViewController) {
-      if (kDebugMode) {
-        (controller.platform as WebKitWebViewController).setInspectable(true);
-      }
-    }
-
-    if (controller.platform is AndroidWebViewController) {
-      if (kDebugMode) {
-        AndroidWebViewController.enableDebugging(true);
+    if (_isValidUri) {
+      controller.loadRequest(_initialUri!);
+      if (controller.platform is WebKitWebViewController) {
+        if (kDebugMode) {
+          (controller.platform as WebKitWebViewController).setInspectable(true);
+        }
       }
 
-      (controller.platform as AndroidWebViewController)
-          .setMediaPlaybackRequiresUserGesture(false);
-      (controller.platform as AndroidWebViewController)
-          .setOnPlatformPermissionRequest(
-              (PlatformWebViewPermissionRequest request) {
-        requestCameraPermission(request);
-      });
+      if (controller.platform is AndroidWebViewController) {
+        if (kDebugMode) {
+          AndroidWebViewController.enableDebugging(true);
+        }
+
+        (controller.platform as AndroidWebViewController)
+            .setMediaPlaybackRequiresUserGesture(false);
+        (controller.platform as AndroidWebViewController)
+            .setOnPlatformPermissionRequest((PlatformWebViewPermissionRequest request) {
+          requestCameraPermission(request);
+        });
+      }
     }
 
     _controller = controller;
@@ -400,6 +401,6 @@ class _LeanState extends State<Lean> {
 
   @override
   Widget build(BuildContext context) {
-    return WebViewWidget(controller: _controller);
+    return _isValidUri ? WebViewWidget(controller: _controller) : const SizedBox.shrink();
   }
 }
