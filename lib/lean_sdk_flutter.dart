@@ -249,8 +249,8 @@ class _LeanState extends State<Lean> {
 
   String get _connect {
     return _leanSdk.connect(
-        customerId: widget.customerId!,
-        permissions: widget.permissions!,
+        customerId: widget.customerId ?? '',
+        permissions: widget.permissions ?? [],
         accessTo: widget.accessTo,
         accessFrom: widget.accessFrom,
         bankIdentifier: widget.bankIdentifier,
@@ -262,12 +262,12 @@ class _LeanState extends State<Lean> {
 
   String get _reconnect {
     return _leanSdk.reconnect(
-        reconnectId: widget.reconnectId!, accessToken: widget.accessToken);
+        reconnectId: widget.reconnectId ?? '', accessToken: widget.accessToken);
   }
 
   String get _createBeneficiary {
     return _leanSdk.createBeneficiary(
-        customerId: widget.customerId!,
+        customerId: widget.customerId ?? '',
         paymentSourceId: widget.paymentSourceId,
         failRedirectUrl: widget.failRedirectUrl,
         successRedirectUrl: widget.successRedirectUrl,
@@ -277,7 +277,7 @@ class _LeanState extends State<Lean> {
 
   String get _createPaymentSource {
     return _leanSdk.createPaymentSource(
-        customerId: widget.customerId!,
+        customerId: widget.customerId ?? '',
         bankIdentifier: widget.bankIdentifier,
         failRedirectUrl: widget.failRedirectUrl,
         successRedirectUrl: widget.successRedirectUrl,
@@ -287,9 +287,9 @@ class _LeanState extends State<Lean> {
 
   String get _updatePaymentSource {
     return _leanSdk.updatePaymentSource(
-        customerId: widget.customerId!,
-        paymentSourceId: widget.paymentSourceId!,
-        paymentDestinationId: widget.paymentDestinationId!,
+        customerId: widget.customerId ?? '',
+        paymentSourceId: widget.paymentSourceId ?? '',
+        paymentDestinationId: widget.paymentDestinationId ?? '',
         failRedirectUrl: widget.failRedirectUrl,
         successRedirectUrl: widget.successRedirectUrl,
         accessToken: widget.accessToken);
@@ -297,7 +297,7 @@ class _LeanState extends State<Lean> {
 
   String get _pay {
     return _leanSdk.pay(
-        paymentIntentId: widget.paymentIntentId!,
+        paymentIntentId: widget.paymentIntentId ?? '',
         accountId: widget.accountId,
         showBalances: widget.showBalances,
         failRedirectUrl: widget.failRedirectUrl,
