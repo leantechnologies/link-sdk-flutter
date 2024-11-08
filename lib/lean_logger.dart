@@ -14,4 +14,16 @@ class LeanLogger {
       showLogs == true ? print('LeanSdk-Error: $msg') : null;
     }
   }
+
+  static void logIfEmpty(String value, String variableName) {
+    if (value.isEmpty) {
+      LeanLogger.error(msg: "$variableName can't be empty");
+    }
+  }
+
+  static void logIfEmptyList(List list, String variableName) {
+    if (list.isEmpty) {
+      LeanLogger.error(msg: "$variableName can't be empty");
+    }
+  }
 }
