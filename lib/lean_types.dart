@@ -33,6 +33,7 @@ enum Params {
   account_type,
   access_token,
   bulk_payment_intent_id,
+  entity_id,
 }
 
 enum LeanMethods {
