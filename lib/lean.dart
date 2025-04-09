@@ -53,7 +53,7 @@ class LeanSDK {
       "platform": "mobile",
       "sdk": "flutter",
       "os": Platform.operatingSystem.toString(),
-      "sdk_version": '3.0.6', // @todo: get this dynamically from pubspec.yaml
+      "sdk_version": '3.0.7', // @todo: get this dynamically from pubspec.yaml
       "is_version_pinned": _version != "latest"
     };
 
@@ -189,6 +189,7 @@ class LeanSDK {
     String? failRedirectUrl,
     String? successRedirectUrl,
     String? paymentDestinationId,
+    String? entityId,
   }) {
     String customizationParams = _convertCustomizationToURLString();
 
@@ -208,6 +209,11 @@ class LeanSDK {
     if (accessToken != null && accessToken.isNotEmpty) {
       initializationURL =
           "$initializationURL&${Params.access_token.name}=$accessToken";
+    }
+
+    if (entityId != null && entityId.isNotEmpty) {
+      initializationURL =
+          "$initializationURL&${Params.entity_id.name}=$entityId";
     }
 
     if (failRedirectUrl != null && failRedirectUrl.isNotEmpty) {
@@ -271,6 +277,7 @@ class LeanSDK {
     required String paymentDestinationId,
     String? accessToken,
     String? endUserId,
+    String? entityId,
     String? failRedirectUrl,
     String? successRedirectUrl,
   }) {
@@ -287,6 +294,11 @@ class LeanSDK {
     if (accessToken != null && accessToken.isNotEmpty) {
       initializationURL =
           "$initializationURL&${Params.access_token.name}=$accessToken";
+    }
+
+    if (entityId != null && entityId.isNotEmpty) {
+      initializationURL =
+          "$initializationURL&${Params.entity_id.name}=$entityId";
     }
 
     if (failRedirectUrl != null && failRedirectUrl.isNotEmpty) {
