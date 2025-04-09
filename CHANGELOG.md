@@ -1,3 +1,7 @@
+## 3.0.7
+
+Added support for entity_id in create beneficiary (UPS) flow
+
 ## 3.0.6
 
 Added support for exit_intent_point, exit_survey_reason, lean_correlation_id to callback
