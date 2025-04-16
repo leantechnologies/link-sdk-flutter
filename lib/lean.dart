@@ -110,6 +110,9 @@ class LeanSDK {
     String? accountType,
     String? accessToken,
   }) {
+    LeanLogger.logIfEmpty(customerId, 'customerId');
+    LeanLogger.logIfEmptyList(permissions, 'permissions');
+
     String permissionsParams = _convertPermissionsToURLString(permissions);
     String customizationParams = _convertCustomizationToURLString();
 
@@ -169,6 +172,8 @@ class LeanSDK {
     required String reconnectId,
     String? accessToken,
   }) {
+    LeanLogger.logIfEmpty(reconnectId, 'reconnectId');
+
     String customizationParams = _convertCustomizationToURLString();
 
     var initializationURL =
@@ -191,6 +196,8 @@ class LeanSDK {
     String? paymentDestinationId,
     String? entityId,
   }) {
+    LeanLogger.logIfEmpty(customerId, 'customerId');
+
     String customizationParams = _convertCustomizationToURLString();
 
     var initializationURL =
@@ -238,6 +245,8 @@ class LeanSDK {
     String? successRedirectUrl,
     String? paymentDestinationId,
   }) {
+    LeanLogger.logIfEmpty(customerId, 'customerId');
+
     String customizationParams = _convertCustomizationToURLString();
 
     var initializationURL =
@@ -281,6 +290,10 @@ class LeanSDK {
     String? failRedirectUrl,
     String? successRedirectUrl,
   }) {
+    LeanLogger.logIfEmpty(customerId, 'customerId');
+    LeanLogger.logIfEmpty(paymentSourceId, 'paymentSourceId');
+    LeanLogger.logIfEmpty(paymentDestinationId, 'paymentDestinationId');
+
     String customizationParams = _convertCustomizationToURLString();
 
     var initializationURL =
