@@ -366,4 +366,18 @@ class LeanSDK {
 
     return initializationURL;
   }
+
+  verifyAddress({
+    required String customerId,
+    required String customerName,
+    required List<LeanPermissions> permissions,
+  }) {
+    String permissionsParams = _convertPermissionsToURLString(permissions);
+    String customizationParams = _convertCustomizationToURLString();
+
+    var initializationURL =
+        "$_getBaseUrl&method=${LeanMethods.verifyAddress.name}&${Params.customer_id.name}=$customerId&${Params.customer_name.name}=$customerName$permissionsParams$customizationParams";
+
+    return initializationURL;
+  }
 }

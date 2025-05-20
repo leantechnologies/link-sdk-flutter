@@ -30,6 +30,7 @@ class Lean extends StatefulWidget {
   final String? accountId;
   final String? accessFrom;
   final String? customerId;
+  final String? customerName;
   final String? reconnectId;
   final bool? showBalances;
   final LeanCallback? callback;
@@ -73,6 +74,7 @@ class Lean extends StatefulWidget {
   })  : _method = LeanMethods.connect,
         accountId = null,
         reconnectId = null,
+        customerName = null,
         showBalances = null,
         paymentSourceId = null,
         paymentIntentId = null,
@@ -98,6 +100,7 @@ class Lean extends StatefulWidget {
         customerId = null,
         accessFrom = null,
         permissions = null,
+        customerName = null,
         showBalances = null,
         bankIdentifier = null,
         paymentSourceId = null,
@@ -131,6 +134,7 @@ class Lean extends StatefulWidget {
         accountId = null,
         accessFrom = null,
         permissions = null,
+        customerName = null,
         reconnectId = null,
         showBalances = null,
         bankIdentifier = null,
@@ -162,6 +166,7 @@ class Lean extends StatefulWidget {
         accountId = null,
         accessFrom = null,
         permissions = null,
+        customerName = null,
         reconnectId = null,
         showBalances = null,
         paymentIntentId = null,
@@ -191,6 +196,7 @@ class Lean extends StatefulWidget {
         accountId = null,
         accessFrom = null,
         permissions = null,
+        customerName = null,
         reconnectId = null,
         showBalances = null,
         bankIdentifier = null,
@@ -222,10 +228,41 @@ class Lean extends StatefulWidget {
         accessFrom = null,
         reconnectId = null,
         permissions = null,
+        customerName = null,
         bankIdentifier = null,
         paymentSourceId = null,
         initializationUrl = '',
         paymentDestinationId = null;
+
+  const Lean.verifyAddress({
+    super.key,
+    required this.appToken,
+    required this.customerId,
+    required this.customerName,
+    required this.permissions,
+    this.callback,
+    this.customization,
+    this.actionCancelled,
+    this.isSandbox = true,
+    this.showLogs = false,
+    this.version = 'latest',
+    this.env = 'production',
+    this.country = LeanCountry.ae,
+    this.language = LeanLanguage.en,
+  })  : _method = LeanMethods.connect,
+        accessTo = null,
+        accessFrom = null,
+        accessToken = null,
+        bankIdentifier = null,
+        failRedirectUrl = null,
+        successRedirectUrl = null,
+        paymentDestinationId = null,
+        accountId = null,
+        reconnectId = null,
+        showBalances = null,
+        paymentSourceId = null,
+        paymentIntentId = null,
+        initializationUrl = '';
 
   @override
   State<Lean> createState() => _LeanState();
@@ -305,6 +342,13 @@ class _LeanState extends State<Lean> {
         accessToken: widget.accessToken);
   }
 
+  String get _verifyAddress {
+    return _leanSdk.verifyAddress(
+        customerId: widget.customerId!,
+        customerName: widget.customerName!,
+        permissions: widget.permissions!);
+  }
+
   String get _initializationUrl {
     switch (widget._method) {
       case LeanMethods.connect:
@@ -319,6 +363,8 @@ class _LeanState extends State<Lean> {
         return _updatePaymentSource;
       case LeanMethods.pay:
         return _pay;
+      case LeanMethods.verifyAddress:
+        return _verifyAddress;
       default:
         return '';
     }
