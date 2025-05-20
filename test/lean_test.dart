@@ -213,14 +213,27 @@ void main() {
     });
 
     group('verifyAddress', () {
-      test('all params: returns the correct URL', () {
+      test('partial params: returns the correct URL', () {
         const expectedUrl =
             'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+flutter&implementation_config=os+macos&implementation_config=sdk_version+3.0.8&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=verifyAddress&customer_id=test-customer-id&customer_name=test-customer-name&permissions=identity';
 
         final initializationURL = leanSdk.verifyAddress(
-            customerId:'test-customer-id',
-            customerName:'test-customer-name',
-            permissions: [LeanPermissions.identity]
+            customerId: 'test-customer-id',
+            customerName: 'test-customer-name',
+            permissions: [LeanPermissions.identity]);
+
+        expect(initializationURL, equals(expectedUrl));
+      });
+
+      test('all params: returns the correct URL', () {
+        const expectedUrl =
+            'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+flutter&implementation_config=os+macos&implementation_config=sdk_version+3.0.8&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=verifyAddress&customer_id=test-customer-id&customer_name=test-customer-name&permissions=identity&access_token=test-access-token';
+
+        final initializationURL = leanSdk.verifyAddress(
+          customerId: 'test-customer-id',
+          customerName: 'test-customer-name',
+          permissions: [LeanPermissions.identity],
+          accessToken: 'test-access-token',
         );
 
         expect(initializationURL, equals(expectedUrl));

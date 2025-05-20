@@ -241,6 +241,7 @@ class Lean extends StatefulWidget {
     required this.customerName,
     required this.permissions,
     this.callback,
+    this.accessToken,
     this.customization,
     this.actionCancelled,
     this.isSandbox = true,
@@ -252,7 +253,6 @@ class Lean extends StatefulWidget {
   })  : _method = LeanMethods.connect,
         accessTo = null,
         accessFrom = null,
-        accessToken = null,
         bankIdentifier = null,
         failRedirectUrl = null,
         successRedirectUrl = null,
@@ -346,7 +346,8 @@ class _LeanState extends State<Lean> {
     return _leanSdk.verifyAddress(
         customerId: widget.customerId!,
         customerName: widget.customerName!,
-        permissions: widget.permissions!);
+        permissions: widget.permissions!,
+        accessToken: widget.accessToken);
   }
 
   String get _initializationUrl {

@@ -53,7 +53,7 @@ class LeanSDK {
       "platform": "mobile",
       "sdk": "flutter",
       "os": Platform.operatingSystem.toString(),
-      "sdk_version": '3.0.7', // @todo: get this dynamically from pubspec.yaml
+      "sdk_version": '3.0.8', // @todo: get this dynamically from pubspec.yaml
       "is_version_pinned": _version != "latest"
     };
 
@@ -371,12 +371,19 @@ class LeanSDK {
     required String customerId,
     required String customerName,
     required List<LeanPermissions> permissions,
+    String? accessToken,
   }) {
     String permissionsParams = _convertPermissionsToURLString(permissions);
     String customizationParams = _convertCustomizationToURLString();
 
     var initializationURL =
         "$_getBaseUrl&method=${LeanMethods.verifyAddress.name}&${Params.customer_id.name}=$customerId&${Params.customer_name.name}=$customerName$permissionsParams$customizationParams";
+
+    // only include properties that are set
+    if (accessToken != null && accessToken.isNotEmpty) {
+      initializationURL =
+          "$initializationURL&${Params.access_token.name}=$accessToken";
+    }
 
     return initializationURL;
   }
