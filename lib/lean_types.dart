@@ -15,6 +15,7 @@ enum Params {
   access_to,
   account_id,
   customer_id,
+  customer_name,
   end_user_id,
   permissions,
   access_from,
@@ -44,6 +45,7 @@ enum LeanMethods {
   createBeneficiary,
   createPaymentSource,
   updatePaymentSource,
+  verifyAddress,
 }
 
 enum LeanPermissions {
