@@ -102,8 +102,8 @@ class _HomeScreenState extends State<HomeScreen> {
       LeanPermissions.payments
     ];
     var isSandbox = true;
-    var environment = 'staging';
-
+    var environment = 'sandbox';
+    // use 'sandbox' for implementation phase & 'production' for Live
     _connect() {
       showDialog(
         context: context,
