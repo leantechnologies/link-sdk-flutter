@@ -446,7 +446,7 @@ class _LeanState extends State<Lean> {
     _controller = controller;
   }
 
-  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
+  static final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
   };
 
