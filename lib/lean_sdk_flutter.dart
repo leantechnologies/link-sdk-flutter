@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lean_sdk_flutter/lean.dart';
 import 'package:lean_sdk_flutter/lean_web_client.dart';
@@ -445,8 +446,15 @@ class _LeanState extends State<Lean> {
     _controller = controller;
   }
 
+  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
+    Factory(() => EagerGestureRecognizer())
+  };
+
   @override
   Widget build(BuildContext context) {
-    return WebViewWidget(controller: _controller);
+    return WebViewWidget(
+      controller: _controller,
+      gestureRecognizers: gestureRecognizers,
+    );
   }
 }
