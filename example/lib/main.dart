@@ -46,15 +46,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-/// Home screen
-class HomeScreen extends StatefulWidget {
-  /// Constructs a [HomeScreen]
-  const HomeScreen({super.key});
-
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _appTokenController = TextEditingController();
   String appToken = "";
@@ -102,7 +93,6 @@ class _HomeScreenState extends State<HomeScreen> {
       LeanPermissions.payments
     ];
     var isSandbox = true;
-    var environment = 'staging';
 
     _connect() {
       showDialog(
@@ -113,7 +103,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Lean.connect(
               showLogs: true,
-              env: environment,
               accessToken: "",
               appToken: appToken,
               isSandbox: isSandbox,
@@ -154,7 +143,6 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Lean.reconnect(
-              env: environment,
               appToken: appToken,
               reconnectId: reconnectID,
               isSandbox: isSandbox,
@@ -185,7 +173,6 @@ class _HomeScreenState extends State<HomeScreen> {
             child: SizedBox(
               height: MediaQuery.of(context).size.height * 0.8,
               child: Lean.createPaymentSource(
-                env: environment,
                 appToken: appToken,
                 customerId: customerID,
                 paymentSourceId: paymentSourceID,
@@ -217,7 +204,6 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Lean.pay(
-              env: environment,
               appToken: appToken,
               accountId: accountId,
               paymentIntentId: paymentIntentID,
@@ -566,6 +552,15 @@ class _HomeScreenState extends State<HomeScreen> {
         minimumSize: const Size(200, 40),
         maximumSize: const Size(200, 40),
       );
+}
+
+/// Home screen
+class HomeScreen extends StatefulWidget {
+  /// Constructs a [HomeScreen]
+  const HomeScreen({super.key});
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
 /// Success screen
