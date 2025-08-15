@@ -46,6 +46,15 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// Home screen
+class HomeScreen extends StatefulWidget {
+  /// Constructs a [HomeScreen]
+  const HomeScreen({super.key});
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _appTokenController = TextEditingController();
   String appToken = "";
@@ -552,15 +561,6 @@ class _HomeScreenState extends State<HomeScreen> {
         minimumSize: const Size(200, 40),
         maximumSize: const Size(200, 40),
       );
-}
-
-/// Home screen
-class HomeScreen extends StatefulWidget {
-  /// Constructs a [HomeScreen]
-  const HomeScreen({super.key});
-
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
 }
 
 /// Success screen
