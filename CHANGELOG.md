@@ -1,3 +1,7 @@
+## 3.0.9
+
+Upgraded webview dependencies and other internal changes
+
 ## 3.0.8
 
 Added new sdk method — `verifyAddress`
