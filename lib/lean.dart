@@ -95,6 +95,19 @@ class LeanSDK {
     return customizationParams;
   }
 
+  String _appendOptionalConfigToURLParams(
+    String url,
+    Map<String, Object?> optionalParams,
+  ) {
+    var result = url;
+    optionalParams.forEach((key, value) {
+      if (value != null && value.toString().isNotEmpty) {
+        result = "$result&$key=${value.toString()}";
+      }
+    });
+    return result;
+  }
+
   //  ================    Link methods    ================    //
 
   connect({
@@ -109,6 +122,9 @@ class LeanSDK {
     String? paymentDestinationId,
     String? accountType,
     String? accessToken,
+    bool? showConsentExplanation,
+    String? destinationAlias,
+    String? destinationAvatar,
   }) {
     String permissionsParams = _convertPermissionsToURLString(permissions);
     String customizationParams = _convertCustomizationToURLString();
@@ -116,51 +132,25 @@ class LeanSDK {
     var initializationURL =
         "$_getBaseUrl&method=${LeanMethods.connect.name}&${Params.customer_id.name}=$customerId$permissionsParams$customizationParams";
 
-    // only include properties that are set
-    if (bankIdentifier != null && bankIdentifier.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.bank_identifier.name}=$bankIdentifier";
-    }
+    final optionalParams = {
+      Params.bank_identifier.name: bankIdentifier,
+      Params.payment_destination_id.name: paymentDestinationId,
+      Params.end_user_id.name: endUserId,
+      Params.access_to.name: accessTo,
+      Params.access_from.name: accessFrom,
+      Params.access_token.name: accessToken,
+      Params.fail_redirect_url.name: failRedirectUrl,
+      Params.success_redirect_url.name: successRedirectUrl,
+      Params.account_type.name: accountType,
+      Params.show_consent_explanation.name: showConsentExplanation,
+      Params.destination_alias.name: destinationAlias,
+      Params.destination_avatar.name: destinationAvatar,
+    };
 
-    if (paymentDestinationId != null && paymentDestinationId.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.payment_destination_id.name}=$paymentDestinationId";
-    }
-
-    if (endUserId != null && endUserId.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.end_user_id.name}=$endUserId";
-    }
-
-    if (accessTo != null && accessTo.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.access_to.name}=$accessTo";
-    }
-
-    if (accessFrom != null && accessFrom.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.access_from.name}=$accessFrom";
-    }
-
-    if (accessToken != null && accessToken.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.access_token.name}=$accessToken";
-    }
-
-    if (failRedirectUrl != null && failRedirectUrl.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.fail_redirect_url.name}=$failRedirectUrl";
-    }
-
-    if (successRedirectUrl != null && successRedirectUrl.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.success_redirect_url.name}=$successRedirectUrl";
-    }
-
-    if (accountType != null && accountType.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.account_type.name}=$accountType";
-    }
+    initializationURL = _appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
 
     return initializationURL;
   }
@@ -168,16 +158,24 @@ class LeanSDK {
   reconnect({
     required String reconnectId,
     String? accessToken,
+    String? destinationAlias,
+    String? destinationAvatar,
   }) {
     String customizationParams = _convertCustomizationToURLString();
 
     var initializationURL =
         "$_getBaseUrl&method=${LeanMethods.reconnect.name}&${Params.reconnect_id.name}=$reconnectId$customizationParams";
 
-    if (accessToken != null && accessToken.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.access_token.name}=$accessToken";
-    }
+    final optionalParams = {
+      Params.access_token.name: accessToken,
+      Params.destination_alias.name: destinationAlias,
+      Params.destination_avatar.name: destinationAvatar,
+    };
+
+    initializationURL = _appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
 
     return initializationURL;
   }
@@ -190,41 +188,29 @@ class LeanSDK {
     String? successRedirectUrl,
     String? paymentDestinationId,
     String? entityId,
+    String? destinationAlias,
+    String? destinationAvatar,
   }) {
     String customizationParams = _convertCustomizationToURLString();
 
     var initializationURL =
         "$_getBaseUrl&method=${LeanMethods.createBeneficiary.name}&${Params.customer_id.name}=$customerId$customizationParams";
 
-    if (paymentDestinationId != null && paymentDestinationId.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.payment_destination_id.name}=$paymentDestinationId";
-    }
+    final optionalParams = {
+      Params.payment_source_id.name: paymentSourceId,
+      Params.access_token.name: accessToken,
+      Params.fail_redirect_url.name: failRedirectUrl,
+      Params.success_redirect_url.name: successRedirectUrl,
+      Params.payment_destination_id.name: paymentDestinationId,
+      Params.entity_id.name: entityId,
+      Params.destination_alias.name: destinationAlias,
+      Params.destination_avatar.name: destinationAvatar,
+    };
 
-    if (paymentSourceId != null && paymentSourceId.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.payment_source_id.name}=$paymentSourceId";
-    }
-
-    if (accessToken != null && accessToken.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.access_token.name}=$accessToken";
-    }
-
-    if (entityId != null && entityId.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.entity_id.name}=$entityId";
-    }
-
-    if (failRedirectUrl != null && failRedirectUrl.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.fail_redirect_url.name}=$failRedirectUrl";
-    }
-
-    if (successRedirectUrl != null && successRedirectUrl.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.success_redirect_url.name}=$successRedirectUrl";
-    }
+    initializationURL = _appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
 
     return initializationURL;
   }
@@ -237,36 +223,28 @@ class LeanSDK {
     String? paymentSourceId,
     String? successRedirectUrl,
     String? paymentDestinationId,
+    String? destinationAlias,
+    String? destinationAvatar,
   }) {
     String customizationParams = _convertCustomizationToURLString();
 
     var initializationURL =
         "$_getBaseUrl&method=${LeanMethods.createPaymentSource.name}&${Params.customer_id.name}=$customerId$customizationParams";
 
-    if (paymentDestinationId != null && paymentDestinationId.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.payment_destination_id.name}=$paymentDestinationId";
-    }
+    final optionalParams = {
+      Params.payment_destination_id.name: paymentDestinationId,
+      Params.bank_identifier.name: bankIdentifier,
+      Params.access_token.name: accessToken,
+      Params.fail_redirect_url.name: failRedirectUrl,
+      Params.success_redirect_url.name: successRedirectUrl,
+      Params.destination_alias.name: destinationAlias,
+      Params.destination_avatar.name: destinationAvatar,
+    };
 
-    if (bankIdentifier != null && bankIdentifier.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.bank_identifier.name}=$bankIdentifier";
-    }
-
-    if (accessToken != null && accessToken.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.access_token.name}=$accessToken";
-    }
-
-    if (failRedirectUrl != null && failRedirectUrl.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.fail_redirect_url.name}=$failRedirectUrl";
-    }
-
-    if (successRedirectUrl != null && successRedirectUrl.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.success_redirect_url.name}=$successRedirectUrl";
-    }
+    initializationURL = _appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
 
     return initializationURL;
   }
@@ -280,36 +258,28 @@ class LeanSDK {
     String? entityId,
     String? failRedirectUrl,
     String? successRedirectUrl,
+    String? destinationAlias,
+    String? destinationAvatar,
   }) {
     String customizationParams = _convertCustomizationToURLString();
 
     var initializationURL =
         "$_getBaseUrl&method=${LeanMethods.updatePaymentSource.name}&${Params.customer_id.name}=$customerId&${Params.payment_source_id.name}=$paymentSourceId&${Params.payment_destination_id.name}=$paymentDestinationId$customizationParams";
 
-    if (endUserId != null && endUserId.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.end_user_id.name}=$endUserId";
-    }
+    final optionalParams = {
+      Params.end_user_id.name: endUserId,
+      Params.access_token.name: accessToken,
+      Params.entity_id.name: entityId,
+      Params.fail_redirect_url.name: failRedirectUrl,
+      Params.success_redirect_url.name: successRedirectUrl,
+      Params.destination_alias.name: destinationAlias,
+      Params.destination_avatar.name: destinationAvatar,
+    };
 
-    if (accessToken != null && accessToken.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.access_token.name}=$accessToken";
-    }
-
-    if (entityId != null && entityId.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.entity_id.name}=$entityId";
-    }
-
-    if (failRedirectUrl != null && failRedirectUrl.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.fail_redirect_url.name}=$failRedirectUrl";
-    }
-
-    if (successRedirectUrl != null && successRedirectUrl.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.success_redirect_url.name}=$successRedirectUrl";
-    }
+    initializationURL = _appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
 
     return initializationURL;
   }
@@ -323,46 +293,30 @@ class LeanSDK {
     bool? showBalances,
     String? failRedirectUrl,
     String? successRedirectUrl,
+    String? destinationAlias,
+    String? destinationAvatar,
   }) {
     String customizationParams = _convertCustomizationToURLString();
 
     var initializationURL =
         "$_getBaseUrl&method=${LeanMethods.pay.name}&${Params.payment_intent_id.name}=$paymentIntentId$customizationParams";
 
-    if (bulkPaymentIntentId != null && bulkPaymentIntentId.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.bulk_payment_intent_id.name}=$bulkPaymentIntentId";
-    }
+    final optionalParams = {
+      Params.bulk_payment_intent_id.name: bulkPaymentIntentId,
+      Params.end_user_id.name: endUserId,
+      Params.account_id.name: accountId,
+      Params.show_balances.name: showBalances,
+      Params.access_token.name: accessToken,
+      Params.fail_redirect_url.name: failRedirectUrl,
+      Params.success_redirect_url.name: successRedirectUrl,
+      Params.destination_alias.name: destinationAlias,
+      Params.destination_avatar.name: destinationAvatar,
+    };
 
-    if (endUserId != null && endUserId.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.end_user_id.name}=$endUserId";
-    }
-
-    if (accountId != null && accountId.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.account_id.name}=$accountId";
-    }
-
-    if (showBalances != null && showBalances == true) {
-      initializationURL =
-          "$initializationURL&${Params.show_balances.name}=$showBalances";
-    }
-
-    if (accessToken != null && accessToken.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.access_token.name}=$accessToken";
-    }
-
-    if (failRedirectUrl != null && failRedirectUrl.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.fail_redirect_url.name}=$failRedirectUrl";
-    }
-
-    if (successRedirectUrl != null && successRedirectUrl.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.success_redirect_url.name}=$successRedirectUrl";
-    }
+    initializationURL = _appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
 
     return initializationURL;
   }
@@ -372,6 +326,8 @@ class LeanSDK {
     required String customerName,
     required List<LeanPermissions> permissions,
     String? accessToken,
+    String? destinationAlias,
+    String? destinationAvatar,
   }) {
     String permissionsParams = _convertPermissionsToURLString(permissions);
     String customizationParams = _convertCustomizationToURLString();
@@ -379,11 +335,16 @@ class LeanSDK {
     var initializationURL =
         "$_getBaseUrl&method=${LeanMethods.verifyAddress.name}&${Params.customer_id.name}=$customerId&${Params.customer_name.name}=$customerName$permissionsParams$customizationParams";
 
-    // only include properties that are set
-    if (accessToken != null && accessToken.isNotEmpty) {
-      initializationURL =
-          "$initializationURL&${Params.access_token.name}=$accessToken";
-    }
+    final optionalParams = {
+      Params.access_token.name: accessToken,
+      Params.destination_alias.name: destinationAlias,
+      Params.destination_avatar.name: destinationAvatar,
+    };
+
+    initializationURL = _appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
 
     return initializationURL;
   }
