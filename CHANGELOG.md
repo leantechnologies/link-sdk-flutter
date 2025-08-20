@@ -1,3 +1,7 @@
+## 3.0.10
+
+Added support for `showConsentExplanation` in connect method, along with `destinationAlias` and `destinationAvatar` in all flows
+
 ## 3.0.9
 
 Upgraded webview dependencies and other internal changes
