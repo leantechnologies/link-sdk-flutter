@@ -247,5 +247,36 @@ void main() {
         expect(initializationURL, equals(expectedUrl));
       });
     });
+
+    group('authorizeConsent', () {
+      test('partial params: returns the correct URL', () {
+        const expectedUrl =
+            'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+flutter&implementation_config=os+macos&implementation_config=sdk_version+3.0.9&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=authorizeConsent&customer_id=b2f3537b-2e38-4067-bf61-7398cf7d4934&consent_id=7ebe7449-fd93-4657-be82-fcc3697262c4&fail_redirect_url=https://www.leantech.me/failure&success_redirect_url=https://www.leantech.me/success';
+
+        final initializationURL = leanSdk.authorizeConsent(
+            customerId: 'b2f3537b-2e38-4067-bf61-7398cf7d4934',
+            consentId: '7ebe7449-fd93-4657-be82-fcc3697262c4',
+            failRedirectUrl: 'https://www.leantech.me/failure',
+            successRedirectUrl: 'https://www.leantech.me/success');
+
+        expect(initializationURL, equals(expectedUrl));
+      });
+
+      test('all params: returns the correct URL', () {
+        const expectedUrl =
+            'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+flutter&implementation_config=os+macos&implementation_config=sdk_version+3.0.9&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=authorizeConsent&customer_id=b2f3537b-2e38-4067-bf61-7398cf7d4934&consent_id=7ebe7449-fd93-4657-be82-fcc3697262c4&fail_redirect_url=https://www.leantech.me/failure&success_redirect_url=https://www.leantech.me/success&access_token=test-access-token&destination_alias=TestingCo&destination_avatar=https://dev.leantech.me/success.png';
+
+        final initializationURL = leanSdk.authorizeConsent(
+            customerId: 'b2f3537b-2e38-4067-bf61-7398cf7d4934',
+            consentId: '7ebe7449-fd93-4657-be82-fcc3697262c4',
+            failRedirectUrl: 'https://www.leantech.me/failure',
+            successRedirectUrl: 'https://www.leantech.me/success',
+            accessToken: 'test-access-token',
+            destinationAlias: 'TestingCo',
+            destinationAvatar: 'https://dev.leantech.me/success.png');
+
+        expect(initializationURL, equals(expectedUrl));
+      });
+    });
   });
 }
