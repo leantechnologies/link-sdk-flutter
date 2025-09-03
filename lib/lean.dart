@@ -348,4 +348,32 @@ class LeanSDK {
 
     return initializationURL;
   }
+
+  authorizeConsent({
+    required String customerId,
+    required String consentId,
+    required String failRedirectUrl,
+    required String successRedirectUrl,
+    String? accessToken,
+    String? destinationAlias,
+    String? destinationAvatar,
+  }) {
+    String customizationParams = _convertCustomizationToURLString();
+
+    var initializationURL =
+        "$_getBaseUrl&method=${LeanMethods.authorizeConsent.name}&${Params.customer_id.name}=$customerId&${Params.consent_id.name}=$consentId&${Params.fail_redirect_url.name}=$failRedirectUrl&${Params.success_redirect_url.name}=$successRedirectUrl$customizationParams";
+
+    final optionalParams = {
+      Params.access_token.name: accessToken,
+      Params.destination_alias.name: destinationAlias,
+      Params.destination_avatar.name: destinationAvatar,
+    };
+
+    initializationURL = _appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
+
+    return initializationURL;
+  }
 }
