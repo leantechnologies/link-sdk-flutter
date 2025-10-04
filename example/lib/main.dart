@@ -92,6 +92,19 @@ class _HomeScreenState extends State<HomeScreen> {
       TextEditingController();
   String paymentIntentID = "";
 
+  // Authorize Consent
+  final TextEditingController _consentCustomerIDController =
+      TextEditingController();
+  String consentCustomerID = "";
+  final TextEditingController _consentIDController = TextEditingController();
+  String consentID = "";
+  final TextEditingController _consentFailRedirectUrlController =
+      TextEditingController();
+  String consentFailRedirectUrl = "";
+  final TextEditingController _consentSuccessRedirectUrlController =
+      TextEditingController();
+  String consentSuccessRedirectUrl = "";
+
   @override
   Widget build(BuildContext context) {
     var permissions = [
@@ -113,7 +126,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Lean.connect(
               showLogs: true,
-              env: environment,
               accessToken: "",
               appToken: appToken,
               isSandbox: isSandbox,
@@ -154,7 +166,6 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Lean.reconnect(
-              env: environment,
               appToken: appToken,
               reconnectId: reconnectID,
               isSandbox: isSandbox,
@@ -185,7 +196,6 @@ class _HomeScreenState extends State<HomeScreen> {
             child: SizedBox(
               height: MediaQuery.of(context).size.height * 0.8,
               child: Lean.createPaymentSource(
-                env: environment,
                 appToken: appToken,
                 customerId: customerID,
                 paymentSourceId: paymentSourceID,
@@ -217,11 +227,41 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Lean.pay(
-              env: environment,
               appToken: appToken,
               accountId: accountId,
               paymentIntentId: paymentIntentID,
               showBalances: isShowBalances,
+              isSandbox: isSandbox,
+              showLogs: true,
+              accessToken: "",
+              callback: (LeanResponse resp) {
+                if (kDebugMode) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("Callback: ${resp.message}"),
+                  ));
+                }
+                Navigator.pop(context);
+              },
+              actionCancelled: () => Navigator.pop(context),
+            ),
+          );
+        },
+      );
+    }
+
+    _authorizeConsent() {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Lean.authorizeConsent(
+              appToken: appToken,
+              customerId: consentCustomerID,
+              consentId: consentID,
+              failRedirectUrl: consentFailRedirectUrl,
+              successRedirectUrl: consentSuccessRedirectUrl,
               isSandbox: isSandbox,
               showLogs: true,
               accessToken: "",
@@ -550,6 +590,97 @@ class _HomeScreenState extends State<HomeScreen> {
                             onPressed: () => _pay(),
                             style: _buttonStyle(),
                             child: const Text('Pay'),
+                          ),
+                        ]),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.only(bottom: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          spreadRadius: 2,
+                          blurRadius: 2,
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 0),
+                            child: TextFormField(
+                              key: Key('consentCustomerId'),
+                              decoration: const InputDecoration(
+                                border: UnderlineInputBorder(),
+                                labelText: 'Customer ID',
+                              ),
+                              controller: _consentCustomerIDController,
+                              onChanged: (value) {
+                                setState(() {
+                                  consentCustomerID = value;
+                                });
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 0),
+                            child: TextFormField(
+                              key: Key('consentId'),
+                              decoration: const InputDecoration(
+                                border: UnderlineInputBorder(),
+                                labelText: 'Consent ID',
+                              ),
+                              controller: _consentIDController,
+                              onChanged: (value) {
+                                setState(() {
+                                  consentID = value;
+                                });
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 0),
+                            child: TextFormField(
+                              key: Key('consentFailRedirectUrl'),
+                              decoration: const InputDecoration(
+                                border: UnderlineInputBorder(),
+                                labelText: 'Fail Redirect URL',
+                              ),
+                              controller: _consentFailRedirectUrlController,
+                              onChanged: (value) {
+                                setState(() {
+                                  consentFailRedirectUrl = value;
+                                });
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: 14, left: 8, right: 8),
+                            child: TextFormField(
+                              key: Key('consentSuccessRedirectUrl'),
+                              decoration: const InputDecoration(
+                                border: UnderlineInputBorder(),
+                                labelText: 'Success Redirect URL',
+                              ),
+                              controller: _consentSuccessRedirectUrlController,
+                              onChanged: (value) {
+                                setState(() {
+                                  consentSuccessRedirectUrl = value;
+                                });
+                              },
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () => _authorizeConsent(),
+                            style: _buttonStyle(),
+                            child: const Text('Authorize Consent'),
                           ),
                         ]),
                   ),

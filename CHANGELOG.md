@@ -1,3 +1,15 @@
+## 3.0.11
+
+Added new sdk method - `authorizeConsent`
+
+## 3.0.10
+
+Added support for `showConsentExplanation` in connect method, along with `destinationAlias` and `destinationAvatar` in all flows
+
+## 3.0.9
+
+Upgraded webview dependencies and other internal changes
+
 ## 3.0.8
 
 Added new sdk method — `verifyAddress`
@@ -36,9 +48,9 @@ Major version bump for new SDK architecture
 
 ## 0.5.0
 
-Includes features: 
-* connect bank account
-* create payment source
-* reconnect bank account
-* complete payment
+Includes features:
 
+- connect bank account
+- create payment source
+- reconnect bank account
+- complete payment

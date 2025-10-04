@@ -35,6 +35,10 @@ enum Params {
   access_token,
   bulk_payment_intent_id,
   entity_id,
+  show_consent_explanation,
+  destination_alias,
+  destination_avatar,
+  consent_id
 }
 
 enum LeanMethods {
@@ -46,6 +50,7 @@ enum LeanMethods {
   createPaymentSource,
   updatePaymentSource,
   verifyAddress,
+  authorizeConsent,
 }
 
 enum LeanPermissions {
