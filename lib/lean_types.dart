@@ -38,7 +38,10 @@ enum Params {
   show_consent_explanation,
   destination_alias,
   destination_avatar,
-  consent_id
+  consent_id,
+  consent_attempt_id,
+  granular_status_code,
+  status_additional_info
 }
 
 enum LeanMethods {
@@ -51,6 +54,9 @@ enum LeanMethods {
   updatePaymentSource,
   verifyAddress,
   authorizeConsent,
+  checkout,
+  manageConsents,
+  captureRedirect,
 }
 
 enum LeanPermissions {

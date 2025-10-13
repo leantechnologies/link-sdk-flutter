@@ -1,3 +1,6 @@
+## 3.0.12
+Added new sdk methods - `checkout`, `manageConsents`, `captureRedirect`
+
 ## 3.0.11
 
 Added new sdk method - `authorizeConsent`
