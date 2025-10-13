@@ -41,7 +41,8 @@ enum Params {
   consent_id,
   consent_attempt_id,
   granular_status_code,
-  status_additional_info
+  status_additional_info,
+  customer_metadata
 }
 
 enum LeanMethods {

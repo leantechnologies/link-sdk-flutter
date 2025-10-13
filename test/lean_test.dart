@@ -44,7 +44,7 @@ void main() {
 
       test('all params: returns the correct URL', () {
         const expectedUrl =
-            'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+flutter&implementation_config=os+macos&implementation_config=sdk_version+3.0.12&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=connect&customer_id=dda80d32-4062-404c-abe7-ba9b9290c873&permissions=identity&permissions=accounts&permissions=balance&permissions=transactions&permissions=payments&bank_identifier=LEANMB1_SAU&payment_destination_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&access_to=10-10-2023&access_from=10-05-2023&access_token=test&fail_redirect_url=https://dev.leantech.me/fail&success_redirect_url=https://dev.leantech.me/success&destination_alias=TestingCo&destination_avatar=https://dev.leantech.me/success.png';
+            'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+flutter&implementation_config=os+macos&implementation_config=sdk_version+3.0.12&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=connect&customer_id=dda80d32-4062-404c-abe7-ba9b9290c873&permissions=identity&permissions=accounts&permissions=balance&permissions=transactions&permissions=payments&bank_identifier=LEANMB1_SAU&payment_destination_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&access_to=10-10-2023&access_from=10-05-2023&access_token=test&fail_redirect_url=https://dev.leantech.me/fail&success_redirect_url=https://dev.leantech.me/success&destination_alias=TestingCo&destination_avatar=https://dev.leantech.me/success.png&customer_metadata={"user":"test"}';
 
         final initializationURL = leanSdk.connect(
             customerId: customerId,
@@ -63,7 +63,8 @@ void main() {
             successRedirectUrl: 'https://dev.leantech.me/success',
             paymentDestinationId: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
             destinationAlias: 'TestingCo',
-            destinationAvatar: 'https://dev.leantech.me/success.png');
+            destinationAvatar: 'https://dev.leantech.me/success.png',
+            customerMetadata: '{"user":"test"}');
 
         expect(initializationURL, equals(expectedUrl));
       });
@@ -280,13 +281,15 @@ void main() {
     });
 
     group('checkout', () {
-      test('partial params: returns the correct URL', () {
+      test('required params: returns the correct URL', () {
         const expectedUrl =
-            'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+flutter&implementation_config=os+macos&implementation_config=sdk_version+3.0.12&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=checkout&customer_name=John Doe&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0';
+            'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+flutter&implementation_config=os+macos&implementation_config=sdk_version+3.0.12&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=checkout&customer_name=John Doe&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&success_redirect_url=https://dev.leantech.me/success&fail_redirect_url=https://dev.leantech.me/fail';
 
         final initializationURL = leanSdk.checkout(
           customerName: 'John Doe',
           paymentIntentId: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
+          successRedirectUrl: 'https://dev.leantech.me/success',
+          failRedirectUrl: 'https://dev.leantech.me/fail',
         );
 
         expect(initializationURL, equals(expectedUrl));
@@ -294,14 +297,14 @@ void main() {
 
       test('all params: returns the correct URL', () {
         const expectedUrl =
-            'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+flutter&implementation_config=os+macos&implementation_config=sdk_version+3.0.12&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=checkout&customer_name=John Doe&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&access_token=test-access-token&success_redirect_url=https://dev.leantech.me/success&fail_redirect_url=https://dev.leantech.me/fail';
+            'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+flutter&implementation_config=os+macos&implementation_config=sdk_version+3.0.12&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=checkout&customer_name=John Doe&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&success_redirect_url=https://dev.leantech.me/success&fail_redirect_url=https://dev.leantech.me/fail&access_token=test-access-token';
 
         final initializationURL = leanSdk.checkout(
             customerName: 'John Doe',
             paymentIntentId: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
-            accessToken: 'test-access-token',
             successRedirectUrl: 'https://dev.leantech.me/success',
-            failRedirectUrl: 'https://dev.leantech.me/fail');
+            failRedirectUrl: 'https://dev.leantech.me/fail',
+            accessToken: 'test-access-token');
 
         expect(initializationURL, equals(expectedUrl));
       });

@@ -125,6 +125,7 @@ class LeanSDK {
     bool? showConsentExplanation,
     String? destinationAlias,
     String? destinationAvatar,
+    String? customerMetadata,
   }) {
     String permissionsParams = _convertPermissionsToURLString(permissions);
     String customizationParams = _convertCustomizationToURLString();
@@ -145,6 +146,7 @@ class LeanSDK {
       Params.show_consent_explanation.name: showConsentExplanation,
       Params.destination_alias.name: destinationAlias,
       Params.destination_avatar.name: destinationAvatar,
+      Params.customer_metadata.name: customerMetadata,
     };
 
     initializationURL = _appendOptionalConfigToURLParams(
@@ -380,19 +382,17 @@ class LeanSDK {
   checkout({
     required String customerName,
     required String paymentIntentId,
+    required String successRedirectUrl,
+    required String failRedirectUrl,
     String? accessToken,
-    String? successRedirectUrl,
-    String? failRedirectUrl,
   }) {
     String customizationParams = _convertCustomizationToURLString();
 
     var initializationURL =
-        "$_getBaseUrl&method=${LeanMethods.checkout.name}&${Params.customer_name.name}=$customerName&${Params.payment_intent_id.name}=$paymentIntentId$customizationParams";
+        "$_getBaseUrl&method=${LeanMethods.checkout.name}&${Params.customer_name.name}=$customerName&${Params.payment_intent_id.name}=$paymentIntentId&${Params.success_redirect_url.name}=$successRedirectUrl&${Params.fail_redirect_url.name}=$failRedirectUrl$customizationParams";
 
     final optionalParams = {
       Params.access_token.name: accessToken,
-      Params.success_redirect_url.name: successRedirectUrl,
-      Params.fail_redirect_url.name: failRedirectUrl,
     };
 
     initializationURL = _appendOptionalConfigToURLParams(
