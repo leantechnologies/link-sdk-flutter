@@ -1,5 +1,6 @@
 ## 3.0.12
-Added new sdk methods - `checkout`, `manageConsents`, `captureRedirect`
+- Added new sdk methods - `checkout`, `manageConsents`, `captureRedirect`
+- Added support for `user_exit_intent` in callback response
 
 ## 3.0.11
 

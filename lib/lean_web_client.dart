@@ -20,6 +20,7 @@ class LeanWebClient {
       exitIntentPoint: uri.queryParameters["exit_intent_point"],
       exitSurveyReason: uri.queryParameters["exit_survey_reason"],
       leanCorrelationId: uri.queryParameters["lean_correlation_id"],
+      userExitIntent: uri.queryParameters["user_exit_intent"],
     );
   }
 
@@ -49,6 +50,7 @@ class LeanWebClient {
           exitIntentPoint: null,
           exitSurveyReason: null,
           leanCorrelationId: null,
+          userExitIntent: null,
         ));
 
         // Do not override URL loading

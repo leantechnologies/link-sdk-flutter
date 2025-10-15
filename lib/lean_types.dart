@@ -109,6 +109,7 @@ class LeanResponse {
   final String? exitIntentPoint;
   final String? exitSurveyReason;
   final String? leanCorrelationId;
+  final String? userExitIntent;
 
   LeanResponse({
     required this.status,
@@ -121,5 +122,6 @@ class LeanResponse {
     this.exitIntentPoint,
     this.exitSurveyReason,
     this.leanCorrelationId,
+    this.userExitIntent,
   });
 }
