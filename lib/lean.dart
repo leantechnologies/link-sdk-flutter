@@ -53,7 +53,7 @@ class LeanSDK {
       "platform": "mobile",
       "sdk": "flutter",
       "os": Platform.operatingSystem.toString(),
-      "sdk_version": '3.0.9', // @todo: get this dynamically from pubspec.yaml
+      "sdk_version": '3.0.12', // @todo: get this dynamically from pubspec.yaml
       "is_version_pinned": _version != "latest"
     };
 
@@ -125,6 +125,7 @@ class LeanSDK {
     bool? showConsentExplanation,
     String? destinationAlias,
     String? destinationAvatar,
+    String? customerMetadata,
   }) {
     String permissionsParams = _convertPermissionsToURLString(permissions);
     String customizationParams = _convertCustomizationToURLString();
@@ -145,6 +146,7 @@ class LeanSDK {
       Params.show_consent_explanation.name: showConsentExplanation,
       Params.destination_alias.name: destinationAlias,
       Params.destination_avatar.name: destinationAvatar,
+      Params.customer_metadata.name: customerMetadata,
     };
 
     initializationURL = _appendOptionalConfigToURLParams(
@@ -367,6 +369,78 @@ class LeanSDK {
       Params.access_token.name: accessToken,
       Params.destination_alias.name: destinationAlias,
       Params.destination_avatar.name: destinationAvatar,
+    };
+
+    initializationURL = _appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
+
+    return initializationURL;
+  }
+
+  checkout({
+    required String customerName,
+    required String paymentIntentId,
+    required String successRedirectUrl,
+    required String failRedirectUrl,
+    String? accessToken,
+  }) {
+    String customizationParams = _convertCustomizationToURLString();
+
+    var initializationURL =
+        "$_getBaseUrl&method=${LeanMethods.checkout.name}&${Params.customer_name.name}=$customerName&${Params.payment_intent_id.name}=$paymentIntentId&${Params.success_redirect_url.name}=$successRedirectUrl&${Params.fail_redirect_url.name}=$failRedirectUrl$customizationParams";
+
+    final optionalParams = {
+      Params.access_token.name: accessToken,
+    };
+
+    initializationURL = _appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
+
+    return initializationURL;
+  }
+
+  manageConsents({
+    required String customerId,
+    String? accessToken,
+  }) {
+    String customizationParams = _convertCustomizationToURLString();
+
+    var initializationURL =
+        "$_getBaseUrl&method=${LeanMethods.manageConsents.name}&${Params.customer_id.name}=$customerId$customizationParams";
+
+    final optionalParams = {
+      Params.access_token.name: accessToken,
+    };
+
+    initializationURL = _appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
+
+    return initializationURL;
+  }
+
+  captureRedirect({
+    required String customerId,
+    String? accessToken,
+    String? consentAttemptId,
+    String? granularStatusCode,
+    String? statusAdditionalInfo,
+  }) {
+    String customizationParams = _convertCustomizationToURLString();
+
+    var initializationURL =
+        "$_getBaseUrl&method=${LeanMethods.captureRedirect.name}&${Params.customer_id.name}=$customerId$customizationParams";
+
+    final optionalParams = {
+      Params.access_token.name: accessToken,
+      Params.consent_attempt_id.name: consentAttemptId,
+      Params.granular_status_code.name: granularStatusCode,
+      Params.status_additional_info.name: statusAdditionalInfo,
     };
 
     initializationURL = _appendOptionalConfigToURLParams(

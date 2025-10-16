@@ -1,6 +1,6 @@
 name: lean_sdk_flutter
 description: Lean SDK Flutter.
-version: 3.0.11
+version: 3.0.12
 homepage: https://github.com/leantechnologies/link-sdk-flutter
 
 environment:
