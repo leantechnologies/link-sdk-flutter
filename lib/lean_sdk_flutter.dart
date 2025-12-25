@@ -257,6 +257,7 @@ class Lean extends StatefulWidget {
     this.language = LeanLanguage.en,
     // method-specific properties
     this.accountId,
+    this.bankIdentifier,
     this.showBalances,
     this.failRedirectUrl,
     this.successRedirectUrl,
@@ -269,7 +270,6 @@ class Lean extends StatefulWidget {
         permissions = null,
         customerName = null,
         consentId = null,
-        bankIdentifier = null,
         paymentSourceId = null,
         customerMetadata = null,
         consentAttemptId = null,
@@ -532,6 +532,7 @@ class _LeanState extends State<Lean> {
     return _leanSdk.pay(
         paymentIntentId: widget.paymentIntentId!,
         accountId: widget.accountId,
+        bankIdentifier: widget.bankIdentifier,
         showBalances: widget.showBalances,
         failRedirectUrl: widget.failRedirectUrl,
         successRedirectUrl: widget.successRedirectUrl,
