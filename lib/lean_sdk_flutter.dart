@@ -353,7 +353,6 @@ class Lean extends StatefulWidget {
   const Lean.checkout({
     super.key,
     required this.appToken,
-    required this.customerName,
     required this.paymentIntentId,
     required this.failRedirectUrl,
     required this.successRedirectUrl,
@@ -367,13 +366,14 @@ class Lean extends StatefulWidget {
     this.env = 'production',
     this.country = LeanCountry.ae,
     this.language = LeanLanguage.en,
+    this.customerName,
+    this.bankIdentifier,
     this.riskDetails,
   })  : _method = LeanMethods.checkout,
         customerId = null,
         permissions = null,
         accessTo = null,
         accessFrom = null,
-        bankIdentifier = null,
         paymentDestinationId = null,
         accountId = null,
         reconnectId = null,
@@ -560,11 +560,12 @@ class _LeanState extends State<Lean> {
 
   String get _checkout {
     return _leanSdk.checkout(
-        customerName: widget.customerName!,
         paymentIntentId: widget.paymentIntentId!,
-        accessToken: widget.accessToken,
         successRedirectUrl: widget.successRedirectUrl!,
         failRedirectUrl: widget.failRedirectUrl!,
+        accessToken: widget.accessToken,
+        customerName: widget.customerName,
+        bankIdentifier: widget.bankIdentifier,
         riskDetails: widget.riskDetails);
   }
 

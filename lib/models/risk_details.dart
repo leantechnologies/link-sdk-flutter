@@ -1,484 +1,243 @@
 // Enums
 
 enum AuthenticationChannel {
-  web,
-  mobile,
+  web('WEB'),
+  mobile('MOBILE');
+
+  const AuthenticationChannel(this.value);
+  final String value;
 }
 
 enum PossessionFactorType {
-  fido2SecurityKey,
-  passkey,
-  otpDevice,
-  otpApp,
-  smsOtp,
-  emailOtp,
-  pushNotification,
-  webauthnToken,
-  secureEnclaveKey,
-  hardwareOtpKey,
-  trustedDevice,
-  other,
+  fido2SecurityKey('FIDO2_SECURITY_KEY'),
+  passkey('PASSKEY'),
+  otpDevice('OTP_DEVICE'),
+  otpApp('OTP_APP'),
+  smsOtp('SMS_OTP'),
+  emailOtp('EMAIL_OTP'),
+  pushNotification('PUSH_NOTIFICATION'),
+  webauthnToken('WEBAUTHN_TOKEN'),
+  secureEnclaveKey('SECURE_ENCLAVE_KEY'),
+  hardwareOtpKey('HARDWARE_OTP_KEY'),
+  trustedDevice('TRUSTED_DEVICE'),
+  other('OTHER');
+
+  const PossessionFactorType(this.value);
+  final String value;
 }
 
 enum KnowledgeFactorType {
-  pin,
-  password,
-  securityQuestion,
-  smsOtp,
-  emailOtp,
-  otpPush,
-  other,
+  pin('PIN'),
+  password('PASSWORD'),
+  securityQuestion('SECURITY_QUESTION'),
+  smsOtp('SMS_OTP'),
+  emailOtp('EMAIL_OTP'),
+  otpPush('OTP_PUSH'),
+  other('OTHER');
+
+  const KnowledgeFactorType(this.value);
+  final String value;
 }
 
 enum InherenceFactorType {
-  biometric,
-  fingerprint,
-  faceRecognition,
-  irisScan,
-  voiceRecognition,
-  fidoBiometric,
-  deviceBiometrics,
-  other,
+  biometric('BIOMETRIC'),
+  fingerprint('FINGERPRINT'),
+  faceRecognition('FACE_RECOGNITION'),
+  irisScan('IRIS_SCAN'),
+  voiceRecognition('VOICE_RECOGNITION'),
+  fidoBiometric('FIDO_BIOMETRIC'),
+  deviceBiometrics('DEVICE_BIOMETRICS'),
+  other('OTHER');
+
+  const InherenceFactorType(this.value);
+  final String value;
 }
 
 enum ChallengeOutcome {
-  pass,
-  fail,
-  notPerformed,
+  pass('PASS'),
+  fail('FAIL'),
+  notPerformed('NOT_PERFORMED');
+
+  const ChallengeOutcome(this.value);
+  final String value;
 }
 
 enum AuthenticationFlow {
-  mfa,
-  other,
+  mfa('MFA'),
+  other('OTHER');
+
+  const AuthenticationFlow(this.value);
+  final String value;
 }
 
 enum DeviceType {
-  mobile,
-  desktop,
-  tablet,
-  wearable,
-  other,
+  mobile('MOBILE'),
+  desktop('DESKTOP'),
+  tablet('TABLET'),
+  wearable('WEARABLE'),
+  other('OTHER');
+
+  const DeviceType(this.value);
+  final String value;
 }
 
 enum ConnectionType {
-  wifi,
-  cellular,
-  other,
+  wifi('WIFI'),
+  cellular('CELLULAR'),
+  other('OTHER');
+
+  const ConnectionType(this.value);
+  final String value;
 }
 
 enum ScreenOrientation {
-  portrait,
-  landscape,
+  portrait('PORTRAIT'),
+  landscape('LANDSCAPE');
+
+  const ScreenOrientation(this.value);
+  final String value;
 }
 
 enum BindingStatus {
-  active,
-  expired,
-  revoked,
-  suspended,
+  active('ACTIVE'),
+  expired('EXPIRED'),
+  revoked('REVOKED'),
+  suspended('SUSPENDED');
+
+  const BindingStatus(this.value);
+  final String value;
 }
 
 enum BiometricType {
-  fingerprint,
-  facialRecognition,
-  iris,
-  voicePrint,
-  other,
+  fingerprint('FINGERPRINT'),
+  facialRecognition('FACIAL_RECOGNITION'),
+  iris('IRIS'),
+  voicePrint('VOICE_PRINT'),
+  other('OTHER');
+
+  const BiometricType(this.value);
+  final String value;
 }
 
 enum MotionSensorStatus {
-  inMotion,
-  stationary,
+  inMotion('IN_MOTION'),
+  stationary('STATIONARY');
+
+  const MotionSensorStatus(this.value);
+  final String value;
 }
 
 enum DeviceEnvironmentContext {
-  vpnDetected,
-  emulatorDetected,
+  vpnDetected('VPN_DETECTED'),
+  emulatorDetected('EMULATOR_DETECTED');
+
+  const DeviceEnvironmentContext(this.value);
+  final String value;
 }
 
 enum ScrollDirection {
-  up,
-  down,
-  both,
+  up('UP'),
+  down('DOWN'),
+  both('BOTH');
+
+  const ScrollDirection(this.value);
+  final String value;
 }
 
 enum SuspiciousActivity {
-  noSuspiciousActivity,
-  suspiciousActivityDetected,
+  noSuspiciousActivity('NO_SUSPICIOUS_ACTIVITY'),
+  suspiciousActivityDetected('SUSPICIOUS_ACTIVITY_DETECTED');
+
+  const SuspiciousActivity(this.value);
+  final String value;
 }
 
 enum RecipientType {
-  individual,
-  corporate,
+  individual('INDIVIDUAL'),
+  corporate('CORPORATE');
+
+  const RecipientType(this.value);
+  final String value;
 }
 
 enum AddressType {
-  business,
-  correspondence,
-  residential,
+  business('BUSINESS'),
+  correspondence('CORRESPONDENCE'),
+  residential('RESIDENTIAL');
+
+  const AddressType(this.value);
+  final String value;
 }
 
 enum Channel {
-  web,
-  mobile,
+  web('WEB'),
+  mobile('MOBILE');
+
+  const Channel(this.value);
+  final String value;
 }
 
 enum ChannelType {
-  ecommerce,
-  inStore,
-  inApp,
-  telephone,
-  mail,
-  recurringPayment,
-  other,
+  ecommerce('ECOMMERCE'),
+  inStore('IN_STORE'),
+  inApp('IN_APP'),
+  telephone('TELEPHONE'),
+  mail('MAIL'),
+  recurringPayment('RECURRING_PAYMENT'),
+  other('OTHER');
+
+  const ChannelType(this.value);
+  final String value;
 }
 
 enum SubChannelType {
-  webBrowser,
-  mobileApp,
-  smartTv,
-  wearableDevice,
-  posTerminal,
-  atm,
-  kioskTerminal,
-  other,
+  webBrowser('WEB_BROWSER'),
+  mobileApp('MOBILE_APP'),
+  smartTv('SMART_TV'),
+  wearableDevice('WEARABLE_DEVICE'),
+  posTerminal('POS_TERMINAL'),
+  atm('ATM'),
+  kioskTerminal('KIOSK_TERMINAL'),
+  other('OTHER');
+
+  const SubChannelType(this.value);
+  final String value;
 }
 
 enum DeliveryTimeframe {
-  electronicDelivery,
-  sameDayShipping,
-  overnightShipping,
-  moreThan1DayShipping,
+  electronicDelivery('ELECTRONIC_DELIVERY'),
+  sameDayShipping('SAME_DAY_SHIPPING'),
+  overnightShipping('OVERNIGHT_SHIPPING'),
+  moreThan1DayShipping('MORE_THAN_1_DAY_SHIPPING');
+
+  const DeliveryTimeframe(this.value);
+  final String value;
 }
 
 enum ReorderItemsIndicator {
-  firstTimeOrder,
-  reorder,
+  firstTimeOrder('FIRST_TIME_ORDER'),
+  reorder('REORDER');
+
+  const ReorderItemsIndicator(this.value);
+  final String value;
 }
 
 enum PreOrderPurchaseIndicator {
-  merchandiseAvailable,
-  futureAvailability,
+  merchandiseAvailable('MERCHANDISE_AVAILABLE'),
+  futureAvailability('FUTURE_AVAILABILITY');
+
+  const PreOrderPurchaseIndicator(this.value);
+  final String value;
 }
 
 enum AddressMatchLevel {
-  fullMatch,
-  partialMatch,
-  noMatch,
-  notApplicable,
-}
+  fullMatch('FULL_MATCH'),
+  partialMatch('PARTIAL_MATCH'),
+  noMatch('NO_MATCH'),
+  notApplicable('NOT_APPLICABLE');
 
-// Enum to JSON converters
-String _authenticationChannelToJson(AuthenticationChannel value) {
-  switch (value) {
-    case AuthenticationChannel.web:
-      return 'WEB';
-    case AuthenticationChannel.mobile:
-      return 'MOBILE';
-  }
-}
-
-String _possessionFactorTypeToJson(PossessionFactorType value) {
-  switch (value) {
-    case PossessionFactorType.fido2SecurityKey:
-      return 'FIDO2_SECURITY_KEY';
-    case PossessionFactorType.passkey:
-      return 'PASSKEY';
-    case PossessionFactorType.otpDevice:
-      return 'OTP_DEVICE';
-    case PossessionFactorType.otpApp:
-      return 'OTP_APP';
-    case PossessionFactorType.smsOtp:
-      return 'SMS_OTP';
-    case PossessionFactorType.emailOtp:
-      return 'EMAIL_OTP';
-    case PossessionFactorType.pushNotification:
-      return 'PUSH_NOTIFICATION';
-    case PossessionFactorType.webauthnToken:
-      return 'WEBAUTHN_TOKEN';
-    case PossessionFactorType.secureEnclaveKey:
-      return 'SECURE_ENCLAVE_KEY';
-    case PossessionFactorType.hardwareOtpKey:
-      return 'HARDWARE_OTP_KEY';
-    case PossessionFactorType.trustedDevice:
-      return 'TRUSTED_DEVICE';
-    case PossessionFactorType.other:
-      return 'OTHER';
-  }
-}
-
-String _knowledgeFactorTypeToJson(KnowledgeFactorType value) {
-  switch (value) {
-    case KnowledgeFactorType.pin:
-      return 'PIN';
-    case KnowledgeFactorType.password:
-      return 'PASSWORD';
-    case KnowledgeFactorType.securityQuestion:
-      return 'SECURITY_QUESTION';
-    case KnowledgeFactorType.smsOtp:
-      return 'SMS_OTP';
-    case KnowledgeFactorType.emailOtp:
-      return 'EMAIL_OTP';
-    case KnowledgeFactorType.otpPush:
-      return 'OTP_PUSH';
-    case KnowledgeFactorType.other:
-      return 'OTHER';
-  }
-}
-
-String _inherenceFactorTypeToJson(InherenceFactorType value) {
-  switch (value) {
-    case InherenceFactorType.biometric:
-      return 'BIOMETRIC';
-    case InherenceFactorType.fingerprint:
-      return 'FINGERPRINT';
-    case InherenceFactorType.faceRecognition:
-      return 'FACE_RECOGNITION';
-    case InherenceFactorType.irisScan:
-      return 'IRIS_SCAN';
-    case InherenceFactorType.voiceRecognition:
-      return 'VOICE_RECOGNITION';
-    case InherenceFactorType.fidoBiometric:
-      return 'FIDO_BIOMETRIC';
-    case InherenceFactorType.deviceBiometrics:
-      return 'DEVICE_BIOMETRICS';
-    case InherenceFactorType.other:
-      return 'OTHER';
-  }
-}
-
-String _challengeOutcomeToJson(ChallengeOutcome value) {
-  switch (value) {
-    case ChallengeOutcome.pass:
-      return 'PASS';
-    case ChallengeOutcome.fail:
-      return 'FAIL';
-    case ChallengeOutcome.notPerformed:
-      return 'NOT_PERFORMED';
-  }
-}
-
-String _authenticationFlowToJson(AuthenticationFlow value) {
-  switch (value) {
-    case AuthenticationFlow.mfa:
-      return 'MFA';
-    case AuthenticationFlow.other:
-      return 'OTHER';
-  }
-}
-
-String _deviceTypeToJson(DeviceType value) {
-  switch (value) {
-    case DeviceType.mobile:
-      return 'MOBILE';
-    case DeviceType.desktop:
-      return 'DESKTOP';
-    case DeviceType.tablet:
-      return 'TABLET';
-    case DeviceType.wearable:
-      return 'WEARABLE';
-    case DeviceType.other:
-      return 'OTHER';
-  }
-}
-
-String _connectionTypeToJson(ConnectionType value) {
-  switch (value) {
-    case ConnectionType.wifi:
-      return 'WIFI';
-    case ConnectionType.cellular:
-      return 'CELLULAR';
-    case ConnectionType.other:
-      return 'OTHER';
-  }
-}
-
-String _screenOrientationToJson(ScreenOrientation value) {
-  switch (value) {
-    case ScreenOrientation.portrait:
-      return 'PORTRAIT';
-    case ScreenOrientation.landscape:
-      return 'LANDSCAPE';
-  }
-}
-
-String _bindingStatusToJson(BindingStatus value) {
-  switch (value) {
-    case BindingStatus.active:
-      return 'ACTIVE';
-    case BindingStatus.expired:
-      return 'EXPIRED';
-    case BindingStatus.revoked:
-      return 'REVOKED';
-    case BindingStatus.suspended:
-      return 'SUSPENDED';
-  }
-}
-
-String _biometricTypeToJson(BiometricType value) {
-  switch (value) {
-    case BiometricType.fingerprint:
-      return 'FINGERPRINT';
-    case BiometricType.facialRecognition:
-      return 'FACIAL_RECOGNITION';
-    case BiometricType.iris:
-      return 'IRIS';
-    case BiometricType.voicePrint:
-      return 'VOICE_PRINT';
-    case BiometricType.other:
-      return 'OTHER';
-  }
-}
-
-String _motionSensorStatusToJson(MotionSensorStatus value) {
-  switch (value) {
-    case MotionSensorStatus.inMotion:
-      return 'IN_MOTION';
-    case MotionSensorStatus.stationary:
-      return 'STATIONARY';
-  }
-}
-
-String _deviceEnvironmentContextToJson(DeviceEnvironmentContext value) {
-  switch (value) {
-    case DeviceEnvironmentContext.vpnDetected:
-      return 'VPN_DETECTED';
-    case DeviceEnvironmentContext.emulatorDetected:
-      return 'EMULATOR_DETECTED';
-  }
-}
-
-String _scrollDirectionToJson(ScrollDirection value) {
-  switch (value) {
-    case ScrollDirection.up:
-      return 'UP';
-    case ScrollDirection.down:
-      return 'DOWN';
-    case ScrollDirection.both:
-      return 'BOTH';
-  }
-}
-
-String _suspiciousActivityToJson(SuspiciousActivity value) {
-  switch (value) {
-    case SuspiciousActivity.noSuspiciousActivity:
-      return 'NO_SUSPICIOUS_ACTIVITY';
-    case SuspiciousActivity.suspiciousActivityDetected:
-      return 'SUSPICIOUS_ACTIVITY_DETECTED';
-  }
-}
-
-String _recipientTypeToJson(RecipientType value) {
-  switch (value) {
-    case RecipientType.individual:
-      return 'INDIVIDUAL';
-    case RecipientType.corporate:
-      return 'CORPORATE';
-  }
-}
-
-String _addressTypeToJson(AddressType value) {
-  switch (value) {
-    case AddressType.business:
-      return 'BUSINESS';
-    case AddressType.correspondence:
-      return 'CORRESPONDENCE';
-    case AddressType.residential:
-      return 'RESIDENTIAL';
-  }
-}
-
-String _channelToJson(Channel value) {
-  switch (value) {
-    case Channel.web:
-      return 'WEB';
-    case Channel.mobile:
-      return 'MOBILE';
-  }
-}
-
-String _channelTypeToJson(ChannelType value) {
-  switch (value) {
-    case ChannelType.ecommerce:
-      return 'ECOMMERCE';
-    case ChannelType.inStore:
-      return 'IN_STORE';
-    case ChannelType.inApp:
-      return 'IN_APP';
-    case ChannelType.telephone:
-      return 'TELEPHONE';
-    case ChannelType.mail:
-      return 'MAIL';
-    case ChannelType.recurringPayment:
-      return 'RECURRING_PAYMENT';
-    case ChannelType.other:
-      return 'OTHER';
-  }
-}
-
-String _subChannelTypeToJson(SubChannelType value) {
-  switch (value) {
-    case SubChannelType.webBrowser:
-      return 'WEB_BROWSER';
-    case SubChannelType.mobileApp:
-      return 'MOBILE_APP';
-    case SubChannelType.smartTv:
-      return 'SMART_TV';
-    case SubChannelType.wearableDevice:
-      return 'WEARABLE_DEVICE';
-    case SubChannelType.posTerminal:
-      return 'POS_TERMINAL';
-    case SubChannelType.atm:
-      return 'ATM';
-    case SubChannelType.kioskTerminal:
-      return 'KIOSK_TERMINAL';
-    case SubChannelType.other:
-      return 'OTHER';
-  }
-}
-
-String _deliveryTimeframeToJson(DeliveryTimeframe value) {
-  switch (value) {
-    case DeliveryTimeframe.electronicDelivery:
-      return 'ELECTRONIC_DELIVERY';
-    case DeliveryTimeframe.sameDayShipping:
-      return 'SAME_DAY_SHIPPING';
-    case DeliveryTimeframe.overnightShipping:
-      return 'OVERNIGHT_SHIPPING';
-    case DeliveryTimeframe.moreThan1DayShipping:
-      return 'MORE_THAN_1_DAY_SHIPPING';
-  }
-}
-
-String _reorderItemsIndicatorToJson(ReorderItemsIndicator value) {
-  switch (value) {
-    case ReorderItemsIndicator.firstTimeOrder:
-      return 'FIRST_TIME_ORDER';
-    case ReorderItemsIndicator.reorder:
-      return 'REORDER';
-  }
-}
-
-String _preOrderPurchaseIndicatorToJson(PreOrderPurchaseIndicator value) {
-  switch (value) {
-    case PreOrderPurchaseIndicator.merchandiseAvailable:
-      return 'MERCHANDISE_AVAILABLE';
-    case PreOrderPurchaseIndicator.futureAvailability:
-      return 'FUTURE_AVAILABILITY';
-  }
-}
-
-String _addressMatchLevelToJson(AddressMatchLevel value) {
-  switch (value) {
-    case AddressMatchLevel.fullMatch:
-      return 'FULL_MATCH';
-    case AddressMatchLevel.partialMatch:
-      return 'PARTIAL_MATCH';
-    case AddressMatchLevel.noMatch:
-      return 'NO_MATCH';
-    case AddressMatchLevel.notApplicable:
-      return 'NOT_APPLICABLE';
-  }
+  const AddressMatchLevel(this.value);
+  final String value;
 }
 
 // Model classes
@@ -495,7 +254,7 @@ class PossessionFactor {
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
     if (isUsed != null) json['is_used'] = isUsed;
-    if (type != null) json['type'] = _possessionFactorTypeToJson(type!);
+    if (type != null) json['type'] = type!.value;
     return json;
   }
 }
@@ -512,7 +271,7 @@ class KnowledgeFactor {
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
     if (isUsed != null) json['is_used'] = isUsed;
-    if (type != null) json['type'] = _knowledgeFactorTypeToJson(type!);
+    if (type != null) json['type'] = type!.value;
     return json;
   }
 }
@@ -529,7 +288,7 @@ class InherenceFactor {
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
     if (isUsed != null) json['is_used'] = isUsed;
-    if (type != null) json['type'] = _inherenceFactorTypeToJson(type!);
+    if (type != null) json['type'] = type!.value;
     return json;
   }
 }
@@ -558,8 +317,7 @@ class Authentication {
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
     if (authenticationChannel != null) {
-      json['authentication_channel'] =
-          _authenticationChannelToJson(authenticationChannel!);
+      json['authentication_channel'] = authenticationChannel!.value;
     }
     if (possessionFactor != null) {
       json['possession_factor'] = possessionFactor!.toJson();
@@ -571,10 +329,10 @@ class Authentication {
       json['inherence_factor'] = inherenceFactor!.toJson();
     }
     if (challengeOutcome != null) {
-      json['challenge_outcome'] = _challengeOutcomeToJson(challengeOutcome!);
+      json['challenge_outcome'] = challengeOutcome!.value;
     }
     if (authenticationFlow != null) {
-      json['authentication_flow'] = _authenticationFlowToJson(authenticationFlow!);
+      json['authentication_flow'] = authenticationFlow!.value;
     }
     if (authenticationValue != null) {
       json['authentication_value'] = authenticationValue;
@@ -609,8 +367,8 @@ class GeoLocation {
     required this.longitude,
   });
 
-  final dynamic latitude; // Can be number or string
-  final dynamic longitude; // Can be number or string
+  final double latitude;
+  final double longitude;
 
   Map<String, dynamic> toJson() {
     return {
@@ -650,7 +408,7 @@ class ScreenInformation {
     final json = <String, dynamic>{};
     if (pixelDensity != null) json['pixel_density'] = pixelDensity;
     if (orientation != null) {
-      json['orientation'] = _screenOrientationToJson(orientation!);
+      json['orientation'] = orientation!.value;
     }
     return json;
   }
@@ -703,7 +461,7 @@ class MotionSensors {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (status != null) json['status'] = _motionSensorStatusToJson(status!);
+    if (status != null) json['status'] = status!.value;
     if (accelerometer != null) json['accelerometer'] = accelerometer;
     if (gyroscope != null) json['gyroscope'] = gyroscope;
     return json;
@@ -769,9 +527,11 @@ class DeviceInformation {
     }
     if (bindingDuration != null) json['binding_duration'] = bindingDuration;
     if (bindingStatus != null) {
-      json['binding_status'] = _bindingStatusToJson(bindingStatus!);
+      json['binding_status'] = bindingStatus!.value;
     }
-    if (deviceType != null) json['device_type'] = _deviceTypeToJson(deviceType!);
+    if (deviceType != null) {
+      json['device_type'] = deviceType!.value;
+    }
     if (deviceManufacturer != null) {
       json['device_manufacturer'] = deviceManufacturer!.toJson();
     }
@@ -780,7 +540,7 @@ class DeviceInformation {
       json['device_local_date_time'] = deviceLocalDateTime;
     }
     if (connectionType != null) {
-      json['connection_type'] = _connectionTypeToJson(connectionType!);
+      json['connection_type'] = connectionType!.value;
     }
     if (screenInformation != null) {
       json['screen_information'] = screenInformation!.toJson();
@@ -789,9 +549,8 @@ class DeviceInformation {
     if (touchSupport != null) json['touch_support'] = touchSupport!.toJson();
     if (motionSensors != null) json['motion_sensors'] = motionSensors!.toJson();
     if (deviceEnvironmentContext != null) {
-      json['device_environment_context'] = deviceEnvironmentContext!
-          .map((e) => _deviceEnvironmentContextToJson(e))
-          .toList();
+      json['device_environment_context'] =
+          deviceEnvironmentContext!.map((e) => e.value).toList();
     }
     return json;
   }
@@ -812,8 +571,7 @@ class BiometricCapabilities {
       json['supports_biometric'] = supportsBiometric;
     }
     if (biometricTypes != null) {
-      json['biometric_types'] =
-          biometricTypes!.map((e) => _biometricTypeToJson(e)).toList();
+      json['biometric_types'] = biometricTypes!.map((e) => e.value).toList();
     }
     return json;
   }
@@ -839,32 +597,6 @@ class AppInformation {
   }
 }
 
-class BrowserInformation {
-  const BrowserInformation({
-    this.userAgent,
-    this.isCookiesEnabled,
-    this.availableFonts,
-    this.plugins,
-    this.pixelRatio,
-  });
-
-  final String? userAgent;
-  final bool? isCookiesEnabled;
-  final List<String>? availableFonts;
-  final List<String>? plugins;
-  final double? pixelRatio;
-
-  Map<String, dynamic> toJson() {
-    final json = <String, dynamic>{};
-    if (userAgent != null) json['user_agent'] = userAgent;
-    if (isCookiesEnabled != null) json['is_cookies_enabled'] = isCookiesEnabled;
-    if (availableFonts != null) json['available_fonts'] = availableFonts;
-    if (plugins != null) json['plugins'] = plugins;
-    if (pixelRatio != null) json['pixel_ratio'] = pixelRatio;
-    return json;
-  }
-}
-
 class ScrollBehavior {
   const ScrollBehavior({
     this.direction,
@@ -878,7 +610,9 @@ class ScrollBehavior {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (direction != null) json['direction'] = _scrollDirectionToJson(direction!);
+    if (direction != null) {
+      json['direction'] = direction!.value;
+    }
     if (speed != null) json['speed'] = speed;
     if (frequency != null) json['frequency'] = frequency;
     return json;
@@ -945,7 +679,7 @@ class AccountRiskIndicators {
       json['last_password_change_date'] = lastPasswordChangeDate;
     }
     if (suspiciousActivity != null) {
-      json['suspicious_activity'] = _suspiciousActivityToJson(suspiciousActivity!);
+      json['suspicious_activity'] = suspiciousActivity!.value;
     }
     if (transactionHistory != null) {
       json['transaction_history'] = transactionHistory!.toJson();
@@ -962,7 +696,6 @@ class DebtorIndicators {
     this.deviceInformation,
     this.biometricCapabilities,
     this.appInformation,
-    this.browserInformation,
     this.userBehavior,
     this.accountRiskIndicators,
     this.supplementaryData,
@@ -974,14 +707,15 @@ class DebtorIndicators {
   final DeviceInformation? deviceInformation;
   final BiometricCapabilities? biometricCapabilities;
   final AppInformation? appInformation;
-  final BrowserInformation? browserInformation;
   final UserBehavior? userBehavior;
   final AccountRiskIndicators? accountRiskIndicators;
   final Map<String, dynamic>? supplementaryData;
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-    if (authentication != null) json['authentication'] = authentication!.toJson();
+    if (authentication != null) {
+      json['authentication'] = authentication!.toJson();
+    }
     if (userName != null) json['user_name'] = userName!.toJson();
     if (geoLocation != null) json['geo_location'] = geoLocation!.toJson();
     if (deviceInformation != null) {
@@ -992,9 +726,6 @@ class DebtorIndicators {
     }
     if (appInformation != null) {
       json['app_information'] = appInformation!.toJson();
-    }
-    if (browserInformation != null) {
-      json['browser_information'] = browserInformation!.toJson();
     }
     if (userBehavior != null) json['user_behavior'] = userBehavior!.toJson();
     if (accountRiskIndicators != null) {
@@ -1037,7 +768,7 @@ class NationalAddress {
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
     if (addressType != null) {
-      json['address_type'] = _addressTypeToJson(addressType!);
+      json['address_type'] = addressType!.value;
     }
     if (addressLine != null) json['address_line'] = addressLine;
     if (buildingNumber != null) json['building_number'] = buildingNumber;
@@ -1067,7 +798,7 @@ class DestinationDeliveryAddress {
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
     if (recipientType != null) {
-      json['recipient_type'] = _recipientTypeToJson(recipientType!);
+      json['recipient_type'] = recipientType!.value;
     }
     if (recipientName != null) json['recipient_name'] = recipientName!.toJson();
     if (nationalAddress != null) {
@@ -1098,15 +829,13 @@ class MerchantRisk {
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
     if (deliveryTimeframe != null) {
-      json['delivery_timeframe'] = _deliveryTimeframeToJson(deliveryTimeframe!);
+      json['delivery_timeframe'] = deliveryTimeframe!.value;
     }
     if (reorderItemsIndicator != null) {
-      json['reorder_items_indicator'] =
-          _reorderItemsIndicatorToJson(reorderItemsIndicator!);
+      json['reorder_items_indicator'] = reorderItemsIndicator!.value;
     }
     if (preOrderPurchaseIndicator != null) {
-      json['pre_order_purchase_indicator'] =
-          _preOrderPurchaseIndicatorToJson(preOrderPurchaseIndicator!);
+      json['pre_order_purchase_indicator'] = preOrderPurchaseIndicator!.value;
     }
     if (isGiftCardPurchase != null) {
       json['is_gift_card_purchase'] = isGiftCardPurchase;
@@ -1116,7 +845,7 @@ class MerchantRisk {
           isDeliveryAddressMatchesBilling;
     }
     if (addressMatchLevel != null) {
-      json['address_match_level'] = _addressMatchLevelToJson(addressMatchLevel!);
+      json['address_match_level'] = addressMatchLevel!.value;
     }
     return json;
   }
@@ -1149,12 +878,12 @@ class TransactionIndicators {
     if (isContractPresent != null) {
       json['is_contract_present'] = isContractPresent;
     }
-    if (channel != null) json['channel'] = _channelToJson(channel!);
+    if (channel != null) json['channel'] = channel!.value;
     if (channelType != null) {
-      json['channel_type'] = _channelTypeToJson(channelType!);
+      json['channel_type'] = channelType!.value;
     }
     if (subChannelType != null) {
-      json['sub_channel_type'] = _subChannelTypeToJson(subChannelType!);
+      json['sub_channel_type'] = subChannelType!.value;
     }
     if (merchantRisk != null) json['merchant_risk'] = merchantRisk!.toJson();
     if (supplementaryData != null) {
@@ -1217,7 +946,8 @@ class RiskDetails {
       json['debtor_indicators'] = debtorIndicators!.toJson();
     }
     if (destinationDeliveryAddress != null) {
-      json['destination_delivery_address'] = destinationDeliveryAddress!.toJson();
+      json['destination_delivery_address'] =
+          destinationDeliveryAddress!.toJson();
     }
     if (transactionIndicators != null) {
       json['transaction_indicators'] = transactionIndicators!.toJson();

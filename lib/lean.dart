@@ -137,6 +137,15 @@ class LeanSDK {
     }
   }
 
+  /// Appends risk_details parameter to URL if risk details are provided
+  String _addRiskDetailsToUrl(String url, RiskDetails? riskDetails) {
+    final serializedRiskDetails = _serializeRiskDetails(riskDetails);
+    if (serializedRiskDetails != null) {
+      return '$url&risk_details=$serializedRiskDetails';
+    }
+    return url;
+  }
+
   /// Recursively removes null, empty strings, empty arrays, and empty objects
   dynamic _cleanJsonObject(dynamic object) {
     if (object is Map<String, dynamic>) {
@@ -385,10 +394,7 @@ class LeanSDK {
       optionalParams,
     );
 
-    final serializedRiskDetails = _serializeRiskDetails(riskDetails);
-    if (serializedRiskDetails != null) {
-      initializationURL += '&risk_details=$serializedRiskDetails';
-    }
+    initializationURL = _addRiskDetailsToUrl(initializationURL, riskDetails);
 
     return initializationURL;
   }
@@ -447,29 +453,29 @@ class LeanSDK {
       optionalParams,
     );
 
-    final serializedRiskDetails = _serializeRiskDetails(riskDetails);
-    if (serializedRiskDetails != null) {
-      initializationURL += '&risk_details=$serializedRiskDetails';
-    }
+    initializationURL = _addRiskDetailsToUrl(initializationURL, riskDetails);
 
     return initializationURL;
   }
 
   checkout({
-    required String customerName,
     required String paymentIntentId,
     required String successRedirectUrl,
     required String failRedirectUrl,
     String? accessToken,
+    String? customerName,
+    String? bankIdentifier,
     RiskDetails? riskDetails,
   }) {
     String customizationParams = _convertCustomizationToURLString();
 
     var initializationURL =
-        "$_getBaseUrl&method=${LeanMethods.checkout.name}&${Params.customer_name.name}=$customerName&${Params.payment_intent_id.name}=$paymentIntentId&${Params.success_redirect_url.name}=$successRedirectUrl&${Params.fail_redirect_url.name}=$failRedirectUrl$customizationParams";
+        "$_getBaseUrl&method=${LeanMethods.checkout.name}&${Params.payment_intent_id.name}=$paymentIntentId&${Params.success_redirect_url.name}=$successRedirectUrl&${Params.fail_redirect_url.name}=$failRedirectUrl$customizationParams";
 
     final optionalParams = {
       Params.access_token.name: accessToken,
+      Params.customer_name.name: customerName,
+      Params.bank_identifier.name: bankIdentifier,
     };
 
     initializationURL = _appendOptionalConfigToURLParams(
@@ -477,10 +483,7 @@ class LeanSDK {
       optionalParams,
     );
 
-    final serializedRiskDetails = _serializeRiskDetails(riskDetails);
-    if (serializedRiskDetails != null) {
-      initializationURL += '&risk_details=$serializedRiskDetails';
-    }
+    initializationURL = _addRiskDetailsToUrl(initializationURL, riskDetails);
 
     return initializationURL;
   }
