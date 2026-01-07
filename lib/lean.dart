@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:lean_sdk_flutter/lean_logger.dart';
 
 import 'lean_types.dart';
+import 'models/risk_details.dart';
 
 class LeanSDK {
   late String _env;
@@ -53,7 +55,7 @@ class LeanSDK {
       "platform": "mobile",
       "sdk": "flutter",
       "os": Platform.operatingSystem.toString(),
-      "sdk_version": '3.0.13', // @todo: get this dynamically from pubspec.yaml
+      "sdk_version": '3.0.14', // @todo: get this dynamically from pubspec.yaml
       "is_version_pinned": _version != "latest"
     };
 
@@ -106,6 +108,75 @@ class LeanSDK {
       }
     });
     return result;
+  }
+
+  /// Serializes risk details to URL-encoded JSON string, removing null/empty values
+  String? _serializeRiskDetails(RiskDetails? riskDetails) {
+    if (riskDetails == null) return null;
+
+    try {
+      final jsonMap = riskDetails.toJson();
+      final cleaned = _cleanJsonObject(jsonMap);
+
+      if (cleaned == null) {
+        LeanLogger.info(
+            msg:
+                'Risk details contained only empty values, skipping parameter');
+        return null;
+      }
+
+      final jsonString = jsonEncode(cleaned);
+
+      LeanLogger.info(
+          msg: 'Risk details serialized: ${jsonString.length} characters');
+
+      return Uri.encodeComponent(jsonString);
+    } catch (e) {
+      LeanLogger.error(msg: 'Error serializing risk_details: $e');
+      return null;
+    }
+  }
+
+  /// Appends risk_details parameter to URL if risk details are provided
+  String _addRiskDetailsToUrl(String url, RiskDetails? riskDetails) {
+    final serializedRiskDetails = _serializeRiskDetails(riskDetails);
+    if (serializedRiskDetails != null) {
+      return '$url&risk_details=$serializedRiskDetails';
+    }
+    return url;
+  }
+
+  /// Recursively removes null, empty strings, empty arrays, and empty objects
+  dynamic _cleanJsonObject(dynamic object) {
+    if (object is Map<String, dynamic>) {
+      final cleanedMap = <String, dynamic>{};
+
+      for (final entry in object.entries) {
+        final cleanedValue = _cleanJsonObject(entry.value);
+        if (cleanedValue != null) {
+          cleanedMap[entry.key] = cleanedValue;
+        }
+      }
+
+      return cleanedMap.isEmpty ? null : cleanedMap;
+    } else if (object is List) {
+      final cleanedList = object
+          .map((element) => _cleanJsonObject(element))
+          .where((element) => element != null)
+          .toList();
+
+      return cleanedList.isEmpty ? null : cleanedList;
+    } else {
+      return _isNullOrEmpty(object) ? null : object;
+    }
+  }
+
+  bool _isNullOrEmpty(dynamic value) {
+    if (value == null) return true;
+    if (value is String) return value.isEmpty;
+    if (value is List) return value.isEmpty;
+    if (value is Map) return value.isEmpty;
+    return false;
   }
 
   //  ================    Link methods    ================    //
@@ -292,11 +363,13 @@ class LeanSDK {
     String? endUserId,
     String? accessToken,
     String? accountId,
+    String? bankIdentifier,
     bool? showBalances,
     String? failRedirectUrl,
     String? successRedirectUrl,
     String? destinationAlias,
     String? destinationAvatar,
+    RiskDetails? riskDetails,
   }) {
     String customizationParams = _convertCustomizationToURLString();
 
@@ -307,6 +380,7 @@ class LeanSDK {
       Params.bulk_payment_intent_id.name: bulkPaymentIntentId,
       Params.end_user_id.name: endUserId,
       Params.account_id.name: accountId,
+      Params.bank_identifier.name: bankIdentifier,
       Params.show_balances.name: showBalances,
       Params.access_token.name: accessToken,
       Params.fail_redirect_url.name: failRedirectUrl,
@@ -319,6 +393,8 @@ class LeanSDK {
       initializationURL,
       optionalParams,
     );
+
+    initializationURL = _addRiskDetailsToUrl(initializationURL, riskDetails);
 
     return initializationURL;
   }
@@ -359,6 +435,7 @@ class LeanSDK {
     String? accessToken,
     String? destinationAlias,
     String? destinationAvatar,
+    RiskDetails? riskDetails,
   }) {
     String customizationParams = _convertCustomizationToURLString();
 
@@ -376,29 +453,37 @@ class LeanSDK {
       optionalParams,
     );
 
+    initializationURL = _addRiskDetailsToUrl(initializationURL, riskDetails);
+
     return initializationURL;
   }
 
   checkout({
-    required String customerName,
     required String paymentIntentId,
     required String successRedirectUrl,
     required String failRedirectUrl,
     String? accessToken,
+    String? customerName,
+    String? bankIdentifier,
+    RiskDetails? riskDetails,
   }) {
     String customizationParams = _convertCustomizationToURLString();
 
     var initializationURL =
-        "$_getBaseUrl&method=${LeanMethods.checkout.name}&${Params.customer_name.name}=$customerName&${Params.payment_intent_id.name}=$paymentIntentId&${Params.success_redirect_url.name}=$successRedirectUrl&${Params.fail_redirect_url.name}=$failRedirectUrl$customizationParams";
+        "$_getBaseUrl&method=${LeanMethods.checkout.name}&${Params.payment_intent_id.name}=$paymentIntentId&${Params.success_redirect_url.name}=$successRedirectUrl&${Params.fail_redirect_url.name}=$failRedirectUrl$customizationParams";
 
     final optionalParams = {
       Params.access_token.name: accessToken,
+      Params.customer_name.name: customerName,
+      Params.bank_identifier.name: bankIdentifier,
     };
 
     initializationURL = _appendOptionalConfigToURLParams(
       initializationURL,
       optionalParams,
     );
+
+    initializationURL = _addRiskDetailsToUrl(initializationURL, riskDetails);
 
     return initializationURL;
   }

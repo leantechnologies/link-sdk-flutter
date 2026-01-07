@@ -9,8 +9,10 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'lean_logger.dart';
 import 'lean_types.dart';
+import 'models/risk_details.dart';
 
 export 'lean_types.dart';
+export 'models/risk_details.dart';
 
 class Lean extends StatefulWidget {
   //  ================    Initialization params    =============    //
@@ -48,6 +50,7 @@ class Lean extends StatefulWidget {
   final String? consentAttemptId;
   final String? granularStatusCode;
   final String? statusAdditionalInfo;
+  final RiskDetails? riskDetails;
 
   //  ================    Extra params    =====================    //
 
@@ -88,6 +91,7 @@ class Lean extends StatefulWidget {
         consentAttemptId = null,
         granularStatusCode = null,
         statusAdditionalInfo = null,
+        riskDetails = null,
         initializationUrl = '';
 
   const Lean.reconnect({
@@ -120,6 +124,7 @@ class Lean extends StatefulWidget {
         consentAttemptId = null,
         granularStatusCode = null,
         statusAdditionalInfo = null,
+        riskDetails = null,
         initializationUrl = '',
         failRedirectUrl = null,
         successRedirectUrl = null,
@@ -159,6 +164,7 @@ class Lean extends StatefulWidget {
         consentAttemptId = null,
         granularStatusCode = null,
         statusAdditionalInfo = null,
+        riskDetails = null,
         initializationUrl = '';
 
   const Lean.createPaymentSource({
@@ -195,6 +201,7 @@ class Lean extends StatefulWidget {
         consentAttemptId = null,
         granularStatusCode = null,
         statusAdditionalInfo = null,
+        riskDetails = null,
         initializationUrl = '';
 
   const Lean.updatePaymentSource({
@@ -231,6 +238,7 @@ class Lean extends StatefulWidget {
         consentAttemptId = null,
         granularStatusCode = null,
         statusAdditionalInfo = null,
+        riskDetails = null,
         initializationUrl = '';
 
   const Lean.pay({
@@ -249,9 +257,11 @@ class Lean extends StatefulWidget {
     this.language = LeanLanguage.en,
     // method-specific properties
     this.accountId,
+    this.bankIdentifier,
     this.showBalances,
     this.failRedirectUrl,
     this.successRedirectUrl,
+    this.riskDetails,
   })  : _method = LeanMethods.pay,
         accessTo = null,
         customerId = null,
@@ -260,7 +270,6 @@ class Lean extends StatefulWidget {
         permissions = null,
         customerName = null,
         consentId = null,
-        bankIdentifier = null,
         paymentSourceId = null,
         customerMetadata = null,
         consentAttemptId = null,
@@ -302,6 +311,7 @@ class Lean extends StatefulWidget {
         consentAttemptId = null,
         granularStatusCode = null,
         statusAdditionalInfo = null,
+        riskDetails = null,
         initializationUrl = '';
 
   const Lean.authorizeConsent({
@@ -321,6 +331,7 @@ class Lean extends StatefulWidget {
     this.env = 'production',
     this.country = LeanCountry.ae,
     this.language = LeanLanguage.en,
+    this.riskDetails,
   })  : _method = LeanMethods.authorizeConsent,
         accessTo = null,
         accessFrom = null,
@@ -342,7 +353,6 @@ class Lean extends StatefulWidget {
   const Lean.checkout({
     super.key,
     required this.appToken,
-    required this.customerName,
     required this.paymentIntentId,
     required this.failRedirectUrl,
     required this.successRedirectUrl,
@@ -356,12 +366,14 @@ class Lean extends StatefulWidget {
     this.env = 'production',
     this.country = LeanCountry.ae,
     this.language = LeanLanguage.en,
+    this.customerName,
+    this.bankIdentifier,
+    this.riskDetails,
   })  : _method = LeanMethods.checkout,
         customerId = null,
         permissions = null,
         accessTo = null,
         accessFrom = null,
-        bankIdentifier = null,
         paymentDestinationId = null,
         accountId = null,
         reconnectId = null,
@@ -407,6 +419,7 @@ class Lean extends StatefulWidget {
         consentAttemptId = null,
         granularStatusCode = null,
         statusAdditionalInfo = null,
+        riskDetails = null,
         initializationUrl = '';
 
   const Lean.captureRedirect({
@@ -443,6 +456,7 @@ class Lean extends StatefulWidget {
         paymentSourceId = null,
         paymentIntentId = null,
         customerMetadata = null,
+        riskDetails = null,
         initializationUrl = '';
 
   @override
@@ -518,10 +532,12 @@ class _LeanState extends State<Lean> {
     return _leanSdk.pay(
         paymentIntentId: widget.paymentIntentId!,
         accountId: widget.accountId,
+        bankIdentifier: widget.bankIdentifier,
         showBalances: widget.showBalances,
         failRedirectUrl: widget.failRedirectUrl,
         successRedirectUrl: widget.successRedirectUrl,
-        accessToken: widget.accessToken);
+        accessToken: widget.accessToken,
+        riskDetails: widget.riskDetails);
   }
 
   String get _verifyAddress {
@@ -538,16 +554,19 @@ class _LeanState extends State<Lean> {
         consentId: widget.consentId!,
         failRedirectUrl: widget.failRedirectUrl!,
         successRedirectUrl: widget.successRedirectUrl!,
-        accessToken: widget.accessToken);
+        accessToken: widget.accessToken,
+        riskDetails: widget.riskDetails);
   }
 
   String get _checkout {
     return _leanSdk.checkout(
-        customerName: widget.customerName!,
         paymentIntentId: widget.paymentIntentId!,
-        accessToken: widget.accessToken,
         successRedirectUrl: widget.successRedirectUrl!,
-        failRedirectUrl: widget.failRedirectUrl!);
+        failRedirectUrl: widget.failRedirectUrl!,
+        accessToken: widget.accessToken,
+        customerName: widget.customerName,
+        bankIdentifier: widget.bankIdentifier,
+        riskDetails: widget.riskDetails);
   }
 
   String get _manageConsents {

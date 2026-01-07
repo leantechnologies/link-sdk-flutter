@@ -1,7 +1,14 @@
+## 3.0.14
+
+- Support `riskDetails` in `pay`, `checkout`, `authorizeConsent` methods.
+- Support `bankIdentifier` in `pay` method.
+
 ## 3.0.13
+
 - Fixed intermittent iOS issue where callbacks could be lost during redirects.
 
 ## 3.0.12
+
 - Added new sdk methods - `checkout`, `manageConsents`, `captureRedirect`
 - Added support for `user_exit_intent` in callback response
 
