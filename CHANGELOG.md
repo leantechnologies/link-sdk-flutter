@@ -1,3 +1,29 @@
+## 3.0.14
+
+- Support `riskDetails` in `pay`, `checkout`, `authorizeConsent` methods.
+- Support `bankIdentifier` in `pay` method.
+
+## 3.0.13
+
+- Fixed intermittent iOS issue where callbacks could be lost during redirects.
+
+## 3.0.12
+
+- Added new sdk methods - `checkout`, `manageConsents`, `captureRedirect`
+- Added support for `user_exit_intent` in callback response
+
+## 3.0.11
+
+Added new sdk method - `authorizeConsent`
+
+## 3.0.10
+
+Added support for `showConsentExplanation` in connect method, along with `destinationAlias` and `destinationAvatar` in all flows
+
+## 3.0.9
+
+Upgraded webview dependencies and other internal changes
+
 ## 3.0.8
 
 Added new sdk method — `verifyAddress`
@@ -36,9 +62,9 @@ Major version bump for new SDK architecture
 
 ## 0.5.0
 
-Includes features: 
-* connect bank account
-* create payment source
-* reconnect bank account
-* complete payment
+Includes features:
 
+- connect bank account
+- create payment source
+- reconnect bank account
+- complete payment
