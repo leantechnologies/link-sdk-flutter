@@ -108,6 +108,7 @@ class Lean extends StatefulWidget {
     this.env = 'production',
     this.country = LeanCountry.ae,
     this.language = LeanLanguage.en,
+    this.customerMetadata,
   })  : _method = LeanMethods.reconnect,
         accessTo = null,
         accountId = null,
@@ -120,7 +121,6 @@ class Lean extends StatefulWidget {
         bankIdentifier = null,
         paymentSourceId = null,
         paymentIntentId = null,
-        customerMetadata = null,
         consentAttemptId = null,
         granularStatusCode = null,
         statusAdditionalInfo = null,
@@ -495,7 +495,9 @@ class _LeanState extends State<Lean> {
 
   String get _reconnect {
     return _leanSdk.reconnect(
-        reconnectId: widget.reconnectId!, accessToken: widget.accessToken);
+        reconnectId: widget.reconnectId!,
+        accessToken: widget.accessToken,
+        customerMetadata: widget.customerMetadata);
   }
 
   String get _createBeneficiary {

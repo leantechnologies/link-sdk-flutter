@@ -233,6 +233,7 @@ class LeanSDK {
     String? accessToken,
     String? destinationAlias,
     String? destinationAvatar,
+    String? customerMetadata,
   }) {
     String customizationParams = _convertCustomizationToURLString();
 
@@ -243,6 +244,7 @@ class LeanSDK {
       Params.access_token.name: accessToken,
       Params.destination_alias.name: destinationAlias,
       Params.destination_avatar.name: destinationAvatar,
+      Params.customer_metadata.name: customerMetadata,
     };
 
     initializationURL = _appendOptionalConfigToURLParams(
