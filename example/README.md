@@ -8,9 +8,15 @@ The example app provides a comprehensive demonstration of the Lean SDK Flutter i
 
 - **Connect** bank accounts with customizable permissions
 - **Reconnect** previously connected bank accounts
-- **Create Payment Sources** (beneficiaries) for payments
-- **Initiate Payments** with balance visibility options
+- **Create Beneficiaries** for payment destinations
+- **Create Payment Sources** for initiating payments
+- **Update Payment Sources** to modify existing sources
+- **Pay** with configurable payment intents
+- **Verify Address** using bank account data
 - **Authorize Consent** for account access
+- **Checkout** with a streamlined payment flow
+- **Manage Consents** to view and control account consents
+- **Capture Redirect** to handle post-authentication redirects
 
 ## Prerequisites
 
@@ -139,24 +145,22 @@ flutter run -d linux
 
 ### 1. Connect Bank Account
 
-Allows users to connect their bank account with customizable permissions:
-- Identity
-- Transactions
-- Balance
-- Accounts
-- Payments
+Allows users to connect their bank account with customizable permissions.
 
 **Required Parameters:**
 - Application Token
 - Customer ID
-- Bank Identifier (optional)
-- Payment Destination ID (optional)
+- Permissions (identity, transactions, balance, accounts, payments)
 
-**Customization Options:**
-- Button text color
-- Theme color
-- Button border radius
-- Overlay color
+**Optional Parameters:**
+- Access Token
+- Access To
+- Access From
+- Bank Identifier
+- Fail Redirect URL
+- Success Redirect URL
+- Payment Destination ID
+- Customer Metadata
 
 ### 2. Reconnect Bank Account
 
@@ -166,9 +170,44 @@ Reconnects a previously connected bank account using a reconnect ID.
 - Application Token
 - Reconnect ID
 
-### 3. Create Payment Source
+**Optional Parameters:**
+- Access Token
+- Customer Metadata
 
-Creates a payment source (beneficiary) for future payments.
+### 3. Create Beneficiary
+
+Creates a beneficiary for a payment destination.
+
+**Required Parameters:**
+- Application Token
+- Customer ID
+
+**Optional Parameters:**
+- Access Token
+- Payment Source ID
+- Payment Destination ID
+- Fail Redirect URL
+- Success Redirect URL
+
+### 4. Create Payment Source
+
+Creates a payment source for initiating payments.
+
+**Required Parameters:**
+- Application Token
+- Customer ID
+
+**Optional Parameters:**
+- Access Token
+- Bank Identifier
+- Payment Source ID
+- Payment Destination ID
+- Fail Redirect URL
+- Success Redirect URL
+
+### 5. Update Payment Source
+
+Updates an existing payment source.
 
 **Required Parameters:**
 - Application Token
@@ -176,17 +215,42 @@ Creates a payment source (beneficiary) for future payments.
 - Payment Source ID
 - Payment Destination ID
 
-### 4. Pay
+**Optional Parameters:**
+- Access Token
+- Fail Redirect URL
+- Success Redirect URL
 
-Initiates a payment with optional balance visibility.
+### 6. Pay
+
+Initiates a payment using a payment intent.
 
 **Required Parameters:**
 - Application Token
-- Account ID
 - Payment Intent ID
-- Show Balances (toggle)
 
-### 5. Authorize Consent
+**Optional Parameters:**
+- Access Token
+- Account ID
+- Bank Identifier
+- Show Balances
+- Fail Redirect URL
+- Success Redirect URL
+- Risk Details
+
+### 7. Verify Address
+
+Verifies a customer's address using their bank account data.
+
+**Required Parameters:**
+- Application Token
+- Customer ID
+- Customer Name
+- Permissions
+
+**Optional Parameters:**
+- Access Token
+
+### 8. Authorize Consent
 
 Authorizes consent for account access with custom redirect URLs.
 
@@ -196,6 +260,51 @@ Authorizes consent for account access with custom redirect URLs.
 - Consent ID
 - Success Redirect URL
 - Fail Redirect URL
+
+**Optional Parameters:**
+- Access Token
+- Risk Details
+
+### 9. Checkout
+
+Initiates a streamlined checkout payment flow.
+
+**Required Parameters:**
+- Application Token
+- Payment Intent ID
+- Success Redirect URL
+- Fail Redirect URL
+
+**Optional Parameters:**
+- Access Token
+- Customer Name
+- Bank Identifier
+- Risk Details
+
+### 10. Manage Consents
+
+Displays and manages a customer's existing consents.
+
+**Required Parameters:**
+- Application Token
+- Customer ID
+
+**Optional Parameters:**
+- Access Token
+
+### 11. Capture Redirect
+
+Handles post-authentication redirects after a consent flow.
+
+**Required Parameters:**
+- Application Token
+- Customer ID
+
+**Optional Parameters:**
+- Access Token
+- Consent Attempt ID
+- Granular Status Code
+- Status Additional Info
 
 ## Project Structure
 
