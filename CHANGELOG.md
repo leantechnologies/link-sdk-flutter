@@ -1,3 +1,7 @@
+## 3.0.15
+
+- Support optional `customerMetadata` in `reconnect`method.
+
 ## 3.0.14
 
 - Support `riskDetails` in `pay`, `checkout`, `authorizeConsent` methods.
