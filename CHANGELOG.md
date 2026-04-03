@@ -1,3 +1,7 @@
+## 3.0.16
+
+- Support optional `showConsentExplanation` in `connect`method.
+
 ## 3.0.15
 
 - Support optional `customerMetadata` in `reconnect`method.
