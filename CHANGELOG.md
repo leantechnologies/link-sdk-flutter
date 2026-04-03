@@ -1,6 +1,6 @@
 ## 3.0.16
 
-- Support optional `showConsentExplanation` in `connect`method.
+- Support optional `showConsentExplanation` in `connect` method.
 
 ## 3.0.15
 
