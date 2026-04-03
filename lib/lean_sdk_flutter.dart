@@ -47,6 +47,9 @@ class Lean extends StatefulWidget {
   final List<LeanPermissions>? permissions;
   final LeanActionCancelled? actionCancelled;
   final String? customerMetadata;
+  final bool? showConsentExplanation;
+  final String? destinationAlias;
+  final String? destinationAvatar;
   final String? consentAttemptId;
   final String? granularStatusCode;
   final String? statusAdditionalInfo;
@@ -80,6 +83,9 @@ class Lean extends StatefulWidget {
     this.successRedirectUrl,
     this.paymentDestinationId,
     this.customerMetadata,
+    this.showConsentExplanation,
+    this.destinationAlias,
+    this.destinationAvatar,
   })  : _method = LeanMethods.connect,
         accountId = null,
         reconnectId = null,
@@ -109,6 +115,8 @@ class Lean extends StatefulWidget {
     this.country = LeanCountry.ae,
     this.language = LeanLanguage.en,
     this.customerMetadata,
+    this.destinationAlias,
+    this.destinationAvatar,
   })  : _method = LeanMethods.reconnect,
         accessTo = null,
         accountId = null,
@@ -121,6 +129,7 @@ class Lean extends StatefulWidget {
         bankIdentifier = null,
         paymentSourceId = null,
         paymentIntentId = null,
+        showConsentExplanation = null,
         consentAttemptId = null,
         granularStatusCode = null,
         statusAdditionalInfo = null,
@@ -149,6 +158,8 @@ class Lean extends StatefulWidget {
     this.failRedirectUrl,
     this.successRedirectUrl,
     this.paymentDestinationId,
+    this.destinationAlias,
+    this.destinationAvatar,
   })  : _method = LeanMethods.createBeneficiary,
         accessTo = null,
         accountId = null,
@@ -161,6 +172,7 @@ class Lean extends StatefulWidget {
         bankIdentifier = null,
         paymentIntentId = null,
         customerMetadata = null,
+        showConsentExplanation = null,
         consentAttemptId = null,
         granularStatusCode = null,
         statusAdditionalInfo = null,
@@ -187,6 +199,8 @@ class Lean extends StatefulWidget {
     this.paymentSourceId,
     this.successRedirectUrl,
     this.paymentDestinationId,
+    this.destinationAlias,
+    this.destinationAvatar,
   })  : _method = LeanMethods.createPaymentSource,
         accessTo = null,
         accountId = null,
@@ -198,6 +212,7 @@ class Lean extends StatefulWidget {
         showBalances = null,
         paymentIntentId = null,
         customerMetadata = null,
+        showConsentExplanation = null,
         consentAttemptId = null,
         granularStatusCode = null,
         statusAdditionalInfo = null,
@@ -223,6 +238,8 @@ class Lean extends StatefulWidget {
     this.failRedirectUrl,
     this.successRedirectUrl,
     this.paymentDestinationId,
+    this.destinationAlias,
+    this.destinationAvatar,
   })  : _method = LeanMethods.updatePaymentSource,
         accessTo = null,
         accountId = null,
@@ -235,6 +252,7 @@ class Lean extends StatefulWidget {
         bankIdentifier = null,
         paymentIntentId = null,
         customerMetadata = null,
+        showConsentExplanation = null,
         consentAttemptId = null,
         granularStatusCode = null,
         statusAdditionalInfo = null,
@@ -262,6 +280,8 @@ class Lean extends StatefulWidget {
     this.failRedirectUrl,
     this.successRedirectUrl,
     this.riskDetails,
+    this.destinationAlias,
+    this.destinationAvatar,
   })  : _method = LeanMethods.pay,
         accessTo = null,
         customerId = null,
@@ -272,6 +292,7 @@ class Lean extends StatefulWidget {
         consentId = null,
         paymentSourceId = null,
         customerMetadata = null,
+        showConsentExplanation = null,
         consentAttemptId = null,
         granularStatusCode = null,
         statusAdditionalInfo = null,
@@ -294,6 +315,8 @@ class Lean extends StatefulWidget {
     this.env = 'production',
     this.country = LeanCountry.ae,
     this.language = LeanLanguage.en,
+    this.destinationAlias,
+    this.destinationAvatar,
   })  : _method = LeanMethods.verifyAddress,
         accessTo = null,
         accessFrom = null,
@@ -308,6 +331,7 @@ class Lean extends StatefulWidget {
         paymentSourceId = null,
         paymentIntentId = null,
         customerMetadata = null,
+        showConsentExplanation = null,
         consentAttemptId = null,
         granularStatusCode = null,
         statusAdditionalInfo = null,
@@ -332,6 +356,8 @@ class Lean extends StatefulWidget {
     this.country = LeanCountry.ae,
     this.language = LeanLanguage.en,
     this.riskDetails,
+    this.destinationAlias,
+    this.destinationAvatar,
   })  : _method = LeanMethods.authorizeConsent,
         accessTo = null,
         accessFrom = null,
@@ -344,6 +370,7 @@ class Lean extends StatefulWidget {
         accountId = null,
         showBalances = null,
         customerMetadata = null,
+        showConsentExplanation = null,
         consentAttemptId = null,
         granularStatusCode = null,
         statusAdditionalInfo = null,
@@ -381,6 +408,9 @@ class Lean extends StatefulWidget {
         showBalances = null,
         paymentSourceId = null,
         customerMetadata = null,
+        showConsentExplanation = null,
+        destinationAlias = null,
+        destinationAvatar = null,
         consentAttemptId = null,
         granularStatusCode = null,
         statusAdditionalInfo = null,
@@ -416,6 +446,9 @@ class Lean extends StatefulWidget {
         paymentSourceId = null,
         paymentIntentId = null,
         customerMetadata = null,
+        showConsentExplanation = null,
+        destinationAlias = null,
+        destinationAvatar = null,
         consentAttemptId = null,
         granularStatusCode = null,
         statusAdditionalInfo = null,
@@ -457,6 +490,9 @@ class Lean extends StatefulWidget {
         paymentIntentId = null,
         customerMetadata = null,
         riskDetails = null,
+        showConsentExplanation = null,
+        destinationAlias = null,
+        destinationAvatar = null,
         initializationUrl = '';
 
   @override
@@ -490,14 +526,19 @@ class _LeanState extends State<Lean> {
         successRedirectUrl: widget.successRedirectUrl,
         paymentDestinationId: widget.paymentDestinationId,
         accessToken: widget.accessToken,
-        customerMetadata: widget.customerMetadata);
+        customerMetadata: widget.customerMetadata,
+        showConsentExplanation: widget.showConsentExplanation,
+        destinationAlias: widget.destinationAlias,
+        destinationAvatar: widget.destinationAvatar);
   }
 
   String get _reconnect {
     return _leanSdk.reconnect(
         reconnectId: widget.reconnectId!,
         accessToken: widget.accessToken,
-        customerMetadata: widget.customerMetadata);
+        customerMetadata: widget.customerMetadata,
+        destinationAlias: widget.destinationAlias,
+        destinationAvatar: widget.destinationAvatar);
   }
 
   String get _createBeneficiary {
@@ -507,7 +548,9 @@ class _LeanState extends State<Lean> {
         failRedirectUrl: widget.failRedirectUrl,
         successRedirectUrl: widget.successRedirectUrl,
         paymentDestinationId: widget.paymentDestinationId,
-        accessToken: widget.accessToken);
+        accessToken: widget.accessToken,
+        destinationAlias: widget.destinationAlias,
+        destinationAvatar: widget.destinationAvatar);
   }
 
   String get _createPaymentSource {
@@ -517,7 +560,9 @@ class _LeanState extends State<Lean> {
         failRedirectUrl: widget.failRedirectUrl,
         successRedirectUrl: widget.successRedirectUrl,
         paymentDestinationId: widget.paymentDestinationId,
-        accessToken: widget.accessToken);
+        accessToken: widget.accessToken,
+        destinationAlias: widget.destinationAlias,
+        destinationAvatar: widget.destinationAvatar);
   }
 
   String get _updatePaymentSource {
@@ -527,7 +572,9 @@ class _LeanState extends State<Lean> {
         paymentDestinationId: widget.paymentDestinationId!,
         failRedirectUrl: widget.failRedirectUrl,
         successRedirectUrl: widget.successRedirectUrl,
-        accessToken: widget.accessToken);
+        accessToken: widget.accessToken,
+        destinationAlias: widget.destinationAlias,
+        destinationAvatar: widget.destinationAvatar);
   }
 
   String get _pay {
@@ -539,7 +586,9 @@ class _LeanState extends State<Lean> {
         failRedirectUrl: widget.failRedirectUrl,
         successRedirectUrl: widget.successRedirectUrl,
         accessToken: widget.accessToken,
-        riskDetails: widget.riskDetails);
+        riskDetails: widget.riskDetails,
+        destinationAlias: widget.destinationAlias,
+        destinationAvatar: widget.destinationAvatar);
   }
 
   String get _verifyAddress {
@@ -547,7 +596,9 @@ class _LeanState extends State<Lean> {
         customerId: widget.customerId!,
         customerName: widget.customerName!,
         permissions: widget.permissions!,
-        accessToken: widget.accessToken);
+        accessToken: widget.accessToken,
+        destinationAlias: widget.destinationAlias,
+        destinationAvatar: widget.destinationAvatar);
   }
 
   String get _authorizeConsent {
@@ -557,7 +608,9 @@ class _LeanState extends State<Lean> {
         failRedirectUrl: widget.failRedirectUrl!,
         successRedirectUrl: widget.successRedirectUrl!,
         accessToken: widget.accessToken,
-        riskDetails: widget.riskDetails);
+        riskDetails: widget.riskDetails,
+        destinationAlias: widget.destinationAlias,
+        destinationAvatar: widget.destinationAvatar);
   }
 
   String get _checkout {
