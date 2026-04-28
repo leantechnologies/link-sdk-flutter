@@ -51,9 +51,19 @@ class LeanWebClient {
       if (uri.host == 'redirect') {
         LeanLogger.info(msg: 'Redirect received: ${request.url}');
         _redirectFired = true; // guard against late duplicates
+        final redirectParams = _getResponseFromParams(uri);
         callback?.call(LeanResponse(
           status: 'SUCCESS',
           message: 'Link closed after redirect',
+          bankId: redirectParams.bankId,
+          exitPoint: redirectParams.exitPoint,
+          lastApiResponse: redirectParams.lastApiResponse,
+          secondaryStatus: redirectParams.secondaryStatus,
+          bankIsSupported: redirectParams.bankIsSupported,
+          exitIntentPoint: redirectParams.exitIntentPoint,
+          exitSurveyReason: redirectParams.exitSurveyReason,
+          leanCorrelationId: redirectParams.leanCorrelationId,
+          userExitIntent: redirectParams.userExitIntent,
         ));
       } else {
         LeanLogger.info(msg: 'Response received: ${request.url}');
