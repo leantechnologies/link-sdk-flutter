@@ -1,3 +1,7 @@
+## 3.0.17
+
+- Include query params from redirect URL in callback response, with `status` and `message` overridden to `SUCCESS` and `Link closed after redirect`.
+
 ## 3.0.16
 
 - Support optional `showConsentExplanation` in `connect` method.
