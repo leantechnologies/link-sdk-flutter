@@ -306,6 +306,21 @@ void main() {
 
         expect(initializationURL, equals(expectedUrl));
       });
+
+      test('with bankIdentifier and accountId: returns the correct URL', () {
+        const expectedUrl =
+            'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+flutter&implementation_config=os+macos&implementation_config=sdk_version+3.0.18&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=authorizeConsent&customer_id=b2f3537b-2e38-4067-bf61-7398cf7d4934&consent_id=7ebe7449-fd93-4657-be82-fcc3697262c4&fail_redirect_url=https://www.leantech.me/failure&success_redirect_url=https://www.leantech.me/success&bank_identifier=LEANMB1_SAU&account_id=8b3b7960-c4a1-41da-8ad0-5df36cf67540';
+
+        final initializationURL = leanSdk.authorizeConsent(
+            customerId: 'b2f3537b-2e38-4067-bf61-7398cf7d4934',
+            consentId: '7ebe7449-fd93-4657-be82-fcc3697262c4',
+            failRedirectUrl: 'https://www.leantech.me/failure',
+            successRedirectUrl: 'https://www.leantech.me/success',
+            bankIdentifier: 'LEANMB1_SAU',
+            accountId: '8b3b7960-c4a1-41da-8ad0-5df36cf67540');
+
+        expect(initializationURL, equals(expectedUrl));
+      });
     });
 
     group('checkout', () {
@@ -360,6 +375,20 @@ void main() {
           failRedirectUrl: 'https://dev.leantech.me/fail',
           customerName: 'John Doe',
           bankIdentifier: 'LEANMB1_SAU',
+        );
+
+        expect(initializationURL, equals(expectedUrl));
+      });
+
+      test('with accountId: returns the correct URL', () {
+        const expectedUrl =
+            'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+flutter&implementation_config=os+macos&implementation_config=sdk_version+3.0.18&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=checkout&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&success_redirect_url=https://dev.leantech.me/success&fail_redirect_url=https://dev.leantech.me/fail&account_id=8b3b7960-c4a1-41da-8ad0-5df36cf67540';
+
+        final initializationURL = leanSdk.checkout(
+          paymentIntentId: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
+          successRedirectUrl: 'https://dev.leantech.me/success',
+          failRedirectUrl: 'https://dev.leantech.me/fail',
+          accountId: '8b3b7960-c4a1-41da-8ad0-5df36cf67540',
         );
 
         expect(initializationURL, equals(expectedUrl));
