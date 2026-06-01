@@ -21,6 +21,7 @@ enum Params {
   access_from,
   reconnect_id,
   show_balances,
+  allow_payment_source_change,
   customization,
   implementation,
   bank_identifier,
