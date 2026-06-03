@@ -36,6 +36,7 @@ class Lean extends StatefulWidget {
   final String? reconnectId;
   final String? consentId;
   final bool? showBalances;
+  final bool? allowPaymentSourceChange;
   final LeanCallback? callback;
   final String? bankIdentifier;
   final String? paymentIntentId;
@@ -87,6 +88,7 @@ class Lean extends StatefulWidget {
     this.destinationAlias,
     this.destinationAvatar,
   })  : _method = LeanMethods.connect,
+        allowPaymentSourceChange = null,
         accountId = null,
         reconnectId = null,
         customerName = null,
@@ -118,6 +120,7 @@ class Lean extends StatefulWidget {
     this.destinationAlias,
     this.destinationAvatar,
   })  : _method = LeanMethods.reconnect,
+        allowPaymentSourceChange = null,
         accessTo = null,
         accountId = null,
         customerId = null,
@@ -161,6 +164,7 @@ class Lean extends StatefulWidget {
     this.destinationAlias,
     this.destinationAvatar,
   })  : _method = LeanMethods.createBeneficiary,
+        allowPaymentSourceChange = null,
         accessTo = null,
         accountId = null,
         accessFrom = null,
@@ -202,6 +206,7 @@ class Lean extends StatefulWidget {
     this.destinationAlias,
     this.destinationAvatar,
   })  : _method = LeanMethods.createPaymentSource,
+        allowPaymentSourceChange = null,
         accessTo = null,
         accountId = null,
         accessFrom = null,
@@ -241,6 +246,7 @@ class Lean extends StatefulWidget {
     this.destinationAlias,
     this.destinationAvatar,
   })  : _method = LeanMethods.updatePaymentSource,
+        allowPaymentSourceChange = null,
         accessTo = null,
         accountId = null,
         accessFrom = null,
@@ -277,6 +283,7 @@ class Lean extends StatefulWidget {
     this.accountId,
     this.bankIdentifier,
     this.showBalances,
+    this.allowPaymentSourceChange,
     this.failRedirectUrl,
     this.successRedirectUrl,
     this.riskDetails,
@@ -318,6 +325,7 @@ class Lean extends StatefulWidget {
     this.destinationAlias,
     this.destinationAvatar,
   })  : _method = LeanMethods.verifyAddress,
+        allowPaymentSourceChange = null,
         accessTo = null,
         accessFrom = null,
         bankIdentifier = null,
@@ -355,7 +363,10 @@ class Lean extends StatefulWidget {
     this.env = 'production',
     this.country = LeanCountry.ae,
     this.language = LeanLanguage.en,
+    this.bankIdentifier,
+    this.accountId,
     this.riskDetails,
+    this.allowPaymentSourceChange,
     this.destinationAlias,
     this.destinationAvatar,
   })  : _method = LeanMethods.authorizeConsent,
@@ -364,10 +375,8 @@ class Lean extends StatefulWidget {
         reconnectId = null,
         permissions = null,
         customerName = null,
-        bankIdentifier = null,
         paymentSourceId = null,
         paymentIntentId = null,
-        accountId = null,
         showBalances = null,
         customerMetadata = null,
         showConsentExplanation = null,
@@ -395,14 +404,15 @@ class Lean extends StatefulWidget {
     this.language = LeanLanguage.en,
     this.customerName,
     this.bankIdentifier,
+    this.accountId,
     this.riskDetails,
+    this.allowPaymentSourceChange,
   })  : _method = LeanMethods.checkout,
         customerId = null,
         permissions = null,
         accessTo = null,
         accessFrom = null,
         paymentDestinationId = null,
-        accountId = null,
         reconnectId = null,
         consentId = null,
         showBalances = null,
@@ -431,6 +441,7 @@ class Lean extends StatefulWidget {
     this.country = LeanCountry.ae,
     this.language = LeanLanguage.en,
   })  : _method = LeanMethods.manageConsents,
+        allowPaymentSourceChange = null,
         permissions = null,
         accessTo = null,
         accessFrom = null,
@@ -474,6 +485,7 @@ class Lean extends StatefulWidget {
     this.granularStatusCode,
     this.statusAdditionalInfo,
   })  : _method = LeanMethods.captureRedirect,
+        allowPaymentSourceChange = null,
         permissions = null,
         accessTo = null,
         accessFrom = null,
@@ -583,6 +595,7 @@ class _LeanState extends State<Lean> {
         accountId: widget.accountId,
         bankIdentifier: widget.bankIdentifier,
         showBalances: widget.showBalances,
+        allowPaymentSourceChange: widget.allowPaymentSourceChange,
         failRedirectUrl: widget.failRedirectUrl,
         successRedirectUrl: widget.successRedirectUrl,
         accessToken: widget.accessToken,
@@ -608,7 +621,10 @@ class _LeanState extends State<Lean> {
         failRedirectUrl: widget.failRedirectUrl!,
         successRedirectUrl: widget.successRedirectUrl!,
         accessToken: widget.accessToken,
+        bankIdentifier: widget.bankIdentifier,
+        accountId: widget.accountId,
         riskDetails: widget.riskDetails,
+        allowPaymentSourceChange: widget.allowPaymentSourceChange,
         destinationAlias: widget.destinationAlias,
         destinationAvatar: widget.destinationAvatar);
   }
@@ -621,7 +637,9 @@ class _LeanState extends State<Lean> {
         accessToken: widget.accessToken,
         customerName: widget.customerName,
         bankIdentifier: widget.bankIdentifier,
-        riskDetails: widget.riskDetails);
+        accountId: widget.accountId,
+        riskDetails: widget.riskDetails,
+        allowPaymentSourceChange: widget.allowPaymentSourceChange);
   }
 
   String get _manageConsents {

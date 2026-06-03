@@ -55,7 +55,7 @@ class LeanSDK {
       "platform": "mobile",
       "sdk": "flutter",
       "os": Platform.operatingSystem.toString(),
-      "sdk_version": '3.0.17', // @todo: get this dynamically from pubspec.yaml
+      "sdk_version": '3.0.18', // @todo: get this dynamically from pubspec.yaml
       "is_version_pinned": _version != "latest"
     };
 
@@ -372,6 +372,7 @@ class LeanSDK {
     String? destinationAlias,
     String? destinationAvatar,
     RiskDetails? riskDetails,
+    bool? allowPaymentSourceChange,
   }) {
     String customizationParams = _convertCustomizationToURLString();
 
@@ -384,6 +385,7 @@ class LeanSDK {
       Params.account_id.name: accountId,
       Params.bank_identifier.name: bankIdentifier,
       Params.show_balances.name: showBalances,
+      Params.allow_payment_source_change.name: allowPaymentSourceChange,
       Params.access_token.name: accessToken,
       Params.fail_redirect_url.name: failRedirectUrl,
       Params.success_redirect_url.name: successRedirectUrl,
@@ -435,9 +437,12 @@ class LeanSDK {
     required String failRedirectUrl,
     required String successRedirectUrl,
     String? accessToken,
+    String? bankIdentifier,
+    String? accountId,
     String? destinationAlias,
     String? destinationAvatar,
     RiskDetails? riskDetails,
+    bool? allowPaymentSourceChange,
   }) {
     String customizationParams = _convertCustomizationToURLString();
 
@@ -446,6 +451,9 @@ class LeanSDK {
 
     final optionalParams = {
       Params.access_token.name: accessToken,
+      Params.bank_identifier.name: bankIdentifier,
+      Params.account_id.name: accountId,
+      Params.allow_payment_source_change.name: allowPaymentSourceChange,
       Params.destination_alias.name: destinationAlias,
       Params.destination_avatar.name: destinationAvatar,
     };
@@ -467,7 +475,9 @@ class LeanSDK {
     String? accessToken,
     String? customerName,
     String? bankIdentifier,
+    String? accountId,
     RiskDetails? riskDetails,
+    bool? allowPaymentSourceChange,
   }) {
     String customizationParams = _convertCustomizationToURLString();
 
@@ -478,6 +488,8 @@ class LeanSDK {
       Params.access_token.name: accessToken,
       Params.customer_name.name: customerName,
       Params.bank_identifier.name: bankIdentifier,
+      Params.account_id.name: accountId,
+      Params.allow_payment_source_change.name: allowPaymentSourceChange,
     };
 
     initializationURL = _appendOptionalConfigToURLParams(

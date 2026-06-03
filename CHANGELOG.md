@@ -1,3 +1,8 @@
+## 3.0.18
+
+- Add `allowPaymentSourceChange` as an optional parameter to `pay`, `authorizeConsent`, and `checkout` methods.
+- Support accountId and bankIdentifier in `checkout` and `authorizeConsent` method.
+
 ## 3.0.17
 
 - Include query params from redirect URL in callback response, with `status` and `message` overridden to `SUCCESS` and `Link closed after redirect`.
