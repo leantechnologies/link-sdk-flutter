@@ -40,6 +40,7 @@ enum Params {
   destination_alias,
   destination_avatar,
   consent_id,
+  consent_type,
   consent_attempt_id,
   granular_status_code,
   status_additional_info,

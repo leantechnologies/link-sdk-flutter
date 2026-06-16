@@ -35,6 +35,7 @@ class Lean extends StatefulWidget {
   final String? customerName;
   final String? reconnectId;
   final String? consentId;
+  final String? consentType;
   final bool? showBalances;
   final bool? allowPaymentSourceChange;
   final LeanCallback? callback;
@@ -93,6 +94,7 @@ class Lean extends StatefulWidget {
         reconnectId = null,
         customerName = null,
         consentId = null,
+        consentType = null,
         showBalances = null,
         paymentSourceId = null,
         paymentIntentId = null,
@@ -128,6 +130,7 @@ class Lean extends StatefulWidget {
         permissions = null,
         customerName = null,
         consentId = null,
+        consentType = null,
         showBalances = null,
         bankIdentifier = null,
         paymentSourceId = null,
@@ -172,6 +175,7 @@ class Lean extends StatefulWidget {
         customerName = null,
         reconnectId = null,
         consentId = null,
+        consentType = null,
         showBalances = null,
         bankIdentifier = null,
         paymentIntentId = null,
@@ -214,6 +218,7 @@ class Lean extends StatefulWidget {
         customerName = null,
         reconnectId = null,
         consentId = null,
+        consentType = null,
         showBalances = null,
         paymentIntentId = null,
         customerMetadata = null,
@@ -254,6 +259,7 @@ class Lean extends StatefulWidget {
         customerName = null,
         reconnectId = null,
         consentId = null,
+        consentType = null,
         showBalances = null,
         bankIdentifier = null,
         paymentIntentId = null,
@@ -297,6 +303,7 @@ class Lean extends StatefulWidget {
         permissions = null,
         customerName = null,
         consentId = null,
+        consentType = null,
         paymentSourceId = null,
         customerMetadata = null,
         showConsentExplanation = null,
@@ -335,6 +342,7 @@ class Lean extends StatefulWidget {
         accountId = null,
         reconnectId = null,
         consentId = null,
+        consentType = null,
         showBalances = null,
         paymentSourceId = null,
         paymentIntentId = null,
@@ -370,6 +378,7 @@ class Lean extends StatefulWidget {
     this.destinationAlias,
     this.destinationAvatar,
   })  : _method = LeanMethods.authorizeConsent,
+        consentType = null,
         accessTo = null,
         accessFrom = null,
         reconnectId = null,
@@ -415,6 +424,7 @@ class Lean extends StatefulWidget {
         paymentDestinationId = null,
         reconnectId = null,
         consentId = null,
+        consentType = null,
         showBalances = null,
         paymentSourceId = null,
         customerMetadata = null,
@@ -432,6 +442,8 @@ class Lean extends StatefulWidget {
     required this.customerId,
     this.callback,
     this.accessToken,
+    this.consentId,
+    this.consentType,
     this.customization,
     this.actionCancelled,
     this.isSandbox = true,
@@ -452,7 +464,6 @@ class Lean extends StatefulWidget {
         accountId = null,
         reconnectId = null,
         customerName = null,
-        consentId = null,
         showBalances = null,
         paymentSourceId = null,
         paymentIntentId = null,
@@ -497,6 +508,7 @@ class Lean extends StatefulWidget {
         reconnectId = null,
         customerName = null,
         consentId = null,
+        consentType = null,
         showBalances = null,
         paymentSourceId = null,
         paymentIntentId = null,
@@ -644,7 +656,10 @@ class _LeanState extends State<Lean> {
 
   String get _manageConsents {
     return _leanSdk.manageConsents(
-        customerId: widget.customerId!, accessToken: widget.accessToken);
+        customerId: widget.customerId!,
+        accessToken: widget.accessToken,
+        consentId: widget.consentId,
+        consentType: widget.consentType);
   }
 
   String get _captureRedirect {
