@@ -1,3 +1,7 @@
+## 3.0.19
+
+- Add `consentId` and `consentType` as optional parameters to the `manageConsents` method.
+
 ## 3.0.18
 
 - Add `allowPaymentSourceChange` as an optional parameter to `pay`, `authorizeConsent`, and `checkout` methods.

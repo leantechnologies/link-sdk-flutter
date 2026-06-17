@@ -55,7 +55,7 @@ class LeanSDK {
       "platform": "mobile",
       "sdk": "flutter",
       "os": Platform.operatingSystem.toString(),
-      "sdk_version": '3.0.18', // @todo: get this dynamically from pubspec.yaml
+      "sdk_version": '3.0.19', // @todo: get this dynamically from pubspec.yaml
       "is_version_pinned": _version != "latest"
     };
 
@@ -505,6 +505,8 @@ class LeanSDK {
   manageConsents({
     required String customerId,
     String? accessToken,
+    String? consentId,
+    String? consentType,
   }) {
     String customizationParams = _convertCustomizationToURLString();
 
@@ -513,6 +515,8 @@ class LeanSDK {
 
     final optionalParams = {
       Params.access_token.name: accessToken,
+      Params.consent_id.name: consentId,
+      Params.consent_type.name: consentType,
     };
 
     initializationURL = _appendOptionalConfigToURLParams(
