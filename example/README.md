@@ -233,6 +233,7 @@ Initiates a payment using a payment intent.
 - Account ID
 - Bank Identifier
 - Show Balances
+- Allow Payment Source Change
 - Fail Redirect URL
 - Success Redirect URL
 - Risk Details
@@ -263,6 +264,9 @@ Authorizes consent for account access with custom redirect URLs.
 
 **Optional Parameters:**
 - Access Token
+- Bank Identifier
+- Account ID
+- Allow Payment Source Change
 - Risk Details
 
 ### 9. Checkout
@@ -279,6 +283,8 @@ Initiates a streamlined checkout payment flow.
 - Access Token
 - Customer Name
 - Bank Identifier
+- Account ID
+- Allow Payment Source Change
 - Risk Details
 
 ### 10. Manage Consents
@@ -291,6 +297,8 @@ Displays and manages a customer's existing consents.
 
 **Optional Parameters:**
 - Access Token
+- Consent ID
+- Consent Type
 
 ### 11. Capture Redirect
 
