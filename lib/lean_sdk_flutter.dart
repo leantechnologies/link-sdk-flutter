@@ -295,6 +295,7 @@ class Lean extends StatefulWidget {
     this.riskDetails,
     this.destinationAlias,
     this.destinationAvatar,
+    this.consentId,
   })  : _method = LeanMethods.pay,
         accessTo = null,
         customerId = null,
@@ -302,7 +303,6 @@ class Lean extends StatefulWidget {
         reconnectId = null,
         permissions = null,
         customerName = null,
-        consentId = null,
         consentType = null,
         paymentSourceId = null,
         customerMetadata = null,
@@ -613,7 +613,8 @@ class _LeanState extends State<Lean> {
         accessToken: widget.accessToken,
         riskDetails: widget.riskDetails,
         destinationAlias: widget.destinationAlias,
-        destinationAvatar: widget.destinationAvatar);
+        destinationAvatar: widget.destinationAvatar,
+        consentId: widget.consentId);
   }
 
   String get _verifyAddress {

@@ -373,6 +373,7 @@ class LeanSDK {
     String? destinationAvatar,
     RiskDetails? riskDetails,
     bool? allowPaymentSourceChange,
+    String? consentId,
   }) {
     String customizationParams = _convertCustomizationToURLString();
 
@@ -385,6 +386,7 @@ class LeanSDK {
       Params.account_id.name: accountId,
       Params.bank_identifier.name: bankIdentifier,
       Params.show_balances.name: showBalances,
+      Params.consent_id.name: consentId,
       Params.allow_payment_source_change.name: allowPaymentSourceChange,
       Params.access_token.name: accessToken,
       Params.fail_redirect_url.name: failRedirectUrl,

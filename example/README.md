@@ -234,6 +234,7 @@ Initiates a payment using a payment intent.
 - Bank Identifier
 - Show Balances
 - Allow Payment Source Change
+- Consent ID
 - Fail Redirect URL
 - Success Redirect URL
 - Risk Details

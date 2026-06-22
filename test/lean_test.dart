@@ -216,7 +216,7 @@ void main() {
             "%7B%22debtor_indicators%22%3A%7B%22geo_location%22%3A%7B%22latitude%22%3A1.0%2C%22longitude%22%3A1.0%7D%7D%7D";
 
         const expectedUrl =
-            'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+flutter&implementation_config=os+macos&implementation_config=sdk_version+3.0.19&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=pay&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&account_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&show_balances=true&allow_payment_source_change=true&access_token=test&fail_redirect_url=https://dev.leantech.me/fail&success_redirect_url=https://dev.leantech.me/success&destination_alias=TestingCo&destination_avatar=https://dev.leantech.me/success.png&risk_details=$expectedSerilizedRiskDetails';
+            'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+flutter&implementation_config=os+macos&implementation_config=sdk_version+3.0.19&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=pay&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&account_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&show_balances=true&consent_id=test-consent-id&allow_payment_source_change=true&access_token=test&fail_redirect_url=https://dev.leantech.me/fail&success_redirect_url=https://dev.leantech.me/success&destination_alias=TestingCo&destination_avatar=https://dev.leantech.me/success.png&risk_details=$expectedSerilizedRiskDetails';
 
         final initializationURL = leanSdk.pay(
             accessToken: 'test',
@@ -224,6 +224,7 @@ void main() {
             accountId: "617207b3-a4d4-4413-ba1b-b8d32efd58a0",
             showBalances: true,
             allowPaymentSourceChange: true,
+            consentId: 'test-consent-id',
             failRedirectUrl: 'https://dev.leantech.me/fail',
             successRedirectUrl: 'https://dev.leantech.me/success',
             destinationAlias: 'TestingCo',
